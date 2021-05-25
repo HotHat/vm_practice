@@ -21,9 +21,11 @@ class TestAst(unittest.TestCase):
         left = gen_expr_const(gen_const_true())
         right = gen_expr_const(gen_const_false())
 
-        binop = gen_expr_binop(left, right)
+        binop = gen_expr_binop(BinOp.ADD, left, right)
 
-        print(binop)
+        binop2 = gen_expr_binop(BinOp.SUB, binop, right)
+
+        print(binop2)
 
 
 if __name__ == '__main__':

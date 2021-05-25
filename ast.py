@@ -75,10 +75,20 @@ class Expr:
     BINOP = 3
     UNOP = 4
 
-    def __init__(self, t, left=None, right=None):
+    def __init__(self, t, value):
         self.type = t
-        self.left = left
-        self.right = right
+        self.value = value
+
+    def __str__(self):
+        if self.type == self.CONSTANT:
+            return f"expr: constant, value= {self.value.__str__()}"
+        elif self.type == self.PREFIX:
+            return f"expr: prefix , value= {self.value.__str__()}"
+        elif self.type == self.BINOP:
+            return f"expr: binop, value= {self.value.__str__()}"
+        else:
+            # self.type == self.UNOP:
+            return f"expr: unop, value= {self.value.__str__()}"
 
 
 class BinOp:
@@ -101,6 +111,27 @@ class BinOp:
         self.left = left
         self.right = right
 
+    def __kind_str(self, op):
+        op_map = {
+            self.ADD: 'ADD',
+            self.SUB: 'SUB',
+            self.MUL: 'MUL',
+            self.DIV: 'DIV',
+            self.XOR: 'XOR',
+            self.MOD: 'MOD',
+            self.LT: 'LT',
+            self.LTE: 'LTE',
+            self.GT: 'GT',
+            self.GTE: 'GTE',
+            self.EQ:  'EQ',
+            self.CONCAT: 'CONCAT',
+            self.ASSIGN_XOR: 'ASSIGN_XOR'
+        }
+        return op_map[op]
+
+    def __str__(self):
+        return f"{self.__kind_str(self.operator)} left={{{self.left.__str__()}}}, right={{{self.right.__str__()}}}"
+
 
 class Constant:
     NIL = 1
@@ -112,6 +143,9 @@ class Constant:
     def __init__(self, t, value=None):
         self.type = t
         self.value = value
+
+    def __str__(self):
+        return str(self.value)
 
 
 def gen_const_nil() -> Constant:
@@ -142,26 +176,11 @@ def gen_expr_prefix(c):
     return Expr(Expr.PREFIX, c)
 
 
-def gen_expr_binop(left: Constant, right: Constant) -> Expr:
-    return Expr(Expr.BINOP, left, right)
+def gen_expr_binop(kind, left: Expr, right: Expr) -> Expr:
+    return Expr(Expr.BINOP, BinOp(kind, left, right))
 
 
-def gen_expr_unop(left: Expr) -> Expr:
-    return Expr(Expr.UNOP, left)
-
-
-
-
-class AddStmt(Stmt):
-    pass
-
-class SubStmt(Stmt):
-    pass
-
-class MulStmt(Stmt):
-    pass
-
-class DivStmt(Stmt):
-    pass
+def gen_expr_unop(value: Expr) -> Expr:
+    return Expr(Expr.UNOP, value)
 
 
