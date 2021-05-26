@@ -58,8 +58,7 @@ binop ::= `+´  |  `-´  |  `*´  |  `/´  |  `^´  |  `%´  |  `..´  |
 
 unop ::= `-´  |  not  |  `#´
 """
-from collections.abc import Sequence
-from typing import Optional
+from typing import Optional, Sequence
 
 
 class Expr:
