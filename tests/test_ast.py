@@ -5,11 +5,11 @@ from ast import *
 
 class TestAst(unittest.TestCase):
     def test_constant(self):
-        c1 = gen_const_nil()
-        c2 = gen_const_string('string const')
-        c3 = gen_const_number(1234)
-        c4 = gen_const_true()
-        c5 = gen_const_false()
+        c1 = NIL
+        c2 = string('string const')
+        c3 = number(1234)
+        c4 = TRUE
+        c5 = FALSE
 
         print(c1)
         print(c2)
@@ -17,15 +17,25 @@ class TestAst(unittest.TestCase):
         print(c4)
         print(c5)
 
-    def test_binop(self):
-        left = gen_expr_const(gen_const_true())
-        right = gen_expr_const(gen_const_false())
+    def test_assign(self):
+        s = AssignStmt([Name('a'), Name('b')], ExprList(Expr(TRUE), Expr(FALSE)), True)
 
-        binop = gen_expr_binop(BinOp.ADD, left, right)
+    def test_binop_const(self):
 
-        binop2 = gen_expr_binop(BinOp.SUB, binop, right)
+        binop = BinOpExpr(BinOpExpr.ADD, string('abc'), FALSE)
+
+        binop2 = BinOpExpr(BinOpExpr.SUB, binop, TRUE)
 
         print(binop2)
+
+    def test_binop_var(self):
+        l = Expr(prefix_name('abc'))
+        r = Expr(prefix_bracket(prefix_name('table'), number(10)))
+
+        r2 = Expr(prefix_dot(prefix_name('class'), Name('func')))
+
+        b = BinOpExpr(BinOpExpr.ADD, l, r)
+        b2 = BinOpExpr(BinOpExpr.SUB, b, r2)
 
 
 if __name__ == '__main__':
