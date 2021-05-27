@@ -29,13 +29,13 @@ namelist ::= Name {`,´ Name}
 explist1 ::= {exp `,´} exp
 
 exp ::=  nil  |  false  |  true  |  Number  |  String  |  `...´  |
-         function  |  prefixexp  |  tableconstructor  |  exp binop exp  |  unop exp
+         function  |  prefixexp  |  TableConstructoror  |  exp binop exp  |  unop exp
 
 prefixexp ::= var  |  functioncall  |  `(´ exp `)´
 
 functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
 
-args ::=  `(´ [explist1] `)´  |  tableconstructor  |  String
+args ::=  `(´ [explist1] `)´  |  TableConstructoror  |  String
 
 function ::= function funcbody
 
@@ -43,7 +43,7 @@ funcbody ::= `(´ [parlist1] `)´ block end
 
 parlist1 ::= namelist [`,´ `...´]  |  `...´
 
-tableconstructor ::= `{´ [fieldlist] `}´
+TableConstructoror ::= `{´ [fieldlist] `}´
 
 fieldlist ::= field {fieldsep field} [fieldsep]
 
@@ -59,33 +59,291 @@ binop ::= `+´  |  `-´  |  `*´  |  `/´  |  `^´  |  `%´  |  `..´  |
 unop ::= `-´  |  not  |  `#´
 """
 from typing import Optional, Sequence
+from enum import Enum
 
 
-class Expr:
+# --------------  terminal start ---------------
+class Terminal:
+    """ terminal item"""
+    pass
+
+
+class TermNil(Terminal):
+    pass
+
+
+class TermFalse(Terminal):
+    pass
+
+
+class TermTrue(Terminal):
+    pass
+
+
+class TermNumber(Terminal):
+    def __init__(self, n):
+        self.value = n
+
+
+class TermString(Terminal):
+    def __init__(self, n):
+        self.value = n
+
+
+class TermName(Terminal):
+    def __init__(self, n):
+        self.value = n
+
+
+class TermEllipsis(Terminal):
+    pass
+
+
+def number(n):
+    return Expr(TermNumber(n))
+
+
+def string(s):
+    return Expr(TermString(s))
+# --------------  terminal start ---------------
+
+
+class Chunk:
+    def __init__(self, stat_arr: Sequence['Stmt'], last_stat: 'LastStmt'):
+        self.stat_arr = stat_arr
+        self.last_stat = last_stat
+
+    def __str__(self):
+        return f"graph {{ {self.stat_arr} {self.last_stat} }}"
+
+
+class Block:
+    def __init__(self, chunk: Chunk, is_root: bool = False):
+        self.chunk = chunk
+        self.is_root = is_root
+
+    def __str__(self):
+        if self.is_root:
+            return f"graph {{ {self.chunk.__str__()} }}"
+        else:
+            return self.chunk.__str__()
+
+
+# --------------  stmt start ---------------
+
+class Stmt:
+    """ = Stat """
+    pass
+
+
+class StmtEnum(Enum):
+    ASSIGN = 1
+    FUNCTION_CALL = 2
+    DO = 3
+    WHILE = 5
+    REPEAT = 4
+    IF = 5
+    FOR = 6
+    FOREACH = 7
+    FUNCTION = 8
+    LOCAL_FUNCTION = 9
+    LOCAL_ASSIGN = 10
+
+
+class AssignStmt(Stmt):
+    def __init__(self, left: 'VarList', right: 'ExprList'):
+        self.left = left
+        self.right = right
+
+
+class FunctionCallStmt(Stmt):
+    """
+    functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
+    """
+
+    def __init__(self, prefix_expr: 'PrefixExpr', colon_name: Optional[TermName], args: 'Args'):
+        self.prefix_expr = prefix_expr
+        self.colon_name = colon_name
+        self.args = args
+
+
+class DoStmt(Stmt):
+    def __init__(self, block):
+        self.block = block
+
+
+class WhileStmt(Stmt):
+    def __init__(self, cond, block):
+        self.cond = cond
+        self.block = block
+
+
+class RepeatStmt(Stmt):
+    def __init__(self, block: Block, exp: 'Expr'):
+        self.block = block
+        self.exp = exp
+
+
+class IfStmt(Stmt):
+    def __init__(self, cond: 'Expr', block, elif_arr: Sequence['ElifStmt'], else_block):
+        self.cond = cond
+        self.block = block
+        self.elif_arr = elif_arr
+        self.else_block = else_block
+
+
+class ElifStmt(Stmt):
+    def __init__(self, cond, block):
+        self.cond = cond
+        self.block = block
+
+
+class ForStmt(Stmt):
+    def __init__(self, init, cond, nxt, block):
+        self.init = init
+        self.cond = cond
+        self.next = nxt
+        self.block = block
+
+
+class ForeachStmt(Stmt):
+    def __init__(self, name_list: 'NameList', exp_list: 'ExprList', block):
+        self.name_list = name_list
+        self.exp_list = exp_list
+        self.block = block
+
+
+class FunctionStmt(Stmt):
+    def __init__(self, name: 'FunctionName', args, body: Block):
+        self.name = name
+        self.args = args
+        self.body = body
+
+
+class LocalFunctionStmt(Stmt):
+    def __init__(self, name: TermName, args, body: Block):
+        self.name = name
+        self.args = args
+        self.body = body
+
+
+class LocalAssignStmt(Stmt):
+    def __init__(self, left: TermName, right: 'ExprList'):
+        self.left = left
+        self.right = right
+
+
+class LastStmt(Stmt):
+    RETURN = 1
+    BREAK = 2
+
+    def __init__(self, kind, exp_list: Optional['ExprList']):
+        self.kind = kind
+        self.exp_list = exp_list
+
+    def is_break(self):
+        return self.kind == LastStmt.BREAK
+
+    @staticmethod
+    def ret(exp_list):
+        return LastStmt(LastStmt.RETURN, exp_list)
+
+    @staticmethod
+    def brk():
+        return LastStmt(LastStmt.BREAK, None)
+
+
+# --------------  stmt end ---------------
+
+class FunctionName:
+    """
+    funcname ::= Name {`.´ Name} [`:´ Name]
+    """
+    def __init__(self, name: TermName, opt_name: Optional[Sequence[TermName]], colon_name: Optional[TermName]):
+        self.name = name
+        self.opt_name = opt_name
+        self.colon_name = colon_name
+
+
+class Var:
+    """
+    var ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
+    """
+    NAME = 1
+    BRACKET = 2
+    DOT = 3
+
+    def __init__(self, kind, prefix_exp: Optional['PrefixExpr'], exp: Optional['Expr'], name: Optional[TermName]):
+        self.kind = kind
+        self.prefix_exp = prefix_exp
+        self.exp = exp
+        self.name = name
+
+    @staticmethod
+    def name(name: TermName):
+        return Var(Var.NAME, None, None, name)
+
+    @staticmethod
+    def bracket(prefix_expr: 'PrefixExpr', expr: 'Expr'):
+        return Var(Var.BRACKET, prefix_expr, expr, None)
+
+    @staticmethod
+    def dot(prefix_expr: 'PrefixExpr', name: TermName):
+        return Var(Var.BRACKET, prefix_expr, None, name)
+
+
+def var_name(name):
+    return Var(TermName(name))
+
+
+class VarList:
+    def __init__(self, var_list: Sequence[Var]):
+        self.var_list = var_list
+
+
+class NameList:
+    def __init__(self, *args: 'TermName'):
+        self.name_list = args
+
+
+class ExprEnum(Enum):
     CONSTANT = 1
     PREFIX = 2
     BINOP = 3
     UNOP = 4
     FUNCTION = 5
 
+
+class Expr:
+
     def __init__(self, value):
-        if type(value) is Constant:
-            self.kind = Expr.CONSTANT
+        if type(value) is TermNil:
+            self.kind = ExprEnum.CONSTANT
+        elif type(value) is TermFalse:
+            self.kind = ExprEnum.CONSTANT
+        elif type(value) is TermTrue:
+            self.kind = ExprEnum.CONSTANT
+        elif type(value) is TermNumber:
+            self.kind = ExprEnum.CONSTANT
+        elif type(value) is TermString:
+            self.kind = ExprEnum.CONSTANT
+        elif type(value) is TermEllipsis:
+            self.kind = ExprEnum.CONSTANT
         elif type(value) is PrefixExpr:
-            self.kind = Expr.PREFIX
+            self.kind = ExprEnum.PREFIX
         elif type(value) is BinOpExpr:
-            self.kind = Expr.BINOP
+            self.kind = ExprEnum.BINOP
         elif type(value) is FunctionExpr:
-            self.kind = Expr.FUNCTION
+            self.kind = ExprEnum.FUNCTION
 
         self.value = value
 
     def __str__(self):
-        if self.type == self.CONSTANT:
+        if self.kind == ExprEnum.CONSTANT:
             return f"expr: constant, value= {self.value.__str__()}"
-        elif self.type == self.PREFIX:
+        elif self.kind == ExprEnum.PREFIX:
             return f"expr: prefix , value= {self.value.__str__()}"
-        elif self.type == self.BINOP:
+        elif self.kind == ExprEnum.BINOP:
             return f"expr: binop, value= {self.value.__str__()}"
         else:
             # self.type == self.UNOP:
@@ -97,17 +355,7 @@ class ExprList:
         self.expr_list = lst
 
 
-class FunctionCall:
-    """
-    functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
-    """
-    def __init__(self, prefix_expr: 'PrefixExpr', colon_name: Optional['Name'], args):
-        self.prefix_expr = prefix_expr
-        self.colon_name = colon_name
-        self.args = args
-
-
-class PrefixExpr(Expr):
+class PrefixExpr:
     """
     prefixexp ::= var  |  functioncall  |  `(´ exp `)´
     """
@@ -115,18 +363,118 @@ class PrefixExpr(Expr):
     FUNCTION_CALL = 2
     PARENTHESES = 3
 
-    def __init__(self, value):
-        if type(value) is Var:
-            self.kind = PrefixExpr.VAR
-        elif type(value) is FunctionCall:
-            self.kind = PrefixExpr.FUNCTION_CALL
-        elif type(value) is Expr:
-            self.kind = PrefixExpr.PARENTHESES
+    def __init__(self, kind, var: Optional['Var'], call: Optional[FunctionCallStmt], exp: Optional[Expr]):
+        self.kind = kind
+        self.var = var
+        self.call = call
+        self.exp = exp
 
-        self.value = value
+    @staticmethod
+    def var(var: 'Var'):
+        return PrefixExpr(PrefixExpr.VAR, var, None, None)
+
+    @staticmethod
+    def call(call):
+        return PrefixExpr(PrefixExpr.FUNCTION_CALL, None, call, None)
+
+    @staticmethod
+    def round(exp):
+        return PrefixExpr(PrefixExpr.PARENTHESES, None, None, exp)
 
 
-class BinOpExpr(Expr):
+def prefix_name(name):
+    return PrefixExpr.var(Var.name(TermName(name)))
+
+
+def prefix_bracket(prefix_expr: PrefixExpr, expr: Expr):
+    return PrefixExpr.var(Var.bracket(prefix_expr, expr))
+
+
+def prefix_dot(prefix_expr: PrefixExpr, name: 'TermName'):
+    return PrefixExpr.var(Var.dot(prefix_expr, name))
+
+
+class Args:
+    PARAMS = 1
+    TABLE_CONSTRUCT = 2
+    STRING = 3
+
+    def __init__(self, kind, params: Optional['ExprList'], table_construct: Optional['TableContructor'],
+                 term_string: Optional[TermString]):
+        self.kind = kind
+        self.params = params
+        self.table_construct = table_construct
+        self.string = term_string
+
+    @staticmethod
+    def params(p: 'ExprList'):
+        return Args(Args.PARAMS, p, None, None)
+
+    @staticmethod
+    def table_construct(tb: 'TableConstructor'):
+        return Args(Args.PARAMS, None, tb, None)
+
+    @staticmethod
+    def string(s: TermString):
+        return Args(Args.PARAMS, None, None, s)
+
+
+class FunctionExpr:
+    def __init__(self, par_list: 'ParList', block: Block):
+        self.par_list = par_list
+        self.block = block
+
+
+class ParList:
+    NAME_LIST = 1
+    ELLIPSIS = 2
+
+    def __init__(self, kind, name_list: Optional['NameList'], elp: Optional[TermEllipsis]):
+        self.kind = kind
+        self.name_list = name_list
+        self.ellipsis = elp
+
+    @staticmethod
+    def name(name_list: 'NameList', elp: Optional[TermEllipsis]):
+        return ParList(ParList.NAME_LIST, name_list, elp)
+
+    @staticmethod
+    def ellipsis(elp: TermEllipsis):
+        return ParList(ParList.ELLIPSIS, None, elp)
+
+
+class TableConstructor:
+    def __init__(self, field_list):
+        self.field_list = field_list
+
+
+class Field:
+    BRACKET_ASSIGN = 1
+    ASSIGN = 2
+    EXP = 3
+
+    def __init__(self, kind, left: Optional[Expr], left_name: Optional[TermName],
+                 right: Optional[Expr]):
+        self.kind = kind
+        self.left = left
+        self.left = left_name
+        self.right = right
+
+    @staticmethod
+    def bracket(left: Expr, right: Expr):
+        return Field(Field.BRACKET_ASSIGN, left, None, right)
+
+    @staticmethod
+    def assign(left: TermName, right: Expr):
+        return Field(Field.ASSIGN, None, left, right)
+
+    @staticmethod
+    def exp(right: Expr):
+        return Field(Field.EXP, None, None, right)
+
+
+# --------------  expression start ---------------
+class BinOpEnum(Enum):
     ADD = 1
     SUB = 2
     MUL = 3
@@ -141,196 +489,16 @@ class BinOpExpr(Expr):
     CONCAT = 12
     ASSIGN_XOR = 13
 
-    def __init__(self, op, left: Expr, right: Expr):
+
+class BinOpExpr:
+    def __init__(self, op: BinOpEnum, left: Expr, right: Expr):
         self.operator = op
         self.left = left
         self.right = right
 
-    def __kind_str(self, op):
-        op_map = {
-            self.ADD: 'ADD',
-            self.SUB: 'SUB',
-            self.MUL: 'MUL',
-            self.DIV: 'DIV',
-            self.XOR: 'XOR',
-            self.MOD: 'MOD',
-            self.LT: 'LT',
-            self.LTE: 'LTE',
-            self.GT: 'GT',
-            self.GTE: 'GTE',
-            self.EQ:  'EQ',
-            self.CONCAT: 'CONCAT',
-            self.ASSIGN_XOR: 'ASSIGN_XOR'
-        }
-        return op_map[op]
-
     def __str__(self):
-        return f"{self.__kind_str(self.operator)} left={{{self.left.__str__()}}}, right={{{self.right.__str__()}}}"
+        return f"{self.operator} left={{{self.left.__str__()}}}, right={{{self.right.__str__()}}}"
 
+# --------------  expression end ---------------
 
-class FunctionExpr(Expr):
-    pass
-
-
-class Name:
-    def __init__(self, name):
-        self.name = name
-
-
-def var_name(name):
-    return Var(Name(name))
-
-
-def prefix_name(name):
-    return PrefixExpr(Var(Name(name)))
-
-
-class NameList:
-    def __init__(self, *args: Name):
-        self.name_list = args
-
-
-class FunctionName:
-    """
-    funcname ::= Name {`.´ Name} [`:´ Name]
-    """
-    def __init__(self, name: Name, opt_name: Optional[Sequence[Name]], colon_name: Optional[Name]):
-        self.name = name
-        self.opt_name = opt_name
-        self.colon_name = colon_name
-
-
-class Constant:
-    NIL = 1
-    FALSE = 2
-    TRUE = 3
-    NUMBER = 4
-    STRING = 5
-    ELLIPSIS = 6
-
-    def __init__(self, kind, value=None):
-        self.kind = kind
-        self.value = value
-
-    def __str__(self):
-        return str(self.value)
-
-
-NIL = Expr(Constant(Constant.NIL, 'nil'))
-FALSE = Expr(Constant(Constant.FALSE, 'false'))
-TRUE = Expr(Constant(Constant.TRUE, 'true'))
-ELLIPSIS = Expr(Constant(Constant.ELLIPSIS, '...'))
-
-
-def number(n):
-    return Expr(Constant(Constant.NUMBER, n))
-
-
-def string(s):
-    return Expr(Constant(Constant.STRING, s))
-
-
-class BlockStmt:
-    def __init__(self, chunk):
-        self.chunk = chunk
-
-
-class Stmt:
-    pass
-
-
-class ChunkStmt:
-    def __init__(self, stat_arr: Sequence[Stmt], last_stat):
-        self.stat_arr = stat_arr
-        self.last_stat = last_stat
-
-
-class FunctionStmt(Stmt):
-    def __init__(self, name, args, body, is_local):
-        self.name = name
-        self.args = args
-        self.body = body
-        self.is_local = is_local
-
-
-class ElifStmt(Stmt):
-    def __init__(self, cond, block):
-        self.cond = cond
-        self.block = block
-
-
-class IfStmt(Stmt):
-    def __init__(self, cond: Expr, block, elif_arr: Sequence[ElifStmt], else_block):
-        self.cond = cond
-        self.block = block
-        self.elif_arr = elif_arr
-        self.else_block = else_block
-
-
-class WhileStmt(Stmt):
-    def __init__(self, cond, block):
-        self.cond = cond
-        self.block = block
-
-
-class ForStmt(Stmt):
-    def __init__(self, init, cond, nxt, block):
-        self.init = init
-        self.cond = cond
-        self.next = nxt
-        self.block = block
-
-
-class AssignStmt(Stmt):
-    def __init__(self, left, right: ExprList, is_local):
-        self.left = left
-        self.right = right
-        self.is_local = is_local
-
-
-class Var:
-    """
-    var ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
-    """
-    NAME = 1
-    BRACKET = 2
-    DOT = 3
-
-    def __init__(self, value):
-        if type(value) is Name:
-            self.kind = Var.NAME
-        elif type(value) is BracketVar:
-            self.kind = Var.BRACKET
-        elif type(value) is DotVar:
-            self.kind = Var.DOT
-
-        self.value = value
-
-
-class VarList:
-    def __init__(self, var_list: Sequence[Var]):
-        self.var_list = var_list
-
-
-class BracketVar(Var):
-    def __init__(self, prefix_expr: Expr, expr: Expr):
-        self.prefix_expr = prefix_expr
-        self.name = expr
-
-
-def prefix_bracket(prefix_expr: Expr, expr: Expr):
-    return PrefixExpr(Var(BracketVar(prefix_expr, expr)))
-
-
-class DotVar(Var):
-    """
-    var ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
-    """
-    def __init__(self, prefix_expr, name: Name):
-        self.prefix_expr = prefix_expr
-        self.name = name
-
-
-def prefix_dot(prefix_expr: Expr, name: Name):
-    return PrefixExpr(Var(DotVar(prefix_expr, name)))
 
