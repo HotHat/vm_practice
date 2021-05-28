@@ -71,7 +71,9 @@ class DotLangTag:
     def get_tag_name(self):
         pass
 
+
 # --------------  terminal start ---------------
+
 class Terminal:
     """ terminal item"""
     pass
@@ -132,28 +134,50 @@ def number(n):
 
 def string(s):
     return Expr(TermString(s))
+
+
 # --------------  terminal start ---------------
 
 
-class Chunk:
-    def __init__(self, stat_arr: Sequence['Stmt'], last_stat: 'LastStmt'):
+class Chunk(DotLangTag):
+    def __init__(self, stat_arr: Sequence['Stmt'], last_stat: Optional['LastStmt'] = None):
         self.stat_arr = stat_arr
         self.last_stat = last_stat
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"chunk\"]"
 
     def __str__(self):
-        return f"graph {{ {self.stat_arr} {self.last_stat} }}"
+        tag = self.get_tag()
+        stat_arr_s = "\n".join([f"{tag}->{stat.get_tag()}" for stat in self.stat_arr])
+        stat_arr_ss = "\n".join([f"{stat.__str__()}" for stat in self.stat_arr])
+        ls = lss = ''
+        if self.last_stat is not None:
+            ls = f"{tag}->{self.last_stat.get_tag()}\n"
+            lss = f"{self.last_stat.__str__()}\n"
+
+        return f"{self.get_tag_name()}\n" \
+               f"{stat_arr_s}\n" \
+               f"{ls}" \
+               f"{stat_arr_ss}" \
+               f"{lss}"
 
 
-class Block:
+class Block(DotLangTag):
     def __init__(self, chunk: Chunk, is_root: bool = False):
         self.chunk = chunk
         self.is_root = is_root
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"block\"]"
 
     def __str__(self):
-        if self.is_root:
-            return f"graph {{ {self.chunk.__str__()} }}"
-        else:
-            return self.chunk.__str__()
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.chunk.get_tag()}\n" \
+               f"{self.chunk.__str__()}"
 
 
 # --------------  stmt start ---------------
@@ -173,6 +197,7 @@ class StmtEnum(Enum):
 
 class Stmt(DotLangTag):
     """ = Stat """
+
     def __init__(self, value):
         if type(value) is AssignStmt:
             self.kind = StmtEnum.ASSIGN
@@ -201,12 +226,11 @@ class Stmt(DotLangTag):
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"block\"]"
+        return f"{self.get_tag()}[label=\"stmt\"]"
 
     def __str__(self):
         tag = self.get_tag()
         return f"{self.get_tag_name()}\n{tag}->{self.value.get_tag()}\n{self.value.__str__()}"
-
 
 
 class AssignStmt(Stmt):
@@ -321,6 +345,20 @@ class LastStmt(Stmt):
     def is_break(self):
         return self.kind == LastStmt.BREAK
 
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"last_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        if self.kind == LastStmt.RETURN:
+            name = f"{self.get_tag()}[label=\"return\"]"
+            return f"{name}\n" \
+                   f"{tag}->{self.exp_list.get_tag()}\n" \
+                   f"{self.exp_list.__str__()}"
+
+        elif self.kind == LastStmt.BREAK:
+            return f"{self.get_tag()}[label=\"break\"]"
+
     @staticmethod
     def ret(exp_list):
         return LastStmt(LastStmt.RETURN, exp_list)
@@ -336,6 +374,7 @@ class FunctionName(DotLangTag):
     """
     funcname ::= Name {`.´ Name} [`:´ Name]
     """
+
     def __init__(self, name: TermName, opt_name: Optional[Sequence[TermName]] = None,
                  colon_name: Optional[TermName] = None):
         self.name = name
@@ -595,7 +634,7 @@ class Args(DotLangTag):
 
 
 class FunctionExpr(DotLangTag):
-    def __init__(self, par_list: 'ParList', block: Stmt):
+    def __init__(self, par_list: 'ParList', block: Block):
         self.par_list = par_list
         self.block = block
         self.tag = None
@@ -716,6 +755,7 @@ class BinOpExpr(DotLangTag):
         return f"{self.get_tag_name()}\n{tag}->{self.left.get_tag()}\n{tag}->{self.right.get_tag()}\n" \
                f"{self.left.__str__()}\n{self.right.__str__()}"
 
+
 # --------------  expression end ---------------
 
 
@@ -727,4 +767,3 @@ def tag_number():
     tag = TAG_NUMBER
     TAG_NUMBER = TAG_NUMBER + 1
     return tag
-

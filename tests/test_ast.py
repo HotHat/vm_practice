@@ -1,4 +1,3 @@
-
 import unittest
 from ast import *
 from graphviz import Source
@@ -58,10 +57,12 @@ class TestAst(unittest.TestCase):
         print('------------------')
         print(v3)
 
-    def pp(self, s):
+    def pp(self, s, is_source=False):
         s = f"digraph G {{{s}}}"
-        # print(s)
-        Source(s, filename="test.gv", format="png").view()
+        if is_source:
+            print(s)
+        else:
+            Source(s, filename="test.gv", format="png").view()
 
     def test_var_list(self):
         v1 = Var.name(TermName("var_name"))
@@ -95,9 +96,27 @@ class TestAst(unittest.TestCase):
         opn = TermName("option_name")
         fc = FunctionCallStmt(pe, opn, args)
 
-        fn = FunctionExpr(ParList.name(NameList(TermName("args1"), TermName("args2"))), Stmt(fc))
+        fn = FunctionExpr(ParList.name(NameList(TermName("args1"), TermName("args2"))), Block(Chunk([Stmt(fc)])))
 
         self.pp(fn)
+
+    def test_block(self):
+        pe = prefix_name("function_name")
+        args = Args.params(ExprList(Expr(Var.name(TermName("argv1"))),
+                                    Expr(Var.name(TermName("argv2")))))
+        opn = TermName("option_name")
+        fc = FunctionCallStmt(pe, opn, args)
+
+        pe2 = prefix_name("function_name")
+        args2 = Args.params(ExprList(Expr(Var.name(TermName("argv1"))),
+                                     Expr(Var.name(TermName("argv2")))))
+        opn2 = TermName("option_name")
+        fc2 = FunctionCallStmt(pe2, opn2, args2)
+
+        # self.pp(fc, True)
+        block = Block(Chunk([Stmt(fc), Stmt(fc2)]))
+        # self.pp(block, True)
+        self.pp(block)
 
 
 if __name__ == '__main__':
