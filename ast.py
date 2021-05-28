@@ -62,6 +62,15 @@ from typing import Optional, Sequence
 from enum import Enum
 
 
+class DotLangTag:
+    def get_tag(self):
+        if self.tag is None:
+            self.tag = tag_number()
+        return self.tag
+
+    def get_tag_name(self):
+        pass
+
 # --------------  terminal start ---------------
 class Terminal:
     """ terminal item"""
@@ -69,34 +78,52 @@ class Terminal:
 
 
 class TermNil(Terminal):
-    pass
+    def __init__(self):
+        self.tag = None
+
+    def __str__(self):
+        return 'nil'
 
 
 class TermFalse(Terminal):
-    pass
+    def __str__(self):
+        return 'false'
 
 
 class TermTrue(Terminal):
-    pass
+    def __str__(self):
+        return 'true'
 
 
-class TermNumber(Terminal):
+class TermNumber(Terminal, DotLangTag):
+    def __init__(self, n):
+        self.value = n
+        self.tag = None
+
+    def __str__(self):
+        return f"{self.get_tag()}[label=\"{self.value}\"]"
+
+
+class TermString(Terminal, DotLangTag):
     def __init__(self, n):
         self.value = n
 
+    def __str__(self):
+        return f"{self.get_tag()}[label=\"{self.value}\"]"
 
-class TermString(Terminal):
+
+class TermName(Terminal, DotLangTag):
     def __init__(self, n):
         self.value = n
+        self.tag = None
 
-
-class TermName(Terminal):
-    def __init__(self, n):
-        self.value = n
+    def __str__(self):
+        return f"{self.get_tag()}[label=\"{self.value}\"]"
 
 
 class TermEllipsis(Terminal):
-    pass
+    def __str__(self):
+        return '...'
 
 
 def number(n):
@@ -130,12 +157,6 @@ class Block:
 
 
 # --------------  stmt start ---------------
-
-class Stmt:
-    """ = Stat """
-    pass
-
-
 class StmtEnum(Enum):
     ASSIGN = 1
     FUNCTION_CALL = 2
@@ -150,13 +171,51 @@ class StmtEnum(Enum):
     LOCAL_ASSIGN = 10
 
 
+class Stmt(DotLangTag):
+    """ = Stat """
+    def __init__(self, value):
+        if type(value) is AssignStmt:
+            self.kind = StmtEnum.ASSIGN
+        elif type(value) is FunctionCallStmt:
+            self.kind = StmtEnum.FUNCTION_CALL
+        elif type(value) is DoStmt:
+            self.kind = StmtEnum.DO
+        elif type(value) is WhileStmt:
+            self.kind = StmtEnum.WHILE
+        elif type(value) is RepeatStmt:
+            self.kind = StmtEnum.REPEAT
+        elif type(value) is IfStmt:
+            self.kind = StmtEnum.IF
+        elif type(value) is ForStmt:
+            self.kind = StmtEnum.FOR
+        elif type(value) is ForeachStmt:
+            self.kind = StmtEnum.FOREACH
+        elif type(value) is FunctionStmt:
+            self.kind = StmtEnum.FUNCTION
+        elif type(value) is LocalFunctionStmt:
+            self.kind = StmtEnum.LOCAL_FUNCTION
+        elif type(value) is LocalAssignStmt:
+            self.kind = StmtEnum.LOCAL_ASSIGN
+
+        self.value = value
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"block\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n{tag}->{self.value.get_tag()}\n{self.value.__str__()}"
+
+
+
 class AssignStmt(Stmt):
     def __init__(self, left: 'VarList', right: 'ExprList'):
         self.left = left
         self.right = right
 
 
-class FunctionCallStmt(Stmt):
+class FunctionCallStmt(Stmt, DotLangTag):
     """
     functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
     """
@@ -165,6 +224,24 @@ class FunctionCallStmt(Stmt):
         self.prefix_expr = prefix_expr
         self.colon_name = colon_name
         self.args = args
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"function_call\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        cpd = cps = ''
+        if self.colon_name is not None:
+            cpd = f"{tag}->{self.colon_name.get_tag()}\n"
+            cps = f"{self.colon_name.__str__()}\n"
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.prefix_expr.get_tag()}\n" \
+               f"{self.prefix_expr.__str__()}\n" \
+               f"{cpd}" \
+               f"{tag}->{self.args.get_tag()}\n" \
+               f"{cps}" \
+               f"{self.args.__str__()}"
 
 
 class DoStmt(Stmt):
@@ -255,17 +332,30 @@ class LastStmt(Stmt):
 
 # --------------  stmt end ---------------
 
-class FunctionName:
+class FunctionName(DotLangTag):
     """
     funcname ::= Name {`.´ Name} [`:´ Name]
     """
-    def __init__(self, name: TermName, opt_name: Optional[Sequence[TermName]], colon_name: Optional[TermName]):
+    def __init__(self, name: TermName, opt_name: Optional[Sequence[TermName]] = None,
+                 colon_name: Optional[TermName] = None):
         self.name = name
         self.opt_name = opt_name
         self.colon_name = colon_name
+        self.tag = None
+
+    def get_tag_name(self):
+        name = self.name.value
+        if self.opt_name:
+            name = f"{name}.{'.'.join([tn.value for tn in self.opt_name])}"
+        if self.colon_name:
+            name = f"{name}:{self.colon_name}"
+        return f"{self.get_tag()}[label=\"{name}\"]"
+
+    def __str__(self):
+        return f"{self.get_tag_name()}"
 
 
-class Var:
+class Var(DotLangTag):
     """
     var ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
     """
@@ -278,6 +368,28 @@ class Var:
         self.prefix_exp = prefix_exp
         self.exp = exp
         self.name = name
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"var\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        if self.kind == Var.NAME:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.name.get_tag()}\n{self.name.__str__()}"
+        elif self.kind == Var.BRACKET:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.prefix_exp.get_tag()}\n" \
+                   f"{tag}->{self.exp.get_tag()}\n" \
+                   f"{self.prefix_exp.__str__()}\n" \
+                   f"{self.exp.__str__()}"
+        elif self.kind == Var.DOT:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.prefix_exp.get_tag()}\n" \
+                   f"{tag}->{self.name.get_tag()}\n" \
+                   f"{self.prefix_exp.__str__()}\n" \
+                   f"{self.name.__str__()}"
 
     @staticmethod
     def name(name: TermName):
@@ -289,21 +401,41 @@ class Var:
 
     @staticmethod
     def dot(prefix_expr: 'PrefixExpr', name: TermName):
-        return Var(Var.BRACKET, prefix_expr, None, name)
+        return Var(Var.DOT, prefix_expr, None, name)
 
 
 def var_name(name):
     return Var(TermName(name))
 
 
-class VarList:
-    def __init__(self, var_list: Sequence[Var]):
+class VarList(DotLangTag):
+    def __init__(self, *var_list: Var):
         self.var_list = var_list
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"var_list\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        pre = "\n".join([f"{tag}->{var.get_tag()}" for var in self.var_list])
+        sub = "\n".join([var.__str__() for var in self.var_list])
+        return f"{self.get_tag_name()}\n{pre}\n{sub}"
 
 
-class NameList:
+class NameList(DotLangTag):
     def __init__(self, *args: 'TermName'):
         self.name_list = args
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"name_list\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        pre = "\n".join([f"{tag}->{name.get_tag()}" for name in self.name_list])
+        sub = "\n".join([name.__str__() for name in self.name_list])
+        return f"{self.get_tag_name()}\n{pre}\n{sub}"
 
 
 class ExprEnum(Enum):
@@ -314,8 +446,7 @@ class ExprEnum(Enum):
     FUNCTION = 5
 
 
-class Expr:
-
+class Expr(DotLangTag):
     def __init__(self, value):
         if type(value) is TermNil:
             self.kind = ExprEnum.CONSTANT
@@ -337,25 +468,32 @@ class Expr:
             self.kind = ExprEnum.FUNCTION
 
         self.value = value
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"exp\"]"
 
     def __str__(self):
-        if self.kind == ExprEnum.CONSTANT:
-            return f"expr: constant, value= {self.value.__str__()}"
-        elif self.kind == ExprEnum.PREFIX:
-            return f"expr: prefix , value= {self.value.__str__()}"
-        elif self.kind == ExprEnum.BINOP:
-            return f"expr: binop, value= {self.value.__str__()}"
-        else:
-            # self.type == self.UNOP:
-            return f"expr: unop, value= {self.value.__str__()}"
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n{tag}->{self.value.get_tag()}\n{self.value.__str__()}"
 
 
-class ExprList:
+class ExprList(DotLangTag):
     def __init__(self, *lst: Expr):
         self.expr_list = lst
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"exp_list\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        pre = "\n".join([f"{tag}->{exp.get_tag()}" for exp in self.expr_list])
+        sub = "\n".join([exp.__str__() for exp in self.expr_list])
+        return f"{self.get_tag_name()}\n{pre}\n{sub}"
 
 
-class PrefixExpr:
+class PrefixExpr(DotLangTag):
     """
     prefixexp ::= var  |  functioncall  |  `(´ exp `)´
     """
@@ -368,6 +506,24 @@ class PrefixExpr:
         self.var = var
         self.call = call
         self.exp = exp
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"prefix\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        if self.kind == PrefixExpr.VAR:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.var.get_tag()}\n{self.var.__str__()}"
+        elif self.kind == PrefixExpr.FUNCTION_CALL:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.call.get_tag()}\n" \
+                   f"{self.call.__str__()}"
+        elif self.kind == PrefixExpr.PARENTHESES:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.exp.get_tag()}\n" \
+                   f"{self.exp.__str__()}"
 
     @staticmethod
     def var(var: 'Var'):
@@ -394,24 +550,43 @@ def prefix_dot(prefix_expr: PrefixExpr, name: 'TermName'):
     return PrefixExpr.var(Var.dot(prefix_expr, name))
 
 
-class Args:
+class Args(DotLangTag):
     PARAMS = 1
     TABLE_CONSTRUCT = 2
     STRING = 3
 
-    def __init__(self, kind, params: Optional['ExprList'], table_construct: Optional['TableContructor'],
+    def __init__(self, kind, params: Optional['ExprList'], table_constructor: Optional['TableContructor'],
                  term_string: Optional[TermString]):
         self.kind = kind
         self.params = params
-        self.table_construct = table_construct
+        self.table_constructor = table_constructor
         self.string = term_string
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"args\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        if self.kind == Args.PARAMS:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.params.get_tag()}\n" \
+                   f"{self.params.__str__()}"
+        elif self.kind == Args.TABLE_CONSTRUCT:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.table_constructor.get_tag()}\n" \
+                   f"{self.table_constructor.__str__()}"
+        elif self.kind == Args.STRING:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.string.get_tag()}\n" \
+                   f"{self.string.__str__()}"
 
     @staticmethod
     def params(p: 'ExprList'):
         return Args(Args.PARAMS, p, None, None)
 
     @staticmethod
-    def table_construct(tb: 'TableConstructor'):
+    def table_constructor(tb: 'TableConstructor'):
         return Args(Args.PARAMS, None, tb, None)
 
     @staticmethod
@@ -419,13 +594,25 @@ class Args:
         return Args(Args.PARAMS, None, None, s)
 
 
-class FunctionExpr:
-    def __init__(self, par_list: 'ParList', block: Block):
+class FunctionExpr(DotLangTag):
+    def __init__(self, par_list: 'ParList', block: Stmt):
         self.par_list = par_list
         self.block = block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"function_expr\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.par_list.get_tag()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.par_list.__str__()}\n" \
+               f"{self.block.__str__()}\n"
 
 
-class ParList:
+class ParList(DotLangTag):
     NAME_LIST = 1
     ELLIPSIS = 2
 
@@ -433,9 +620,31 @@ class ParList:
         self.kind = kind
         self.name_list = name_list
         self.ellipsis = elp
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"par_list\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        if self.kind == ParList.NAME_LIST:
+            opt = opts = ''
+            if self.ellipsis is not None:
+                opt = f"{tag}->{self.ellipsis.get_tag()}\n"
+                opts = f"{self.ellipsis.__str__()}\n"
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.name_list.get_tag()}\n" \
+                   f"{opt}" \
+                   f"{self.name_list.__str__()}\n" \
+                   f"{opts}"
+
+        elif self.kind == ParList.ELLIPSIS:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.ellipsis.get_tag()}\n" \
+                   f"{self.ellipsis.__str__()}"
 
     @staticmethod
-    def name(name_list: 'NameList', elp: Optional[TermEllipsis]):
+    def name(name_list: 'NameList', elp: Optional[TermEllipsis] = None):
         return ParList(ParList.NAME_LIST, name_list, elp)
 
     @staticmethod
@@ -490,15 +699,32 @@ class BinOpEnum(Enum):
     ASSIGN_XOR = 13
 
 
-class BinOpExpr:
+class BinOpExpr(DotLangTag):
     def __init__(self, op: BinOpEnum, left: Expr, right: Expr):
         self.operator = op
         self.left = left
         self.right = right
+        # for dot lang
+        self.tag = None
+        self.tag_name = self.operator
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"{self.operator.name}\"]"
 
     def __str__(self):
-        return f"{self.operator} left={{{self.left.__str__()}}}, right={{{self.right.__str__()}}}"
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n{tag}->{self.left.get_tag()}\n{tag}->{self.right.get_tag()}\n" \
+               f"{self.left.__str__()}\n{self.right.__str__()}"
 
 # --------------  expression end ---------------
 
+
+TAG_NUMBER = 1
+
+
+def tag_number():
+    global TAG_NUMBER
+    tag = TAG_NUMBER
+    TAG_NUMBER = TAG_NUMBER + 1
+    return tag
 

@@ -1,41 +1,103 @@
 
 import unittest
 from ast import *
+from graphviz import Source
 
 
 class TestAst(unittest.TestCase):
+    def setUp(self) -> None:
+        self.source = Source
+
     def test_constant(self):
-        c1 = NIL
-        c2 = string('string const')
-        c3 = number(1234)
-        c4 = TRUE
-        c5 = FALSE
+        c1 = TermNil()
+        c2 = TermString('it is string')
+        c3 = TermNumber(1234)
+        c4 = TermTrue()
+        c5 = TermFalse()
+        c6 = TermEllipsis()
 
         print(c1)
         print(c2)
         print(c3)
         print(c4)
         print(c5)
+        print(c6)
 
     def test_assign(self):
-        s = AssignStmt([Name('a'), Name('b')], ExprList(Expr(TRUE), Expr(FALSE)), True)
+        pass
 
     def test_binop_const(self):
+        bp = BinOpExpr(BinOpEnum.ADD, number(6), number(5))
+        print(bp)
 
-        binop = BinOpExpr(BinOpExpr.ADD, string('abc'), FALSE)
+    def test_exp_list(self):
+        b1 = Expr(BinOpExpr(BinOpEnum.ADD, number(1), number(2)))
+        # self.assertEqual(1, 2)
+        b2 = Expr(BinOpExpr(BinOpEnum.ADD, number(3), number(4)))
+        pl = ExprList(b1, b2)
+        s = pl.__str__()
+        print(s)
 
-        binop2 = BinOpExpr(BinOpExpr.SUB, binop, TRUE)
+    def test_function_name(self):
+        fn = FunctionName(TermName("dog"))
+        print(fn)
 
-        print(binop2)
+        fn1 = FunctionName(TermName("dog"), [TermName("run"), TermName("jump")])
+        print(fn1)
 
-    def test_binop_var(self):
-        l = Expr(prefix_name('abc'))
-        r = Expr(prefix_bracket(prefix_name('table'), number(10)))
+        fn2 = FunctionName(TermName("dog"), [TermName("run"), TermName("jump")], TermName("eat"))
+        print(fn2)
 
-        r2 = Expr(prefix_dot(prefix_name('class'), Name('func')))
+    def test_var(self):
+        v1 = Var.name(TermName("var_name"))
+        v2 = Var.bracket(prefix_name("var"), Expr(TermNumber(5)))
+        v3 = Var.dot(prefix_name("dog"), TermName("run"))
+        print(v1)
+        print('------------------')
+        print(v2)
+        print('------------------')
+        print(v3)
 
-        b = BinOpExpr(BinOpExpr.ADD, l, r)
-        b2 = BinOpExpr(BinOpExpr.SUB, b, r2)
+    def pp(self, s):
+        s = f"digraph G {{{s}}}"
+        # print(s)
+        Source(s, filename="test.gv", format="png").view()
+
+    def test_var_list(self):
+        v1 = Var.name(TermName("var_name"))
+        v2 = Var.bracket(prefix_name("var"), Expr(TermNumber(5)))
+        v3 = Var.dot(prefix_name("dog"), TermName("run"))
+        vl = VarList(v1, v2, v3)
+        print(vl)
+
+    def test_name_list(self):
+        n1 = TermName("name1")
+        n2 = TermName("name2")
+        n3 = TermName('name3')
+        nl = NameList(n1, n2, n3)
+        print(nl)
+
+    def test_function_call(self):
+        pe = prefix_name("function_name")
+        args = Args.params(ExprList(Expr(Var.name(TermName("argv1"))),
+                                    Expr(Var.name(TermName("argv2"))),
+                                    Expr(Var.name(TermName("argv3")))))
+        opn = TermName("option_name")
+        fc = FunctionCallStmt(pe, opn, args)
+
+        self.pp(fc)
+
+    def test_function_expr(self):
+        pe = prefix_name("function_name")
+        args = Args.params(ExprList(Expr(Var.name(TermName("argv1"))),
+                                    Expr(Var.name(TermName("argv2"))),
+                                    Expr(Var.name(TermName("argv3")))))
+        opn = TermName("option_name")
+        fc = FunctionCallStmt(pe, opn, args)
+
+        fn = FunctionExpr(ParList.name(NameList(TermName("args1"), TermName("args2"))), Stmt(fc))
+
+        self.pp(fn)
 
 
 if __name__ == '__main__':
