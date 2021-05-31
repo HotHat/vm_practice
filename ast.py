@@ -338,7 +338,7 @@ class IfStmt(Stmt):
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"if\"]"
+        return f"{self.get_tag()}[label=\"if_stmt\"]"
 
     def __str__(self):
         tag = self.get_tag()
