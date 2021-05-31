@@ -118,6 +118,70 @@ class TestAst(unittest.TestCase):
         # self.pp(block, True)
         self.pp(block)
 
+    def test_var_one(self):
+        var_list = VarList(Var.name(TermName("var1")))
+        exp_list = ExprList(Expr(TermNil()))
+        a = AssignStmt(var_list, exp_list)
+        self.pp(a)
+
+    def test_var_more(self):
+        var_list = VarList(Var.name(TermName("var1")), Var.name(TermName("var2")), Var.name(TermName("var3")))
+        exp_list = ExprList(Expr(TermNil()), Expr(TermNumber(123)), Expr(TermNumber(456)))
+        a = AssignStmt(var_list, exp_list)
+        self.pp(a)
+
+    def test_if_without_elseif_else(self):
+        conf = Expr(TermTrue())
+        var_list = VarList(Var.name(TermName("var1")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        if_stmt = IfStmt(conf, block, None, None)
+        self.pp(if_stmt)
+
+    def test_if_without_else(self):
+        conf = Expr(TermTrue())
+        var_list = VarList(Var.name(TermName("var1")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+
+        var_list2 = VarList(Var.name(TermName("var2")))
+        exp_list2 = ExprList(Expr(TermNil()))
+        assign2 = AssignStmt(var_list2, exp_list2)
+        block2 = Block(Chunk([Stmt(assign2)]))
+        conf2 = Expr(TermTrue())
+        else_if_stmt = ElifStmt(conf2, block2)
+
+        if_stmt = IfStmt(conf, block, [else_if_stmt], None)
+
+        self.pp(if_stmt)
+        # self.pp(if_stmt, True)
+
+    def test_if_full(self):
+        conf = Expr(TermTrue())
+        var_list = VarList(Var.name(TermName("var1")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+
+        var_list2 = VarList(Var.name(TermName("var2")))
+        exp_list2 = ExprList(Expr(TermNil()))
+        assign2 = AssignStmt(var_list2, exp_list2)
+        block2 = Block(Chunk([Stmt(assign2)]))
+        conf2 = Expr(TermTrue())
+        else_if_stmt = ElifStmt(conf2, block2)
+
+        var_list3 = VarList(Var.name(TermName("var3")))
+        exp_list3 = ExprList(Expr(TermNil()))
+        assign3 = AssignStmt(var_list3, exp_list3)
+        block3 = Block(Chunk([Stmt(assign3)]))
+
+        if_stmt = IfStmt(conf, block, [else_if_stmt], block3)
+
+        self.pp(if_stmt)
+        # self.pp(if_stmt, True)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -79,22 +79,28 @@ class Terminal:
     pass
 
 
-class TermNil(Terminal):
+class TermNil(Terminal, DotLangTag):
     def __init__(self):
         self.tag = None
 
     def __str__(self):
-        return 'nil'
+        return f"{self.get_tag()}[label=\"nil\"]"
 
 
-class TermFalse(Terminal):
+class TermFalse(Terminal, DotLangTag):
+    def __init__(self):
+        self.tag = None
+
     def __str__(self):
-        return 'false'
+        return f"{self.get_tag()}[label=\"false\"]"
 
 
-class TermTrue(Terminal):
+class TermTrue(Terminal, DotLangTag):
+    def __init__(self):
+        self.tag = None
+
     def __str__(self):
-        return 'true'
+        return f"{self.get_tag()}[label=\"true\"]"
 
 
 class TermNumber(Terminal, DotLangTag):
@@ -123,9 +129,12 @@ class TermName(Terminal, DotLangTag):
         return f"{self.get_tag()}[label=\"{self.value}\"]"
 
 
-class TermEllipsis(Terminal):
+class TermEllipsis(Terminal, DotLangTag):
+    def __init__(self):
+        self.tag = None
+
     def __str__(self):
-        return '...'
+        return f"{self.get_tag()}[label=\"...\"]"
 
 
 def number(n):
@@ -233,10 +242,22 @@ class Stmt(DotLangTag):
         return f"{self.get_tag_name()}\n{tag}->{self.value.get_tag()}\n{self.value.__str__()}"
 
 
-class AssignStmt(Stmt):
+class AssignStmt(Stmt, DotLangTag):
     def __init__(self, left: 'VarList', right: 'ExprList'):
         self.left = left
         self.right = right
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"assign\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.left.get_tag()}\n" \
+               f"{tag}->{self.right.get_tag()}\n" \
+               f"{self.left.__str__()}\n" \
+               f"{self.right.__str__()}"
 
 
 class FunctionCallStmt(Stmt, DotLangTag):
@@ -286,17 +307,56 @@ class RepeatStmt(Stmt):
 
 
 class IfStmt(Stmt):
-    def __init__(self, cond: 'Expr', block, elif_arr: Sequence['ElifStmt'], else_block):
+    def __init__(self, cond: 'Expr', block: Block, elif_arr: Optional[Sequence['ElifStmt']], else_block: Optional[Block]):
         self.cond = cond
         self.block = block
         self.elif_arr = elif_arr
         self.else_block = else_block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"if\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        elif_opt = elif_opts = ''
+        else_opt = else_opts = ''
+
+        if self.elif_arr is not None:
+            elif_opt = "\n".join([f"{tag}->{it.get_tag()}\n" for it in self.elif_arr])
+            elif_opts = "\n".join([f"{it.__str__()}\n" for it in self.elif_arr])
+        if self.else_block is not None:
+            else_opt = f"{tag}->{self.else_block.get_tag()}\n"
+            else_opts = f"{self.else_block.__str__()}\n"
+
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.cond.get_tag()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.cond.__str__()}\n" \
+               f"{self.block.__str__()}\n" \
+               f"{elif_opt}" \
+               f"{elif_opts}" \
+               f"{else_opt}" \
+               f"{else_opts}"
 
 
 class ElifStmt(Stmt):
-    def __init__(self, cond, block):
+    def __init__(self, cond: 'Expr', block: Block):
         self.cond = cond
         self.block = block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"else_if\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.cond.get_tag()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.cond.__str__()}\n" \
+               f"{self.block.__str__()}\n"
 
 
 class ForStmt(Stmt):
