@@ -182,6 +182,78 @@ class TestAst(unittest.TestCase):
         self.pp(if_stmt)
         # self.pp(if_stmt, True)
 
+    def test_do(self):
+        var_list = VarList(Var.name(TermName("do-test")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        do = DoStmt(block)
+        self.pp(do)
+
+    def test_while(self):
+        cond = Expr(TermTrue())
+        var_list = VarList(Var.name(TermName("wile_assign")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        wh = WhileStmt(cond, block)
+        self.pp(wh)
+
+    def test_for(self):
+        cond = Expr(TermFalse())
+        var_list = VarList(Var.name(TermName("wile_assign")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        for_stmt = ForStmt(TermName('abc'), Expr(TermNil()), cond, None, block)
+        self.pp(for_stmt)
+
+    def test_for_with_exp(self):
+        cond = Expr(TermFalse())
+        var_list = VarList(Var.name(TermName("wile_assign")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        for_stmt = ForStmt(TermName('abc'), Expr(TermNil()), cond, Expr(TermNil()), block)
+        self.pp(for_stmt)
+
+    def test_foreach(self):
+        var_list = VarList(Var.name(TermName("wile_assign")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+
+        name_list = NameList(TermName("name1"), TermName("name2"), TermName("name3"))
+        exp_list = ExprList(Expr(TermTrue()), Expr(TermNumber(123)), Expr(TermString('abc')))
+        for_stmt = ForeachStmt(name_list, exp_list, block)
+        self.pp(for_stmt)
+
+    def test_function(self):
+        var_list = VarList(Var.name(TermName("wile_assign")))
+        exp_list = ExprList(Expr(TermNil()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        args = Args.params(ExprList(Expr(TermString("args1")), Expr(TermString("args2"))))
+
+        fun_stmt = FunctionStmt(FunctionName(TermName("function_name")), args, block)
+        self.pp(fun_stmt)
+
+    def test_local_function(self):
+        var_list = VarList(Var.name(TermName("local_function_assign")))
+        exp_list = ExprList(Expr(TermTrue()))
+        assign = AssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        args = Args.params(ExprList(Expr(TermString("args1")), Expr(TermString("args2"))))
+
+        fun_stmt = LocalFunctionStmt(TermName("local_function_name"), args, block)
+        self.pp(fun_stmt)
+
+    def test_local_assign(self):
+        name_list = NameList(TermName("var1"), TermName("var2"))
+        exp_list = ExprList(Expr(Var.name(TermName("var_name"))), Expr(TermNumber(123)))
+        ls = LocalAssignStmt(name_list, exp_list)
+        self.pp(ls)
+
 
 if __name__ == '__main__':
     unittest.main()

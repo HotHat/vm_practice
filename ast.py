@@ -115,6 +115,7 @@ class TermNumber(Terminal, DotLangTag):
 class TermString(Terminal, DotLangTag):
     def __init__(self, n):
         self.value = n
+        self.tag = None
 
     def __str__(self):
         return f"{self.get_tag()}[label=\"{self.value}\"]"
@@ -289,15 +290,37 @@ class FunctionCallStmt(Stmt, DotLangTag):
                f"{self.args.__str__()}"
 
 
-class DoStmt(Stmt):
+class DoStmt(Stmt, DotLangTag):
     def __init__(self, block):
         self.block = block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"do_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.block.__str__()}\n"
 
 
 class WhileStmt(Stmt):
     def __init__(self, cond, block):
         self.cond = cond
         self.block = block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"while_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.cond.get_tag()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.cond.__str__()}\n" \
+               f"{self.block.__str__()}"
 
 
 class RepeatStmt(Stmt):
@@ -360,25 +383,78 @@ class ElifStmt(Stmt):
 
 
 class ForStmt(Stmt):
-    def __init__(self, init, cond, nxt, block):
-        self.init = init
+    def __init__(self, name: TermName, assign: 'Expr', cond: 'Expr', nxt: Optional['Expr'], block: Block):
+        self.name = name
+        self.assign = assign
         self.cond = cond
         self.next = nxt
         self.block = block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"for_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        next_opt = next_opts = ''
+
+        if self.next is not None:
+            next_opt = f"{tag}->{self.next.get_tag()}\n"
+            next_opts = f"{self.next.__str__()}\n"
+
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.name.get_tag()}\n" \
+               f"{tag}->{self.assign.get_tag()}\n" \
+               f"{tag}->{self.cond.get_tag()}\n" \
+               f"{next_opt}" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.name.__str__()}\n" \
+               f"{self.assign.__str__()}\n" \
+               f"{self.cond.__str__()}\n" \
+               f"{next_opts}" \
+               f"{self.block.__str__()}"
 
 
-class ForeachStmt(Stmt):
-    def __init__(self, name_list: 'NameList', exp_list: 'ExprList', block):
+class ForeachStmt(Stmt, DotLangTag):
+    def __init__(self, name_list: 'NameList', exp_list: 'ExprList', block: Block):
         self.name_list = name_list
         self.exp_list = exp_list
         self.block = block
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"foreach_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.name_list.get_tag()}\n" \
+               f"{tag}->{self.exp_list.get_tag()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.name_list.__str__()}\n" \
+               f"{self.exp_list.__str__()}\n" \
+               f"{self.block.__str__()}"
 
 
-class FunctionStmt(Stmt):
+class FunctionStmt(Stmt, DotLangTag):
     def __init__(self, name: 'FunctionName', args, body: Block):
         self.name = name
         self.args = args
         self.body = body
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"function_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.name.get_tag()}\n" \
+               f"{tag}->{self.args.get_tag()}\n" \
+               f"{tag}->{self.body.get_tag()}\n" \
+               f"{self.name.__str__()}\n" \
+               f"{self.args.__str__()}\n" \
+               f"{self.body.__str__()}"
 
 
 class LocalFunctionStmt(Stmt):
@@ -386,12 +462,38 @@ class LocalFunctionStmt(Stmt):
         self.name = name
         self.args = args
         self.body = body
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"local_function_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.name.get_tag()}\n" \
+               f"{tag}->{self.args.get_tag()}\n" \
+               f"{tag}->{self.body.get_tag()}\n" \
+               f"{self.name.__str__()}\n" \
+               f"{self.args.__str__()}\n" \
+               f"{self.body.__str__()}"
 
 
-class LocalAssignStmt(Stmt):
-    def __init__(self, left: TermName, right: 'ExprList'):
+class LocalAssignStmt(Stmt, DotLangTag):
+    def __init__(self, left: 'NameList', right: 'ExprList'):
         self.left = left
         self.right = right
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"local_assign\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.left.get_tag()}\n" \
+               f"{tag}->{self.right.get_tag()}\n" \
+               f"{self.left.__str__()}\n" \
+               f"{self.right.__str__()}"
 
 
 class LastStmt(Stmt):
@@ -401,9 +503,6 @@ class LastStmt(Stmt):
     def __init__(self, kind, exp_list: Optional['ExprList']):
         self.kind = kind
         self.exp_list = exp_list
-
-    def is_break(self):
-        return self.kind == LastStmt.BREAK
 
     def get_tag_name(self):
         return f"{self.get_tag()}[label=\"last_stmt\"]"
@@ -418,6 +517,9 @@ class LastStmt(Stmt):
 
         elif self.kind == LastStmt.BREAK:
             return f"{self.get_tag()}[label=\"break\"]"
+
+    def is_break(self):
+        return self.kind == LastStmt.BREAK
 
     @staticmethod
     def ret(exp_list):
