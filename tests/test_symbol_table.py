@@ -20,3 +20,12 @@ class TestDot(unittest.TestCase):
         print(s1.lookup('c'))
         print(s1.lookup('a'))
         print(s1.lookup('a0'))
+
+    def test_const(self):
+        sym = const_symbol_table()
+        print(sym.lookup(''))
+        print(sym.lookup('false'))
+        print(sym.lookup('true'))
+        print(sym.lookup('nil'))
+        print(sym.lookup('123'))
+        print(sym.lookup('this is string'))
