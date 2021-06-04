@@ -21,10 +21,10 @@ def generate_expr(exp: Expr):
     if ExprEnum.CONSTANT == exp.kind:
         return generate_const(exp.value)
     elif ExprEnum.BINOP == exp.kind:
-        return generate_binop_expr(exp.value)
+        return generate_binary_expr(exp.value)
 
 
-def generate_binop_expr(binop: BinOpExpr):
+def generate_binary_expr(binop: BinOpExpr):
     code = None
     if BinOpEnum.ADD == binop.operator:
         code = OpCode.ADD
