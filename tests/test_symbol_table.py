@@ -4,11 +4,11 @@ from symbol_table import *
 
 class TestDot(unittest.TestCase):
     def test_table(self):
-        s = SymbolTable()
+        s = BaseSymbolTable()
         s.insert('a', 123)
         s.insert('b', 456)
 
-        s1 = SymbolTable(s)
+        s1 = BaseSymbolTable(s)
         s1.insert('c', 123)
         s1.insert('d', 456)
 
@@ -29,3 +29,31 @@ class TestDot(unittest.TestCase):
         print(sym.lookup('nil'))
         print(sym.lookup('123'))
         print(sym.lookup('this is string'))
+
+    def test_symbol_table(self):
+        symbol_table = SymbolTable()
+        symbol_table.insert('a', Symbol('a', SymbolType.VARIABLE, VarType.STRING))
+        symbol_table.insert('b', Symbol('b', SymbolType.VARIABLE, VarType.STRING))
+
+        print(symbol_table.lookup('a'))
+        print(symbol_table.lookup('b'))
+        print(symbol_table.lookup('c'))
+        #
+        symbol_table.enter_block()
+        symbol_table.enter_block()
+        symbol_table.enter_block()
+        symbol_table.insert('aa', Symbol('aa', SymbolType.VARIABLE, VarType.STRING))
+        # symbol_table.insert('bb', Symbol('bb', SymbolType.VARIABLE, VarType.STRING))
+        print(symbol_table.lookup('aa'))
+        print(symbol_table.lookup('b'))
+        # print(symbol_table.lookup('c'))
+        symbol_table.leave_block()
+        symbol_table.leave_block()
+        symbol_table.leave_block()
+        #
+        # print(symbol_table.lookup('aa'))
+        # print(symbol_table.lookup('a'))
+        # # print(symbol_table.lookup('c'))
+
+
+

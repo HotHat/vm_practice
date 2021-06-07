@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class OpCode(Enum):
+    NOP = 0
     MOVE = 1
     LOADK = 2
     LOADKX = 3
