@@ -1,5 +1,5 @@
 from ast import *
-from tac import Tac
+from instruction import Instruction
 from lua_opcode import OpCode
 from register import RegisterManager
 
@@ -11,10 +11,10 @@ def generate_chuck_stmt(chuck: Chunk):
 def generate_const(term: Terminal):
     if type(term) == TermNil:
         reg = RegisterManager.get_instance().new()
-        return Tac(OpCode.LOADK, reg, 'nil', reg)
+        return Instruction(OpCode.LOADK, reg, 'nil', reg)
     elif type(term) == TermNumber:
         reg = RegisterManager.get_instance().new()
-        return Tac(OpCode.LOADK, reg, term.value, reg)
+        return Instruction(OpCode.LOADK, reg, term.value, reg)
 
 
 def generate_expr(exp: Expr):
@@ -27,7 +27,7 @@ def generate_expr(exp: Expr):
 def generate_var(var: Var):
     if Var.NAME == var.kind:
         # add symbol table
-        return Tac(OpCode.NOP, None, None, 0)
+        return Instruction(OpCode.NOP, None, None, 0)
     elif Var.BRACKET == var.kind:
         pass
     elif Var.DOT == var.kind:
@@ -40,7 +40,7 @@ def generate_assign(assign: AssignStmt):
     if len(left) != len(right):
         raise Exception("count not equal")
     for k, v in enumerate(left):
-        return Tac(OpCode.LOADK, v.value, right[k], v.value)
+        return Instruction(OpCode.LOADK, v.value, right[k], v.value)
 
 
 def generate_binary_expr(binop: BinOpExpr):
@@ -65,12 +65,12 @@ def generate_binary_expr(binop: BinOpExpr):
         # translate to LE
         code = OpCode.LE
         reg = RegisterManager.get_instance().new()
-        return Tac(code, generate_expr(binop.right), generate_expr(binop.left), reg)
+        return Instruction(code, generate_expr(binop.right), generate_expr(binop.left), reg)
     elif BinOpEnum.GTE == binop.operator:
         # translate to LT
         code = OpCode.LT
         reg = RegisterManager.get_instance().new()
-        return Tac(code, generate_expr(binop.right), generate_expr(binop.left), reg)
+        return Instruction(code, generate_expr(binop.right), generate_expr(binop.left), reg)
     elif BinOpEnum.EQ == binop.operator:
         code = OpCode.EQ
     elif BinOpEnum.CONCAT == binop.operator:
@@ -78,6 +78,6 @@ def generate_binary_expr(binop: BinOpExpr):
     left = generate_expr(binop.left)
     right = generate_expr(binop.right)
     reg = RegisterManager.get_instance().new()
-    return Tac(code, left, right, reg)
+    return Instruction(code, left, right, reg)
 
 

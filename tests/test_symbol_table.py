@@ -4,11 +4,11 @@ from symbol_table import *
 
 class TestDot(unittest.TestCase):
     def test_table(self):
-        s = BaseSymbolTable()
+        s = SymbolTable()
         s.insert('a', 123)
         s.insert('b', 456)
 
-        s1 = BaseSymbolTable(s)
+        s1 = SymbolTable(s)
         s1.insert('c', 123)
         s1.insert('d', 456)
 
@@ -31,7 +31,7 @@ class TestDot(unittest.TestCase):
         print(sym.lookup('this is string'))
 
     def test_symbol_table(self):
-        symbol_table = SymbolTable()
+        symbol_table = SymbolTableStack()
         symbol_table.insert('a', Symbol('a', SymbolType.VARIABLE, VarType.STRING))
         symbol_table.insert('b', Symbol('b', SymbolType.VARIABLE, VarType.STRING))
 

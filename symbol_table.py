@@ -23,8 +23,8 @@ class LookupResult:
                f"is_top: {self.is_top}}}}}"
 
 
-class BaseSymbolTable:
-    def __init__(self, parent: 'BaseSymbolTable' = None):
+class SymbolTable:
+    def __init__(self, parent: 'SymbolTable' = None):
         self.parent = parent
         self.var_list = []
         self.table = {}
@@ -55,14 +55,14 @@ class BaseSymbolTable:
         # return None
 
 
-class SymbolTable:
+class SymbolTableStack:
     def __init__(self):
         self.parent = None
-        self.current = BaseSymbolTable()
+        self.current = SymbolTable()
 
     def enter_block(self):
         self.parent = self.current
-        self.current = BaseSymbolTable(self.parent)
+        self.current = SymbolTable(self.parent)
 
     def leave_block(self):
         if self.parent is not None:
@@ -92,14 +92,14 @@ class SymbolTableManager:
     __instance = None
 
     @staticmethod
-    def get_instance() -> 'SymbolTableManager':
+    def instance() -> 'SymbolTableManager':
         if SymbolTableManager.__instance is None:
             SymbolTableManager.__instance = SymbolTableManager()
         return SymbolTableManager.__instance
 
 
 def const_symbol_table():
-    sym = BaseSymbolTable()
+    sym = SymbolTable()
     sym.insert('nil', Symbol('nil', SymbolType.CONSTANT, VarType.NIL))
     sym.insert('true', Symbol('true', SymbolType.CONSTANT, VarType.BOOL))
     sym.insert('false', Symbol('false', SymbolType.CONSTANT, VarType.BOOL))

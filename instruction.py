@@ -1,7 +1,7 @@
 from lua_opcode import OpCode
 
 
-class Tac:
+class Instruction:
     """
     Three Address code
     """
@@ -12,13 +12,13 @@ class Tac:
         self.rc = rc
 
 
-def opcode_ra(tac: Tac):
+def opcode_ra(tac: Instruction):
     return tac.ra
 
 
-def opcode_rb(tac: Tac):
+def opcode_rb(tac: Instruction):
     return tac.rb
 
 
-def opcode_rc(tac: Tac):
+def opcode_rc(tac: Instruction):
     return tac.rc
