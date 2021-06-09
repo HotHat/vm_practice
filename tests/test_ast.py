@@ -49,7 +49,7 @@ class TestAst(unittest.TestCase):
 
     def test_var(self):
         v1 = Var.name(TermName("var_name"))
-        v2 = Var.bracket(prefix_name("var"), Expr(TermNumber(5)))
+        v2 = Var.bracket(prefix_name("name"), Expr(TermNumber(5)))
         v3 = Var.dot(prefix_name("dog"), TermName("run"))
         print(v1)
         print('------------------')
@@ -66,7 +66,7 @@ class TestAst(unittest.TestCase):
 
     def test_var_list(self):
         v1 = Var.name(TermName("var_name"))
-        v2 = Var.bracket(prefix_name("var"), Expr(TermNumber(5)))
+        v2 = Var.bracket(prefix_name("name"), Expr(TermNumber(5)))
         v3 = Var.dot(prefix_name("dog"), TermName("run"))
         vl = VarList(v1, v2, v3)
         print(vl)

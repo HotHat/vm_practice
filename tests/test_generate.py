@@ -1,5 +1,6 @@
 import unittest
 from ast import *
+from lua_function import FuncStat
 from generate import *
 
 
@@ -8,10 +9,31 @@ class TestGenerate(unittest.TestCase):
         bp = BinOpExpr(BinOpEnum.ADD, Expr(BinOpExpr(BinOpEnum.ADD, number(3), number(4))), number(5))
         opcode = generate_binary_expr(bp)
         print(opcode)
+        print(FuncStat.instance().print())
+
+    def test_const(self):
+        opcode = generate_const(TermNumber("123456"))
+        print(opcode)
+        print(FuncStat.instance().print())
 
     def test_assign(self):
-        var_list = VarList(Var.name(TermName("var1")))
-        exp_list = ExprList(Expr(TermNil()))
-        assign = AssignStmt(var_list, exp_list)
-        opcode = generate_assign(assign)
-        print(opcode)
+        var_list = NameList(Var.name(TermName("var1")))
+        exp_list = ExprList(Expr(TermNumber(123)))
+        assign = LocalAssignStmt(var_list, exp_list)
+        generate_local_assign(assign)
+
+        var_list = VarList(Var.name(TermName("var2")))
+        exp_list = ExprList(Expr(TermNumber(456)))
+        assign = LocalAssignStmt(var_list, exp_list)
+        generate_local_assign(assign)
+        print(FuncStat.instance().print())
+
+    def test_local_assign_binary(self):
+        # local var1 = 3+4+5
+        bp = BinOpExpr(BinOpEnum.ADD, Expr(BinOpExpr(BinOpEnum.ADD, number(3), number(4))), number(5))
+        var_list = NameList(TermName("var1"))
+        exp_list = ExprList(Expr(bp))
+        assign = LocalAssignStmt(var_list, exp_list)
+        generate_local_assign(assign)
+        print(FuncStat.instance().print())
+

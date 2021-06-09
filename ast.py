@@ -20,9 +20,9 @@ laststat ::= return [explist1]  |  break
 
 funcname ::= Name {`.´ Name} [`:´ Name]
 
-varlist1 ::= var {`,´ var}
+varlist1 ::= name {`,´ name}
 
-var ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
+name ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
 
 namelist ::= Name {`,´ Name}
 
@@ -31,7 +31,7 @@ explist1 ::= {exp `,´} exp
 exp ::=  nil  |  false  |  true  |  Number  |  String  |  `...´  |
          function  |  prefixexp  |  TableConstructoror  |  exp binop exp  |  unop exp
 
-prefixexp ::= var  |  functioncall  |  `(´ exp `)´
+prefixexp ::= name  |  functioncall  |  `(´ exp `)´
 
 functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
 
@@ -558,7 +558,7 @@ class FunctionName(DotLangTag):
 
 class Var(DotLangTag):
     """
-    var ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
+    name ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
     """
     NAME = 1
     BRACKET = 2
@@ -572,7 +572,7 @@ class Var(DotLangTag):
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"var\"]"
+        return f"{self.get_tag()}[label=\"name\"]"
 
     def __str__(self):
         tag = self.get_tag()
@@ -696,7 +696,7 @@ class ExprList(DotLangTag):
 
 class PrefixExpr(DotLangTag):
     """
-    prefixexp ::= var  |  functioncall  |  `(´ exp `)´
+    prefixexp ::= name  |  functioncall  |  `(´ exp `)´
     """
     VAR = 1
     FUNCTION_CALL = 2

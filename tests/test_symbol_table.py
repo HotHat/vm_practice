@@ -21,31 +21,22 @@ class TestDot(unittest.TestCase):
         print(s1.lookup('a'))
         print(s1.lookup('a0'))
 
-    def test_const(self):
-        sym = const_symbol_table()
-        print(sym.lookup(''))
-        print(sym.lookup('false'))
-        print(sym.lookup('true'))
-        print(sym.lookup('nil'))
-        print(sym.lookup('123'))
-        print(sym.lookup('this is string'))
-
     def test_symbol_table(self):
         symbol_table = SymbolTableStack()
-        symbol_table.insert('a', Symbol('a', SymbolType.VARIABLE, VarType.STRING))
-        symbol_table.insert('b', Symbol('b', SymbolType.VARIABLE, VarType.STRING))
+        symbol_table.insert(Symbol('a'))
+        symbol_table.insert(Symbol('b'))
 
-        print(symbol_table.lookup('a'))
-        print(symbol_table.lookup('b'))
-        print(symbol_table.lookup('c'))
+        print(symbol_table.lookup(Symbol('a')))
+        print(symbol_table.lookup(Symbol('b')))
+        print(symbol_table.lookup(Symbol('c')))
         #
         symbol_table.enter_block()
         symbol_table.enter_block()
         symbol_table.enter_block()
-        symbol_table.insert('aa', Symbol('aa', SymbolType.VARIABLE, VarType.STRING))
+        symbol_table.insert(Symbol('aa'))
         # symbol_table.insert('bb', Symbol('bb', SymbolType.VARIABLE, VarType.STRING))
-        print(symbol_table.lookup('aa'))
-        print(symbol_table.lookup('b'))
+        print(symbol_table.lookup(Symbol('aa')))
+        print(symbol_table.lookup(Symbol('b')))
         # print(symbol_table.lookup('c'))
         symbol_table.leave_block()
         symbol_table.leave_block()
@@ -54,6 +45,25 @@ class TestDot(unittest.TestCase):
         # print(symbol_table.lookup('aa'))
         # print(symbol_table.lookup('a'))
         # # print(symbol_table.lookup('c'))
+
+    def test_temporary_var(self):
+        tb1 = SymbolTable()
+        tb1.insert(Symbol('a'))
+        tb1.insert(Symbol('b'))
+        tb1.add_temp_var()
+        tb1.add_temp_var()
+        tb1.print()
+        print('------------------------------')
+        tb2 = SymbolTable()
+        tb2.insert(Symbol('a'))
+        tb2.insert(Symbol('b'))
+        tb2.add_temp_var()
+        tb2.add_temp_var()
+        tb2.insert(Symbol('c'))
+        tb2.print()
+
+
+
 
 
 

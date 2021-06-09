@@ -11,6 +11,9 @@ class Instruction:
         self.rb = rb
         self.rc = rc
 
+    def __str__(self):
+        return f"{self.op}     {self.ra}    {self.rb}    {self.rc}"
+
 
 def opcode_ra(tac: Instruction):
     return tac.ra

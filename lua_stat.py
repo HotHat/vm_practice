@@ -8,7 +8,8 @@ class LuaStat:
         self.ip = 0
         self.open_up_value = []
         self.parent = None
-        self.ci_stack = CallInfoStack(Closure())
+        self.ci = Closure()
+        self.ci_stack = CallInfoStack(self.ci)
 
 
 class LuaStatManager:

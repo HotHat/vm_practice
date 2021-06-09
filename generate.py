@@ -2,6 +2,8 @@ from ast import *
 from instruction import Instruction
 from lua_opcode import OpCode
 from register import RegisterManager
+from lua_function import FuncStat
+from symbol_table import Symbol
 
 
 def generate_chuck_stmt(chuck: Chunk):
@@ -9,12 +11,17 @@ def generate_chuck_stmt(chuck: Chunk):
 
 
 def generate_const(term: Terminal):
-    if type(term) == TermNil:
-        reg = RegisterManager.get_instance().new()
-        return Instruction(OpCode.LOADK, reg, 'nil', reg)
-    elif type(term) == TermNumber:
-        reg = RegisterManager.get_instance().new()
-        return Instruction(OpCode.LOADK, reg, term.value, reg)
+    idx = FuncStat.instance().constant_pool.add(term)
+    reg = FuncStat.instance().symbol_stack.add_temp_var()
+    FuncStat.instance().opcode.append(Instruction(OpCode.LOADK, reg, idx))
+    return reg
+    # if type(term) == TermNil:
+    #     reg = RegisterManager.get_instance().new()
+    #     return Instruction(OpCode.LOADK, reg, 'nil')
+    # elif type(term) == TermNumber:
+    #     idx = FuncStat.instance().constant_pool.add(term)
+    #     reg = FuncStat.instance().symbol_stack.add_temp_var()
+    #     return Instruction(OpCode.LOADK, reg, idx)
 
 
 def generate_expr(exp: Expr):
@@ -24,23 +31,34 @@ def generate_expr(exp: Expr):
         return generate_binary_expr(exp.value)
 
 
-def generate_var(var: Var):
-    if Var.NAME == var.kind:
-        # add symbol table
-        return Instruction(OpCode.NOP, None, None, 0)
-    elif Var.BRACKET == var.kind:
-        pass
-    elif Var.DOT == var.kind:
-        pass
+def generate_name(name: TermName):
+    # if Var.NAME == name.kind:
+    FuncStat.instance().symbol_stack.insert(Symbol(name.value))
+        # return Instruction(OpCode.NOP, None, None, 0)
+    # elif Var.BRACKET == name.kind:
+    #     pass
+    # elif Var.DOT == name.kind:
+    #     pass
 
 
-def generate_assign(assign: AssignStmt):
-    left = assign.left.var_list
+def generate_local_assign(assign: LocalAssignStmt):
+    left = assign.left.name_list
     right = assign.right.expr_list
-    if len(left) != len(right):
-        raise Exception("count not equal")
-    for k, v in enumerate(left):
-        return Instruction(OpCode.LOADK, v.value, right[k], v.value)
+    # left -- add local variable
+    for name in left:
+        generate_name(name)
+    # right -- calc value and assign to left variable
+    for idx, name in enumerate(left):
+        res = FuncStat.instance().symbol_stack.lookup(Symbol(name.value))
+        val = right[idx]
+        reg_right = generate_expr(val)
+        code = Instruction(OpCode.LOADK, res.index, reg_right)
+        FuncStat.instance().opcode.append(code)
+
+    # if len(left) != len(right):
+    #     raise Exception("count not equal")
+    # for k, v in enumerate(left):
+    #     return Instruction(OpCode.LOADK, v.value, right[k], v.value)
 
 
 def generate_binary_expr(binop: BinOpExpr):
@@ -77,7 +95,8 @@ def generate_binary_expr(binop: BinOpExpr):
         code = OpCode.CONCAT
     left = generate_expr(binop.left)
     right = generate_expr(binop.right)
-    reg = RegisterManager.get_instance().new()
-    return Instruction(code, left, right, reg)
+    # reg = FuncStat.instance().symbol_stack.add_temp_var()
+    FuncStat.instance().opcode.append(Instruction(code, left, left, right))
+    return left
 
 

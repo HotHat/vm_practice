@@ -1,12 +1,16 @@
 from symbol_type import *
 from typing import Union
+from temp_var import TempVar
 
 
 class Symbol:
-    def __init__(self, symbol: str, symbol_type: SymbolType, detail_type: VarType):
+    def __init__(self, symbol: str, is_temp: bool = False):
         self.symbol = symbol
-        self.symbol_type = symbol_type
-        self.detail_type = detail_type
+        self.is_temp = is_temp
+
+
+def temp_symbol():
+    return Symbol(TempVar.instance().new(), True)
 
 
 class LookupResult:
@@ -18,41 +22,38 @@ class LookupResult:
 
     def __str__(self):
         return f"{{level: {self.level}, index: {self.index}, " \
-               f"symbol: {{symbol:{self.symbol.symbol}, " \
-               f"type: {self.symbol.symbol_type}, detail:{self.symbol.detail_type}," \
-               f"is_top: {self.is_top}}}}}"
+               f"symbol: {{symbol:{self.symbol.symbol}, is_temp:{self.symbol.is_temp}}}" \
+               f"is_top: {self.is_top}}}"
 
 
 class SymbolTable:
     def __init__(self, parent: 'SymbolTable' = None):
         self.parent = parent
         self.var_list = []
-        self.table = {}
 
-    def insert(self, symbol, value: Symbol):
+    def insert(self, symbol: Symbol):
         f = self.lookup(symbol)
         if f is None:
+            # pop temporary variable
+            while 0 != len(self.var_list) and self.var_list[len(self.var_list)-1].is_temp:
+                self.var_list.pop()
             self.var_list.append(symbol)
-            self.table[symbol] = value
-            # if f.symbol_type == value.symbol_type and \
-            #         f.detail_type == value.detail_type:
-            #     return
         else:
             raise Exception(f"{symbol} duplicate definite")
 
+    def add_temp_var(self):
+        self.var_list.append(temp_symbol())
+        return len(self.var_list) - 1
+
     def lookup(self, symbol) -> Union[LookupResult, None]:
-        if symbol in self.table:
-            return LookupResult(0, self.var_list.index(symbol), self.table[symbol], self.parent is None)
+        for idx, sym in enumerate(self.var_list):
+            if symbol.symbol == sym.symbol:
+                return LookupResult(0, idx, sym, self.parent is None)
         return None
-        # parent = self.parent
-        # level = 1
-        # while parent:
-        #     result = parent.lookup(symbol)
-        #     if result:
-        #         return LookupResult(level, result.index, result.symbol)
-        #     level += 1
-        #     parent = parent.parent
-        # return None
+
+    def print(self):
+        for sym in self.var_list:
+            print(f"symbol: {{symbol:{sym.symbol}, is_temp:{sym.is_temp}}}")
 
 
 class SymbolTableStack:
@@ -69,8 +70,8 @@ class SymbolTableStack:
             self.current = self.parent
             self.parent = self.parent.parent
 
-    def insert(self, symbol, value: Symbol):
-        self.current.insert(symbol, value)
+    def insert(self, symbol):
+        self.current.insert(symbol)
 
     def lookup(self, symbol) -> Union[LookupResult, None]:
         cur = self.current
@@ -83,26 +84,4 @@ class SymbolTableStack:
             level += 1
             cur = cur.parent
         return None
-
-    # def get_index(self, symbol):
-    #     return self.current.get_index(symbol)
-
-
-class SymbolTableManager:
-    __instance = None
-
-    @staticmethod
-    def instance() -> 'SymbolTableManager':
-        if SymbolTableManager.__instance is None:
-            SymbolTableManager.__instance = SymbolTableManager()
-        return SymbolTableManager.__instance
-
-
-def const_symbol_table():
-    sym = SymbolTable()
-    sym.insert('nil', Symbol('nil', SymbolType.CONSTANT, VarType.NIL))
-    sym.insert('true', Symbol('true', SymbolType.CONSTANT, VarType.BOOL))
-    sym.insert('false', Symbol('false', SymbolType.CONSTANT, VarType.BOOL))
-    sym.insert('', Symbol('', SymbolType.CONSTANT, VarType.STRING))
-    return sym
 
