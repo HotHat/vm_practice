@@ -43,7 +43,7 @@ class TestGenerate(unittest.TestCase):
                        Expr(BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse())))
                        )
         generate_login_and_expr(bp)
-        print(FuncStat.instance().print())
+        FuncStat.instance().print()
 
     def test_or(self):
         bp = BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse()))
