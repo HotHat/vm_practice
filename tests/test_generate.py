@@ -37,3 +37,27 @@ class TestGenerate(unittest.TestCase):
         generate_local_assign(assign)
         print(FuncStat.instance().print())
 
+    def test_and(self):
+        bp = BinOpExpr(BinOpEnum.AND,
+                       Expr(TermFalse()),
+                       Expr(BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse())))
+                       )
+        generate_login_and_expr(bp)
+        print(FuncStat.instance().print())
+
+    def test_or(self):
+        bp = BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse()))
+        # bp = BinOpExpr(BinOpEnum.OR,
+        #                Expr(BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse()))),
+        #                Expr(TermFalse()))
+        generate_login_or_expr(bp)
+        FuncStat.instance().print()
+
+    def test_and_or(self):
+        bp = BinOpExpr(BinOpEnum.AND,
+                       Expr(BinOpExpr(BinOpEnum.OR, Expr(TermTrue()), Expr(TermFalse()))),
+                       Expr(TermFalse()))
+        generate_login_and_expr(bp)
+        FuncStat.instance().print()
+
+

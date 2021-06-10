@@ -1,5 +1,6 @@
 from symbol_table import SymbolTable, SymbolTableStack
 from constant_pool import ConstantPool
+from instruction import Instruction
 
 
 # class Closure:
@@ -35,10 +36,16 @@ class FuncStat:
         self.constant_pool = ConstantPool()
         self.opcode = []
 
+    def pc(self):
+        return len(self.opcode)
+
+    def change_opcode(self, pc, instruction: Instruction):
+        self.opcode[pc] = instruction
+
     def print(self):
         print('--------symbol stack-------')
-        for i in self.opcode:
-            print(i)
+        for k, v in enumerate(self.opcode):
+            print(f"{k}    {v}")
         print('--------symbol stack-------')
         self.symbol_stack.print()
         print('--------constant pool-------')

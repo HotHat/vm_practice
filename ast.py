@@ -29,7 +29,7 @@ namelist ::= Name {`,´ Name}
 explist1 ::= {exp `,´} exp
 
 exp ::=  nil  |  false  |  true  |  Number  |  String  |  `...´  |
-         function  |  prefixexp  |  TableConstructoror  |  exp binop exp  |  unop exp
+         function  |  prefixexp  |  TableConstructoror  |  exp expr exp  |  unop exp
 
 prefixexp ::= name  |  functioncall  |  `(´ exp `)´
 
@@ -51,7 +51,7 @@ field ::= `[´ exp `]´ `=´ exp  |  Name `=´ exp  |  exp
 
 fieldsep ::= `,´  |  `;´
 
-binop ::= `+´  |  `-´  |  `*´  |  `/´  |  `^´  |  `%´  |  `..´  |
+expr ::= `+´  |  `-´  |  `*´  |  `/´  |  `^´  |  `%´  |  `..´  |
 
          `<´  |  `<=´  |  `>´  |  `>=´  |  `==´  |  `~=´  |
          and  |  or
@@ -898,6 +898,8 @@ class BinOpEnum(Enum):
     EQ = 11
     CONCAT = 12
     ASSIGN_XOR = 13
+    AND = 14
+    OR = 15
 
 
 class BinOpExpr(DotLangTag):
@@ -905,6 +907,8 @@ class BinOpExpr(DotLangTag):
         self.operator = op
         self.left = left
         self.right = right
+        self.false = None
+        self.true = None
         # for dot lang
         self.tag = None
         self.tag_name = self.operator

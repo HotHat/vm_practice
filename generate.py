@@ -15,6 +15,14 @@ def generate_const(term: Terminal):
     reg = FuncStat.instance().symbol_stack.add_temp_var()
     FuncStat.instance().opcode.append(Instruction(OpCode.LOADK, reg, idx))
     return reg
+    # if type(term) == TermNil or type(term) == TermNumber:
+    #     idx = FuncStat.instance().constant_pool.add(term)
+    #     reg = FuncStat.instance().symbol_stack.add_temp_var()
+    #     FuncStat.instance().opcode.append(Instruction(OpCode.LOADK, reg, idx))
+    #     return reg
+    # elif type(term) == TermNil:
+    #     pass
+    #
     # if type(term) == TermNil:
     #     reg = RegisterManager.get_instance().new()
     #     return Instruction(OpCode.LOADK, reg, 'nil')
@@ -61,6 +69,28 @@ def generate_local_assign(assign: LocalAssignStmt):
     #     return Instruction(OpCode.LOADK, v.value, right[k], v.value)
 
 
+def generate_login_and_expr(expr: BinOpExpr):
+    return __generate_login_and_or_expr(expr)
+
+
+def __generate_login_and_or_expr(expr: BinOpExpr):
+    left = generate_expr(expr.left)
+    if BinOpEnum.AND == expr.operator:
+        FuncStat.instance().opcode.append(Instruction(OpCode.TEST, left, 0))
+    else:
+        FuncStat.instance().opcode.append(Instruction(OpCode.TEST, left, 1))
+    FuncStat.instance().opcode.append(Instruction(OpCode.JMP, 0, 0))
+    jump_index = FuncStat.instance().pc() - 1
+    right = generate_expr(expr.right)
+    pc = FuncStat.instance().pc()
+    FuncStat.instance().change_opcode(jump_index, Instruction(OpCode.JMP, 0, pc - jump_index))
+    return right
+
+
+def generate_login_or_expr(expr: BinOpExpr):
+    return __generate_login_and_or_expr(expr)
+
+
 def generate_binary_expr(binop: BinOpExpr):
     code = None
     if BinOpEnum.ADD == binop.operator:
@@ -93,6 +123,12 @@ def generate_binary_expr(binop: BinOpExpr):
         code = OpCode.EQ
     elif BinOpEnum.CONCAT == binop.operator:
         code = OpCode.CONCAT
+    elif BinOpEnum.AND == binop.operator:
+        return generate_login_and_expr(binop)
+
+    elif BinOpEnum.OR == binop.operator:
+        return generate_login_or_expr(binop)
+
     left = generate_expr(binop.left)
     right = generate_expr(binop.right)
     # reg = FuncStat.instance().symbol_stack.add_temp_var()
