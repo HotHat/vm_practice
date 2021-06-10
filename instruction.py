@@ -12,7 +12,7 @@ class Instruction:
         self.rc = rc
 
     def __str__(self):
-        return f"{self.op}     {self.ra}    {self.rb}    {self.rc}"
+        return f"{self.op:<15}{'':>8}{self.ra:>5}{'':>8}{self.rb:>5}{'':>8}{self.rc}"
 
 
 def opcode_ra(tac: Instruction):

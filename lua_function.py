@@ -43,7 +43,7 @@ class FuncStat:
         self.opcode[pc] = instruction
 
     def print(self):
-        print('--------instance array-------')
+        print('--------Instruction array-------')
         for k, v in enumerate(self.opcode):
             print(f"{k}    {v}")
         print('--------symbol stack-------')
