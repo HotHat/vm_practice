@@ -35,14 +35,28 @@ class TestGenerate(unittest.TestCase):
         exp_list = ExprList(Expr(bp))
         assign = LocalAssignStmt(var_list, exp_list)
         generate_local_assign(assign)
-        print(FuncStat.instance().print())
+        FuncStat.instance().print()
 
     def test_and(self):
         bp = BinOpExpr(BinOpEnum.AND,
                        Expr(TermFalse()),
-                       Expr(BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse())))
+                       Expr(TermFalse())
+                       # Expr(BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse())))
                        )
         generate_login_and_expr(bp)
+        FuncStat.instance().print()
+
+    def test_local_assign_and(self):
+        # local var1 = false and true
+        bp = BinOpExpr(BinOpEnum.AND,
+                       Expr(TermFalse()),
+                       # Expr(TermTrue())
+                       Expr(BinOpExpr(BinOpEnum.AND, Expr(TermTrue()), Expr(TermFalse())))
+                       )
+        var_list = NameList(TermName("var1"))
+        exp_list = ExprList(Expr(bp))
+        assign = LocalAssignStmt(var_list, exp_list)
+        generate_local_assign(assign)
         FuncStat.instance().print()
 
     def test_or(self):
@@ -60,4 +74,12 @@ class TestGenerate(unittest.TestCase):
         generate_login_and_expr(bp)
         FuncStat.instance().print()
 
-
+    def test_if(self):
+        cond = Expr(TermTrue())
+        var_list = NameList(TermName("name"))
+        exp_list = ExprList(Expr(number(123)))
+        assign = LocalAssignStmt(var_list, exp_list)
+        block = Block(Chunk([Stmt(assign)]))
+        if_stmt = IfStmt(cond, block, None, None)
+        generate_if_expr(if_stmt)
+        FuncStat.instance().print()

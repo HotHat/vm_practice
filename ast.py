@@ -7,10 +7,10 @@ block ::= chunk
 stat ::=  varlist1 `=´ explist1  |
          functioncall  |
          do block end  |
-         while exp do block end  |
-         repeat block until exp  |
-         if exp then block {elseif exp then block} [else block] end  |
-         for Name `=´ exp `,´ exp [`,´ exp] do block end  |
+         while expr do block end  |
+         repeat block until expr  |
+         if expr then block {elseif expr then block} [else block] end  |
+         for Name `=´ expr `,´ expr [`,´ expr] do block end  |
          for namelist in explist1 do block end  |
          function funcname funcbody  |
          local function Name funcbody  |
@@ -22,16 +22,16 @@ funcname ::= Name {`.´ Name} [`:´ Name]
 
 varlist1 ::= name {`,´ name}
 
-name ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
+name ::=  Name  |  prefixexp `[´ expr `]´  |  prefixexp `.´ Name
 
 namelist ::= Name {`,´ Name}
 
-explist1 ::= {exp `,´} exp
+explist1 ::= {expr `,´} expr
 
-exp ::=  nil  |  false  |  true  |  Number  |  String  |  `...´  |
-         function  |  prefixexp  |  TableConstructoror  |  exp expr exp  |  unop exp
+expr ::=  nil  |  false  |  true  |  Number  |  String  |  `...´  |
+         function  |  prefixexp  |  TableConstructoror  |  expr expr expr  |  unop expr
 
-prefixexp ::= name  |  functioncall  |  `(´ exp `)´
+prefixexp ::= name  |  functioncall  |  `(´ expr `)´
 
 functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
 
@@ -47,7 +47,7 @@ TableConstructoror ::= `{´ [fieldlist] `}´
 
 fieldlist ::= field {fieldsep field} [fieldsep]
 
-field ::= `[´ exp `]´ `=´ exp  |  Name `=´ exp  |  exp
+field ::= `[´ expr `]´ `=´ expr  |  Name `=´ expr  |  expr
 
 fieldsep ::= `,´  |  `;´
 
@@ -558,7 +558,7 @@ class FunctionName(DotLangTag):
 
 class Var(DotLangTag):
     """
-    name ::=  Name  |  prefixexp `[´ exp `]´  |  prefixexp `.´ Name
+    name ::=  Name  |  prefixexp `[´ expr `]´  |  prefixexp `.´ Name
     """
     NAME = 1
     BRACKET = 2
@@ -669,10 +669,13 @@ class Expr(DotLangTag):
             self.kind = ExprEnum.FUNCTION
 
         self.value = value
+        self.true_list = []
+        self.false_list = []
+        self.next_list = []
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"exp\"]"
+        return f"{self.get_tag()}[label=\"expr\"]"
 
     def __str__(self):
         tag = self.get_tag()
@@ -696,7 +699,7 @@ class ExprList(DotLangTag):
 
 class PrefixExpr(DotLangTag):
     """
-    prefixexp ::= name  |  functioncall  |  `(´ exp `)´
+    prefixexp ::= name  |  functioncall  |  `(´ expr `)´
     """
     VAR = 1
     FUNCTION_CALL = 2

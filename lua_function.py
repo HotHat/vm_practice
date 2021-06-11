@@ -37,7 +37,7 @@ class FuncStat:
         self.opcode = []
 
     def pc(self):
-        return len(self.opcode)
+        return len(self.opcode) - 1
 
     def change_opcode(self, pc, instruction: Instruction):
         self.opcode[pc] = instruction
@@ -45,7 +45,7 @@ class FuncStat:
     def print(self):
         print('--------Instruction array-------')
         for k, v in enumerate(self.opcode):
-            print(f"{k}    {v}")
+            print(f"{k:<5}    {v}")
         print('--------symbol stack-------')
         self.symbol_stack.print()
         print('--------constant pool-------')
