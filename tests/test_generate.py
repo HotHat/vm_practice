@@ -77,9 +77,28 @@ class TestGenerate(unittest.TestCase):
     def test_if(self):
         cond = Expr(TermTrue())
         var_list = NameList(TermName("name"))
-        exp_list = ExprList(Expr(number(123)))
+        exp_list = ExprList(Expr(TermTrue()))
         assign = LocalAssignStmt(var_list, exp_list)
         block = Block(Chunk([Stmt(assign)]))
         if_stmt = IfStmt(cond, block, None, None)
         generate_if_expr(if_stmt)
         FuncStat.instance().print()
+
+    def test_if_else(self):
+        cond = Expr(TermTrue())
+        var_list = NameList(TermName("var_block"))
+        exp_list = ExprList(Expr(TermTrue()))
+        assign = LocalAssignStmt(var_list, exp_list)
+        # then block
+        block = Block(Chunk([Stmt(assign)]))
+
+        var2_list = NameList(TermName("else_block"))
+        exp2_list = ExprList(Expr(TermFalse()))
+        assign2 = LocalAssignStmt(var2_list, exp2_list)
+        # else block
+        block2 = Block(Chunk([Stmt(assign2)]))
+        
+        if_stmt = IfStmt(cond, block, None, block2)
+        generate_if_expr(if_stmt)
+        FuncStat.instance().print()
+

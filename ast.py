@@ -178,6 +178,9 @@ class Block(DotLangTag):
     def __init__(self, chunk: Chunk, is_root: bool = False):
         self.chunk = chunk
         self.is_root = is_root
+        self.true_list = []
+        self.false_list = []
+        self.next_list = []
         self.tag = None
 
     def get_tag_name(self):

@@ -2,12 +2,12 @@ from ast import *
 from instruction import Instruction
 from lua_opcode import OpCode
 from register import RegisterManager
-from lua_function import FuncStat
+from lua_function import FuncStat, add_instruction, change_instruction
 from symbol_table import Symbol
 
 
 def generate_stmt(stmt: Stmt):
-    if stmt.kind is LocalAssignStmt:
+    if stmt.kind is StmtEnum.LOCAL_ASSIGN:
         generate_local_assign(stmt.value)
     # TODO: other stmt
 
@@ -20,7 +20,7 @@ def generate_chuck_stmt(chunk: Chunk):
 def generate_const(term: Terminal):
     idx = FuncStat.instance().constant_pool.add(term)
     reg = FuncStat.instance().symbol_stack.add_temp_var()
-    FuncStat.instance().opcode.append(Instruction(OpCode.LOADK, reg, idx))
+    add_instruction(Instruction(OpCode.LOADK, reg, idx))
     return reg
     # if type(term) == TermNil or type(term) == TermNumber:
     #     idx = FuncStat.instance().constant_pool.add(term)
@@ -78,16 +78,14 @@ def generate_local_assign(assign: LocalAssignStmt):
 
         if ExprEnum.BINOP == val.kind and BinOpEnum.AND == val.value.operator:
             pc = FuncStat.instance().pc()
-            for p in val.false_list:
-                FuncStat.instance().change_opcode(p, Instruction(OpCode.JMP, 0, pc - p + 1))
+            _back_path(val.false_list, pc)
 
         elif ExprEnum.BINOP == val.kind and BinOpEnum.OR == val.value.operator:
             pc = FuncStat.instance().pc()
-            for p in val.true_list:
-                FuncStat.instance().change_opcode(p, Instruction(OpCode.JMP, 0, pc - p + 1))
+            _back_path(val.true_list, pc)
 
         code = Instruction(OpCode.LOADK, res.index, reg_right)
-        FuncStat.instance().opcode.append(code)
+        add_instruction(code)
 
     # if len(left) != len(right):
     #     raise Exception("count not equal")
@@ -98,17 +96,17 @@ def generate_local_assign(assign: LocalAssignStmt):
 def generate_login_and_expr(expr: BinOpExpr):
     left = generate_expr(expr.left)
     tmp = FuncStat.instance().symbol_stack.add_temp_var()
-    FuncStat.instance().opcode.append(Instruction(OpCode.MOVE, tmp, left))
+    add_instruction(Instruction(OpCode.MOVE, tmp, left))
     # B1 AND B2 => if B1 = true jump to B2
-    FuncStat.instance().opcode.append(Instruction(OpCode.TEST, left, 0))
+    add_instruction(Instruction(OpCode.TEST, left, 0))
     # if B1 false jump to end
-    FuncStat.instance().opcode.append(Instruction(OpCode.JMP, 0, 0))
+    add_instruction(Instruction(OpCode.JMP, 0, 0))
     jump_index = FuncStat.instance().pc()
     # record left expr false list
     expr.left.false_list.append(jump_index)
 
     right = generate_expr(expr.right)
-    FuncStat.instance().opcode.append(Instruction(OpCode.MOVE, tmp, right))
+    add_instruction(Instruction(OpCode.MOVE, tmp, right))
     # record right expr true list
     jump_index = FuncStat.instance().pc()
     expr.right.false_list.append(jump_index)
@@ -147,8 +145,38 @@ def generate_login_or_expr(expr: BinOpExpr):
     return right
 
 
+def _back_path(lst, pc):
+    for p in lst:
+        FuncStat.instance().change_opcode(p, Instruction(OpCode.JMP, 0, pc - p + 1))
+
+
 def generate_if_expr(if_stmt: IfStmt):
-    pass
+    cond = if_stmt.cond
+    test = generate_expr(cond)
+    add_instruction(Instruction(OpCode.TEST, test, 0))
+    add_instruction(Instruction(OpCode.JMP, 0, 0))
+    cond.false_list.append(FuncStat.instance().pc())
+    # then S1
+    # M1
+    # _back_path(cond.true_list, FuncStat.instance().pc())
+    generate_block(if_stmt.block)
+
+    if if_stmt.else_block:
+        add_instruction(Instruction(OpCode.JMP, 0, 0))
+        if_stmt.block.next_list.append(FuncStat.instance().pc())
+
+    # M1
+    _back_path(cond.false_list, FuncStat.instance().pc())
+    # next_list = cond.false_list + if_stmt.block.next_list
+    # N
+    # _back_path(next_list, FuncStat.instance().pc())
+    # else block
+    if if_stmt.else_block:
+        generate_block(if_stmt.else_block)
+        _back_path(if_stmt.block.next_list, FuncStat.instance().pc())
+    else:
+        # N
+        _back_path(cond.false_list, FuncStat.instance().pc())
 
 
 def generate_binary_expr(binop: BinOpExpr):
@@ -192,13 +220,13 @@ def generate_binary_expr(binop: BinOpExpr):
     left = generate_expr(binop.left)
     right = generate_expr(binop.right)
     # reg = FuncStat.instance().symbol_stack.add_temp_var()
-    FuncStat.instance().opcode.append(Instruction(code, left, left, right))
+    add_instruction(Instruction(code, left, left, right))
     return left
 
 
 def generate_block(block: Block):
     chunk = block.chunk
-    generate_chuck_stmt(chunk)
+    return generate_chuck_stmt(chunk)
 
 
 

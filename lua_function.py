@@ -51,3 +51,12 @@ class FuncStat:
         print('--------constant pool-------')
         self.constant_pool.print()
         print('--------constant end pool-------')
+
+
+def add_instruction(instruction: Instruction):
+    FuncStat.instance().opcode.append(instruction)
+
+
+def change_instruction(pc, instruction: Instruction):
+    FuncStat.instance().change_opcode(pc, instruction)
+
