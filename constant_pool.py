@@ -15,9 +15,8 @@ class ConstantPool:
         self.count = 0
 
     def add(self, item):
-        try:
-            self.pool.index(item)
-        except ValueError:
+        none = self.index(item)
+        if none is None:
             self.pool.append(item)
             self.count += 1
         return 0 - self.count

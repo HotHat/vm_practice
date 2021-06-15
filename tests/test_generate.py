@@ -102,3 +102,34 @@ class TestGenerate(unittest.TestCase):
         generate_if_expr(if_stmt)
         FuncStat.instance().print()
 
+    def test_if_elif(self):
+        cond = Expr(TermTrue())
+        var_list = NameList(TermName("then_block"))
+        exp_list = ExprList(Expr(TermTrue()))
+        assign = LocalAssignStmt(var_list, exp_list)
+        # then block
+        block = Block(Chunk([Stmt(assign)]))
+
+        elif_cond = Expr(TermTrue())
+        elif_var_list = NameList(TermName("then_block"))
+        elif_exp_list = ExprList(Expr(TermTrue()))
+        elif_assign = LocalAssignStmt(elif_var_list, elif_exp_list)
+
+        # else block
+        elif_block = Block(Chunk([Stmt(elif_assign)]))
+        elif_block = ElifStmt(elif_cond, elif_block)
+
+        # else block2
+        elif_cond2 = Expr(TermTrue())
+        elif_var_list2 = NameList(TermName("then_block2"))
+        elif_exp_list2 = ExprList(Expr(TermTrue()))
+        elif_assign2 = LocalAssignStmt(elif_var_list2, elif_exp_list2)
+
+        # else block
+        elif_block2 = Block(Chunk([Stmt(elif_assign2)]))
+        elif_block2 = ElifStmt(elif_cond2, elif_block2)
+
+        if_stmt = IfStmt(cond, block, [elif_block, elif_block2], None)
+        generate_if_expr(if_stmt)
+        FuncStat.instance().print()
+

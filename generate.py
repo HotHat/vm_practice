@@ -150,6 +150,10 @@ def _back_path(lst, pc):
         FuncStat.instance().change_opcode(p, Instruction(OpCode.JMP, 0, pc - p + 1))
 
 
+def generate_elif(el: ElifStmt):
+    pass
+
+
 def generate_if_expr(if_stmt: IfStmt):
     cond = if_stmt.cond
     test = generate_expr(cond)
@@ -161,22 +165,38 @@ def generate_if_expr(if_stmt: IfStmt):
     # _back_path(cond.true_list, FuncStat.instance().pc())
     generate_block(if_stmt.block)
 
-    if if_stmt.else_block:
+    if if_stmt.elif_arr or if_stmt.else_block:
         add_instruction(Instruction(OpCode.JMP, 0, 0))
         if_stmt.block.next_list.append(FuncStat.instance().pc())
 
     # M1
     _back_path(cond.false_list, FuncStat.instance().pc())
-    # next_list = cond.false_list + if_stmt.block.next_list
-    # N
-    # _back_path(next_list, FuncStat.instance().pc())
+
+    cur_test = cond
+    # elif block
+    if if_stmt.elif_arr:
+        for el in if_stmt.elif_arr:
+            _back_path(cur_test.false_list, FuncStat.instance().pc())
+            cur_test = el.cond
+            tes = generate_expr(cur_test)
+            add_instruction(Instruction(OpCode.TEST, tes, 0))
+            add_instruction(Instruction(OpCode.JMP, 0, 0))
+            generate_block(el.block)
+            el.block.next_list.append(FuncStat.instance().pc())
+
+    # elif blocks
+    if if_stmt.elif_arr:
+        for el in if_stmt.elif_arr:
+            _back_path(el.block.next_list, FuncStat.instance().pc())
+
     # else block
     if if_stmt.else_block:
         generate_block(if_stmt.else_block)
         _back_path(if_stmt.block.next_list, FuncStat.instance().pc())
     else:
         # N
-        _back_path(cond.false_list, FuncStat.instance().pc())
+        _back_path(if_stmt.block.next_list, FuncStat.instance().pc())
+        _back_path(cur_test.false_list, FuncStat.instance().pc())
 
 
 def generate_binary_expr(binop: BinOpExpr):

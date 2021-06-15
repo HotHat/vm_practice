@@ -39,7 +39,8 @@ class SymbolTable:
                 self.var_list.pop()
             self.var_list.append(symbol)
         else:
-            raise Exception(f"{symbol} duplicate definite")
+            pass
+            # raise Exception(f"{symbol} duplicate definite")
 
     def add_temp_var(self):
         self.var_list.append(temp_symbol())
