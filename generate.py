@@ -113,6 +113,51 @@ def generate_login_and_expr(expr: BinOpExpr):
     return tmp
 
 
+def generate_equal_expr(expr: BinOpExpr):
+    return _generate_equal_expr(OpCode.EQ, expr)
+
+
+def generate_not_equal_expr(expr: BinOpExpr):
+    return _generate_not_equal_expr(OpCode.EQ, expr)
+
+
+def generate_less_then_expr(expr: BinOpExpr):
+    return _generate_equal_expr(OpCode.LT, expr)
+
+
+def generate_less_equal_expr(expr: BinOpExpr):
+    return _generate_equal_expr(OpCode.LE, expr)
+
+
+def generate_greater_then_expr(expr: BinOpExpr):
+    return _generate_not_equal_expr(OpCode.LE, expr)
+
+
+def generate_greater_equal_expr(expr: BinOpExpr):
+    return _generate_not_equal_expr(OpCode.LT, expr)
+
+
+def _generate_not_equal_expr(opcode: OpCode, expr: BinOpExpr):
+    left = generate_expr(expr.left)
+    right = generate_expr(expr.right)
+    tmp = FuncStat.instance().symbol_stack.add_temp_var()
+    add_instruction(Instruction(opcode, 0, left, right))
+    add_instruction(Instruction(OpCode.JMP, 0, 1))
+    add_instruction(Instruction(OpCode.LOADBOOL, tmp, 0, 1))
+    add_instruction(Instruction(OpCode.LOADBOOL, tmp, 1, 0))
+    return tmp
+
+
+def _generate_equal_expr(opcode: OpCode, expr: BinOpExpr):
+    left = generate_expr(expr.left)
+    right = generate_expr(expr.right)
+    tmp = FuncStat.instance().symbol_stack.add_temp_var()
+    add_instruction(Instruction(opcode, 1, left, right))
+    add_instruction(Instruction(OpCode.JMP, 0, 1))
+    add_instruction(Instruction(OpCode.LOADBOOL, tmp, 1, 1))
+    add_instruction(Instruction(OpCode.LOADBOOL, tmp, 0, 0))
+    return tmp
+
 # def __generate_login_and_or_expr(expr: BinOpExpr):
 #     left = generate_expr(expr.left)
 #     if BinOpEnum.AND == expr.operator:

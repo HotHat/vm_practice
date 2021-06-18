@@ -913,8 +913,9 @@ class BinOpExpr(DotLangTag):
         self.operator = op
         self.left = left
         self.right = right
-        self.false = None
-        self.true = None
+        self.false_list = []
+        self.true_list = []
+        self.next_list = []
         # for dot lang
         self.tag = None
         self.tag_name = self.operator
