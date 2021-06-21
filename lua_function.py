@@ -1,6 +1,7 @@
 from symbol_table import SymbolTable, SymbolTableStack
 from constant_pool import ConstantPool
 from instruction import Instruction
+from ast import Block
 
 
 # class Closure:
@@ -48,30 +49,41 @@ class Closure:
         # up value in lua
         self.up_values = {}
 
+    def add_up_value(self, name, value):
+        self.up_values[name] = value
+
 
 class FuncStat:
-    __instance = None
+    # __instance = None
+    #
+    # @staticmethod
+    # def instance(block: Block) -> 'FuncStat':
+    #     if FuncStat.__instance is None:
+    #         FuncStat.__instance = FuncStat(block)
+    #     return FuncStat.__instance
 
-    @staticmethod
-    def instance() -> 'FuncStat':
-        if FuncStat.__instance is None:
-            FuncStat.__instance = FuncStat()
-        return FuncStat.__instance
+    def __init__(self, block: Block):
+        self.proto = Protocol()
+        self.prev = None
+        self.block = block
+        self.pc = 0
+        self.number_constant = 0
+        self.number_active_var = 0
+        self.number_up_value = 0
 
-    def __init__(self):
         self.symbol_stack = SymbolTable()
         self.constant_pool = ConstantPool()
-        self.opcode = []
+        self.instruction = []
 
     def pc(self):
-        return len(self.opcode) - 1
+        return len(self.instruction) - 1
 
     def change_opcode(self, pc, instruction: Instruction):
-        self.opcode[pc] = instruction
+        self.instruction[pc] = instruction
 
     def print(self):
         print('--------Instruction array-------')
-        for k, v in enumerate(self.opcode):
+        for k, v in enumerate(self.instruction):
             print(f"{k:<5}    {v}")
         print('--------symbol stack-------')
         self.symbol_stack.print()
@@ -81,7 +93,7 @@ class FuncStat:
 
 
 def add_instruction(instruction: Instruction):
-    FuncStat.instance().opcode.append(instruction)
+    FuncStat.instance().instruction.append(instruction)
 
 
 def change_instruction(pc, instruction: Instruction):

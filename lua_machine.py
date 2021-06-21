@@ -12,7 +12,8 @@ class Machine:
         return Machine.__instance
 
     def __init__(self):
+        _ENV = {}
         self.main_closure = Closure()
+        self.main_closure.add_up_value('_ENV', _ENV)
         self.symbol_table = SymbolTable()
-        self.env = {}
 

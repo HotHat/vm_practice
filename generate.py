@@ -25,7 +25,7 @@ def generate_const(term: Terminal):
     # if type(term) == TermNil or type(term) == TermNumber:
     #     idx = FuncStat.instance().constant_pool.add(term)
     #     reg = FuncStat.instance().symbol_stack.add_temp_var()
-    #     FuncStat.instance().opcode.append(Instruction(OpCode.LOADK, reg, idx))
+    #     FuncStat.instance().instruction.append(Instruction(OpCode.LOADK, reg, idx))
     #     return reg
     # elif type(term) == TermNil:
     #     pass
@@ -161,10 +161,10 @@ def _generate_equal_expr(opcode: OpCode, expr: BinOpExpr):
 # def __generate_login_and_or_expr(expr: BinOpExpr):
 #     left = generate_expr(expr.left)
 #     if BinOpEnum.AND == expr.operator:
-#         FuncStat.instance().opcode.append(Instruction(OpCode.TEST, left, 0))
+#         FuncStat.instance().instruction.append(Instruction(OpCode.TEST, left, 0))
 #     else:
-#         FuncStat.instance().opcode.append(Instruction(OpCode.TEST, left, 1))
-#     FuncStat.instance().opcode.append(Instruction(OpCode.JMP, 0, 0))
+#         FuncStat.instance().instruction.append(Instruction(OpCode.TEST, left, 1))
+#     FuncStat.instance().instruction.append(Instruction(OpCode.JMP, 0, 0))
 #     jump_index = FuncStat.instance().pc()
 #     right = generate_expr(expr.right)
 #     pc = FuncStat.instance().pc()
@@ -175,9 +175,9 @@ def _generate_equal_expr(opcode: OpCode, expr: BinOpExpr):
 def generate_login_or_expr(expr: BinOpExpr):
     left = generate_expr(expr.left)
     # B1 or B2 => if B1 = false jump to B2
-    FuncStat.instance().opcode.append(Instruction(OpCode.TEST, left, 1))
+    FuncStat.instance().instruction.append(Instruction(OpCode.TEST, left, 1))
     # if B1 true jump to end
-    FuncStat.instance().opcode.append(Instruction(OpCode.JMP, 0, 0))
+    FuncStat.instance().instruction.append(Instruction(OpCode.JMP, 0, 0))
     # record left expr true list
     jump_index = FuncStat.instance().pc()
     expr.left.true_list.append(jump_index)
