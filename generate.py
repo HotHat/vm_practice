@@ -2,7 +2,7 @@ from ast import *
 from instruction import Instruction
 from lua_opcode import OpCode
 from register import RegisterManager
-from lua_function import FuncStat, add_instruction, change_instruction
+# from lua_function import FuncStat, add_instruction, change_instruction
 from symbol_table import Symbol
 
 
