@@ -15,13 +15,16 @@ class ConstantPool:
         self.count = 0
 
     def add(self, item):
-        none = self.index(item)
+        none = self.get(item)
         if none is None:
             self.pool.append(item)
             self.count += 1
         return 0 - self.count
 
-    def index(self, item):
+    def index(self, idx):
+        return self.pool[idx]
+
+    def get(self, item):
         for k, v in enumerate(self.pool):
             if type(item) == type(v):
                 if type(item) == TermNil or type(item) == TermTrue or type(item) == TermFalse:

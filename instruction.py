@@ -12,7 +12,8 @@ class Instruction:
         self.rc = rc
 
     def __str__(self):
-        return f"{self.op:<15}{'':>8}{self.ra:>5}{'':>8}{self.rb:>5}{'':>8}{self.rc}"
+        c = '' if self.rc is None else self.rc
+        return f"{self.op:<15}{'':>8}{self.ra:>5}{'':>8}{self.rb:>5}{'':>8}{c}"
 
 
 def opcode_ra(tac: Instruction):

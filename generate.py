@@ -84,7 +84,7 @@ def generate_local_assign(assign: LocalAssignStmt):
             pc = FuncStat.instance().pc()
             _back_path(val.true_list, pc)
 
-        code = Instruction(OpCode.LOADK, res.index, reg_right)
+        code = Instruction(OpCode.LOADK, res.get, reg_right)
         add_instruction(code)
 
     # if len(left) != len(right):

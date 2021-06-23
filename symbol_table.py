@@ -48,6 +48,10 @@ class SymbolTable:
         self.var_list.append(temp_symbol())
         return len(self.var_list) - 1
 
+    def pop_temp_var(self):
+        if self.var_list[-1].is_temp:
+            self.var_list.pop()
+
     def _lookup_current_level(self, name):
         for idx, sym in enumerate(self.var_list):
             if name == sym.symbol:

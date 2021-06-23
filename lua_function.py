@@ -96,7 +96,7 @@ class FuncStat:
 
     def generate_block(self, block: Block):
         self.generate_chuck_stmt(block.chunk)
-        self.proto.add_instruction(Instruction(OpCode.RETURN, 0, 2))
+        self.proto.add_instruction(Instruction(OpCode.RETURN, 0, 1))
 
     def generate_chuck_stmt(self, chunk: Chunk):
         for stmt in chunk.stat_arr:
@@ -111,16 +111,23 @@ class FuncStat:
         idx = self.constant_pool.add(term)
         return idx
 
-    def generate_name(self, term: TermName):
+    def generate_name(self, register, term: TermName):
         """
         1) local variable
         2) up values
         3) top variable
+        :param register:
         :param term:
         :return:
         """
         lookup = self.symbol_table.lookup(term.value)
-        return lookup
+        # _ENV variable
+        if -1 == lookup.level:
+            # add symbol to constant pool
+            idx = self.constant_pool.add(term)
+            self.proto.add_instruction(Instruction(OpCode.GETTABUP, register, 0, idx))
+
+        return register
 
     def _back_path(self, lst):
         pc = self.proto.pc()
@@ -193,19 +200,30 @@ class FuncStat:
         self.proto.add_instruction(Instruction(OpCode.LOADBOOL, register, 1, 1))
         self.proto.add_instruction(Instruction(OpCode.LOADBOOL, register, 0, 0))
 
+    def _generate_binary_common(self, opcode: OpCode, register, binop: BinOpExpr):
+        left_reg = self.generate_expr(register, binop.left)
+        right_reg = self.symbol_table.add_temp_var()
+        right_reg = self.generate_expr(right_reg, binop.right)
+        self.proto.add_instruction(Instruction(opcode, register, left_reg, right_reg))
+        self.symbol_table.pop_temp_var()
+        return register
+
     def generate_binary_expr(self, register, binop: BinOpExpr):
         if BinOpEnum.ADD == binop.operator:
-            pass
+            return self._generate_binary_common(OpCode.ADD, register, binop)
         elif BinOpEnum.SUB == binop.operator:
-            pass
+            return self._generate_binary_common(OpCode.SUB, register, binop)
         elif BinOpEnum.MUL == binop.operator:
-            pass
+            return self._generate_binary_common(OpCode.MUL, register, binop)
         elif BinOpEnum.DIV == binop.operator:
-            pass
+            return self._generate_binary_common(OpCode.DIV, register, binop)
         elif BinOpEnum.XOR == binop.operator:
-            pass
+            return self._generate_binary_common(OpCode.BXOR, register, binop)
         elif BinOpEnum.MOD == binop.operator:
-            pass
+            return self._generate_binary_common(OpCode.MOD, register, binop)
+        elif BinOpEnum.CONCAT == binop.operator:
+            return self._generate_binary_common(OpCode.CONCAT, register, binop)
+
         elif BinOpEnum.LT == binop.operator:
             self.generate_less_then_expr(register, binop)
         elif BinOpEnum.LTE == binop.operator:
@@ -216,17 +234,21 @@ class FuncStat:
             self.generate_greater_equal_expr(register, binop)
         elif BinOpEnum.EQ == binop.operator:
             self.generate_equal_expr(register, binop)
-        elif BinOpEnum.CONCAT == binop.operator:
-            pass
         elif BinOpEnum.AND == binop.operator:
             self.generate_login_and_expr(register, binop)
         elif BinOpEnum.OR == binop.operator:
             self.generate_login_or_expr(register, binop)
 
-    def generate_expr(self, register, expr: Expr):
+    def generate_prefix_expr(self, register, expr: PrefixExpr):
+        if PrefixExpr.VAR == expr.kind:
+            return self.generate_name(register, expr.var.name)
+        return register
+
+    def generate_expr(self, register, expr: Expr) -> int:
+        res = register
         if ExprEnum.CONSTANT == expr.kind:
-            k = self.generate_const(expr.value)
-            self.proto.add_instruction(Instruction(OpCode.LOADK, register, k))
+            res = self.generate_const(expr.value)
+            # self.proto.add_instruction(Instruction(OpCode.LOADK, register, k))
 
         elif ExprEnum.BINOP == expr.kind:
             if BinOpEnum.AND == expr.value.operator:
@@ -239,6 +261,11 @@ class FuncStat:
                 self.generate_binary_expr(register, expr.value)
             else:
                 self.generate_binary_expr(register, expr.value)
+            return register
+        elif ExprEnum.PREFIX == expr.kind:
+            res = self.generate_prefix_expr(register, expr.value)
+
+        return res
 
     def generate_local_assign(self, assign: LocalAssignStmt):
         left = assign.left.name_list
@@ -250,13 +277,22 @@ class FuncStat:
             register = self.symbol_table.insert(name.value, name)
             # res = self.symbol_table.lookup(name.value)
             val = right[idx]
-            self.generate_expr(register, val)
+
+            res = self.generate_expr(register, val)
 
             if ExprEnum.BINOP == val.kind and BinOpEnum.AND == val.value.operator:
                 self._back_path(val.false_list)
 
             elif ExprEnum.BINOP == val.kind and BinOpEnum.OR == val.value.operator:
                 self._back_path(val.true_list)
+
+            if res < 0 and (type(self.constant_pool.index(res)) == TermFalse or type(self.constant_pool.index(res)) == TermTrue):
+                self.proto.add_instruction(Instruction(OpCode.LOADBOOL, register,
+                                                       0 if type(self.constant_pool.index(res)) == TermFalse else 1))
+            else:
+                # same register not generate opcode
+                if register != res:
+                    self.proto.add_instruction(Instruction(OpCode.LOADK, register, res))
 
             # code = Instruction(OpCode.LOADK, res.index, reg_right)
             # self.add_instruction(code)
