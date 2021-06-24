@@ -16,6 +16,8 @@ def main(file):
     listener = MyLuaListener()
     parser.addParseListener(listener)
     tree = parser.chunk()
+    # a = listener.get_chuck()
+    # print(a)
     print(tree.toStringTree(recog=parser))
     pass
 

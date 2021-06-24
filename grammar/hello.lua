@@ -1,2 +1,2 @@
-funA()[idx].name()
+funA('str')
 

@@ -1,23 +1,37 @@
 from grammar.LuaListener import LuaListener
 from grammar.LuaParser import LuaParser
+from ast import *
 
 
 class MyLuaListener(LuaListener):
+    def __init__(self):
+        self.chuck = None
+        self.block = None
+        self.stat = []
+        self.ret_stat = None
+        self.prefix_expr = None
+        self.function_call = None
+        self.args = None
+        self.name = None
+
+    def get_chuck(self):
+        return self.chuck
+
     # Enter a parse tree produced by LuaParser#chunk.
     def enterChunk(self, ctx: LuaParser.ChunkContext):
-        print("Enter Chunk")
+        pass
 
     # Exit a parse tree produced by LuaParser#chunk.
     def exitChunk(self, ctx: LuaParser.ChunkContext):
-        pass
+        self.chuck = Chunk(self.block)
 
     # Enter a parse tree produced by LuaParser#block.
     def enterBlock(self, ctx: LuaParser.BlockContext):
-        print("Enter Block")
+        pass
 
     # Exit a parse tree produced by LuaParser#block.
     def exitBlock(self, ctx: LuaParser.BlockContext):
-        print("Exit Block")
+        self.block = Block(self.stat, self.ret_stat)
 
     # Enter a parse tree produced by LuaParser#stat.
     def enterStat(self, ctx: LuaParser.StatContext):
@@ -25,7 +39,7 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#stat.
     def exitStat(self, ctx: LuaParser.StatContext):
-        pass
+        self.stat.append(Stmt(FunctionCallStmt(self.prefix_expr, None, self.args)))
 
     # Enter a parse tree produced by LuaParser#attnamelist.
     def enterAttnamelist(self, ctx: LuaParser.AttnamelistContext):
@@ -81,7 +95,7 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#namelist.
     def exitNamelist(self, ctx: LuaParser.NamelistContext):
-        pass
+        self.name = ctx.NAME()
 
     # Enter a parse tree produced by LuaParser#explist.
     def enterExplist(self, ctx: LuaParser.ExplistContext):
@@ -99,12 +113,30 @@ class MyLuaListener(LuaListener):
     def exitExp(self, ctx: LuaParser.ExpContext):
         pass
 
-    # Enter a parse tree produced by LuaParser#prefixexp.
-    def enterPrefixexp(self, ctx: LuaParser.PrefixexpContext):
+    # Enter a parse tree produced by LuaParser#prefix.
+    def enterPrefix(self, ctx: LuaParser.PrefixContext):
         pass
 
-    # Exit a parse tree produced by LuaParser#prefixexp.
-    def exitPrefixexp(self, ctx: LuaParser.PrefixexpContext):
+    # Exit a parse tree produced by LuaParser#prefix.
+    def exitPrefix(self, ctx: LuaParser.PrefixContext):
+        pass
+
+    # Enter a parse tree produced by LuaParser#nameOrExp.
+    def enterNameOrExp(self, ctx: LuaParser.NameOrExpContext):
+        print(ctx.NAME())
+        print(ctx.exp())
+        pass
+
+    # Exit a parse tree produced by LuaParser#nameOrExp.
+    def exitNameOrExp(self, ctx: LuaParser.NameOrExpContext):
+        pass
+
+    # Enter a parse tree produced by LuaParser#prefix_.
+    def enterPrefix_(self, ctx: LuaParser.Prefix_Context):
+        pass
+
+    # Exit a parse tree produced by LuaParser#prefix_.
+    def exitPrefix_(self, ctx: LuaParser.Prefix_Context):
         pass
 
     # Enter a parse tree produced by LuaParser#functioncall.
@@ -113,7 +145,15 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#functioncall.
     def exitFunctioncall(self, ctx: LuaParser.FunctioncallContext):
+        self.function_call = FunctionCallStmt(self.prefix_expr, None, self.args)
+
+    # Enter a parse tree produced by LuaParser#prefixexp.
+    def enterPrefixexp(self, ctx: LuaParser.PrefixexpContext):
         pass
+
+    # Exit a parse tree produced by LuaParser#prefixexp.
+    def exitPrefixexp(self, ctx: LuaParser.PrefixexpContext):
+        self.prefix_expr = PrefixExpr.var(self.var)
 
     # Enter a parse tree produced by LuaParser#varOrExp.
     def enterVarOrExp(self, ctx: LuaParser.VarOrExpContext):
@@ -129,7 +169,7 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#var_.
     def exitVar_(self, ctx: LuaParser.Var_Context):
-        pass
+        self.var = Var.name(self.name)
 
     # Enter a parse tree produced by LuaParser#varSuffix.
     def enterVarSuffix(self, ctx: LuaParser.VarSuffixContext):
@@ -141,10 +181,16 @@ class MyLuaListener(LuaListener):
 
     # Enter a parse tree produced by LuaParser#nameAndArgs.
     def enterNameAndArgs(self, ctx: LuaParser.NameAndArgsContext):
+        print('------enter------')
+        print(ctx.NAME())
+        print(ctx.args())
         pass
 
     # Exit a parse tree produced by LuaParser#nameAndArgs.
     def exitNameAndArgs(self, ctx: LuaParser.NameAndArgsContext):
+        print('------exit------')
+        print(ctx.NAME())
+        print(ctx.args())
         pass
 
     # Enter a parse tree produced by LuaParser#args.
@@ -153,7 +199,7 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#args.
     def exitArgs(self, ctx: LuaParser.ArgsContext):
-        pass
+        self.args = Args.string(self.name)
 
     # Enter a parse tree produced by LuaParser#functiondef.
     def enterFunctiondef(self, ctx: LuaParser.FunctiondefContext):
@@ -297,4 +343,4 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#string.
     def exitString(self, ctx: LuaParser.StringContext):
-        pass
+        self.name = ctx.NORMALSTRING()
