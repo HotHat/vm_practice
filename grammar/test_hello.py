@@ -3,9 +3,9 @@ import os
 from antlr4 import *
 sys.path.append(os.path.dirname(__file__) + '/../')
 # print(sys.path)
-from antlr.LuaLexer import LuaLexer
-from antlr.LuaParser import LuaParser
-from antlr.MyLuaListener import MyLuaListener
+from grammar.LuaLexer import LuaLexer
+from grammar.LuaParser import LuaParser
+from grammar.MyLuaListener import MyLuaListener
 
 
 def main(file):

@@ -1,62 +1,6 @@
 """
-Lua 5.1 Reference Manual
-chunk ::= {stat [`;´]} [laststat[`;´]]
-
-block ::= chunk
-
-stat ::=  varlist1 `=´ explist1  |
-         functioncall  |
-         do block end  |
-         while expr do block end  |
-         repeat block until expr  |
-         if expr then block {elseif expr then block} [else block] end  |
-         for Name `=´ expr `,´ expr [`,´ expr] do block end  |
-         for namelist in explist1 do block end  |
-         function funcname funcbody  |
-         local function Name funcbody  |
-         local namelist [`=´ explist1]
-
-laststat ::= return [explist1]  |  break
-
-funcname ::= Name {`.´ Name} [`:´ Name]
-
-varlist1 ::= name {`,´ name}
-
-name ::=  Name  |  prefixexp `[´ expr `]´  |  prefixexp `.´ Name
-
-namelist ::= Name {`,´ Name}
-
-explist1 ::= {expr `,´} expr
-
-expr ::=  nil  |  false  |  true  |  Number  |  String  |  `...´  |
-         function  |  prefixexp  |  TableConstructoror  |  expr expr expr  |  unop expr
-
-prefixexp ::= name  |  functioncall  |  `(´ expr `)´
-
-functioncall ::=  prefixexp args  |  prefixexp `:´ Name args
-
-args ::=  `(´ [explist1] `)´  |  TableConstructoror  |  String
-
-function ::= function funcbody
-
-funcbody ::= `(´ [parlist1] `)´ block end
-
-parlist1 ::= namelist [`,´ `...´]  |  `...´
-
-TableConstructoror ::= `{´ [fieldlist] `}´
-
-fieldlist ::= field {fieldsep field} [fieldsep]
-
-field ::= `[´ expr `]´ `=´ expr  |  Name `=´ expr  |  expr
-
-fieldsep ::= `,´  |  `;´
-
-expr ::= `+´  |  `-´  |  `*´  |  `/´  |  `^´  |  `%´  |  `..´  |
-
-         `<´  |  `<=´  |  `>´  |  `>=´  |  `==´  |  `~=´  |
-         and  |  or
-
-unop ::= `-´  |  not  |  `#´
+Lua 5.3 Reference Manual
+https://www.lua.org/manual/5.3/manual.html
 """
 from typing import Optional, Sequence
 from enum import Enum
@@ -149,10 +93,10 @@ def string(s):
 # --------------  terminal start ---------------
 
 
-class Chunk(DotLangTag):
-    def __init__(self, stat_arr: Sequence['Stmt'], last_stat: Optional['LastStmt'] = None):
+class Block(DotLangTag):
+    def __init__(self, stat_arr: Sequence['Stmt'], ret_stat: Optional['LastStmt'] = None):
         self.stat_arr = stat_arr
-        self.last_stat = last_stat
+        self.ret_stat = ret_stat
         self.tag = None
 
     def get_tag_name(self):
@@ -163,9 +107,9 @@ class Chunk(DotLangTag):
         stat_arr_s = "\n".join([f"{tag}->{stat.get_tag()}" for stat in self.stat_arr])
         stat_arr_ss = "\n".join([f"{stat.__str__()}" for stat in self.stat_arr])
         ls = lss = ''
-        if self.last_stat is not None:
-            ls = f"{tag}->{self.last_stat.get_tag()}\n"
-            lss = f"{self.last_stat.__str__()}\n"
+        if self.ret_stat is not None:
+            ls = f"{tag}->{self.ret_stat.get_tag()}\n"
+            lss = f"{self.ret_stat.__str__()}\n"
 
         return f"{self.get_tag_name()}\n" \
                f"{stat_arr_s}\n" \
@@ -174,9 +118,9 @@ class Chunk(DotLangTag):
                f"{lss}"
 
 
-class Block(DotLangTag):
-    def __init__(self, chunk: Chunk, is_root: bool = False):
-        self.chunk = chunk
+class Chunk(DotLangTag):
+    def __init__(self, block: Block, is_root: bool = False):
+        self.block = block
         self.is_root = is_root
         self.true_list = []
         self.false_list = []
@@ -189,8 +133,8 @@ class Block(DotLangTag):
     def __str__(self):
         tag = self.get_tag()
         return f"{self.get_tag_name()}\n" \
-               f"{tag}->{self.chunk.get_tag()}\n" \
-               f"{self.chunk.__str__()}"
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{self.block.__str__()}"
 
 
 # --------------  stmt start ---------------

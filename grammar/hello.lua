@@ -1,0 +1,2 @@
+funA()[idx].name()
+

@@ -115,20 +115,37 @@ exp
     | exp operatorBitwise exp
     ;
 
+prefix :    nameOrExp prefix_;
+nameOrExp : NAME | '(' exp ')';
+
+prefix_ : '[' exp ']' prefix_
+		| '.' NAME prefix_
+		| nameAndArgs prefix_
+		|
+		;
+
+functioncall :  ( NAME
+		  | '(' exp ')'
+		  | prefix '[' exp ']'
+		  | prefix '.' NAME
+		  | prefix  nameAndArgs
+		  )  nameAndArgs
+		  ;
+
 prefixexp
-    : varOrExp nameAndArgs*
+    : var_ | functioncall | '(' exp ')'
     ;
 
-functioncall
-    : varOrExp nameAndArgs+
-    ;
+
 
 varOrExp
     : var_ | '(' exp ')'
     ;
 
 var_
-    : (NAME | '(' exp ')' varSuffix) varSuffix*
+    : NAME
+    | prefix '[' exp ']'
+	| prefix '.' NAME
     ;
 
 varSuffix
@@ -139,17 +156,6 @@ nameAndArgs
     : (':' NAME)? args
     ;
 
-/*
-var_
-    : NAME | prefixexp '[' exp ']' | prefixexp '.' NAME
-    ;
-prefixexp
-    : var_ | functioncall | '(' exp ')'
-    ;
-functioncall
-    : prefixexp args | prefixexp ':' NAME args
-    ;
-*/
 
 args
     : '(' explist? ')' | tableconstructor | string

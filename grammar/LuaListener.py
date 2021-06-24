@@ -116,12 +116,30 @@ class LuaListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LuaParser#prefixexp.
-    def enterPrefixexp(self, ctx:LuaParser.PrefixexpContext):
+    # Enter a parse tree produced by LuaParser#prefix.
+    def enterPrefix(self, ctx:LuaParser.PrefixContext):
         pass
 
-    # Exit a parse tree produced by LuaParser#prefixexp.
-    def exitPrefixexp(self, ctx:LuaParser.PrefixexpContext):
+    # Exit a parse tree produced by LuaParser#prefix.
+    def exitPrefix(self, ctx:LuaParser.PrefixContext):
+        pass
+
+
+    # Enter a parse tree produced by LuaParser#nameOrExp.
+    def enterNameOrExp(self, ctx:LuaParser.NameOrExpContext):
+        pass
+
+    # Exit a parse tree produced by LuaParser#nameOrExp.
+    def exitNameOrExp(self, ctx:LuaParser.NameOrExpContext):
+        pass
+
+
+    # Enter a parse tree produced by LuaParser#prefix_.
+    def enterPrefix_(self, ctx:LuaParser.Prefix_Context):
+        pass
+
+    # Exit a parse tree produced by LuaParser#prefix_.
+    def exitPrefix_(self, ctx:LuaParser.Prefix_Context):
         pass
 
 
@@ -131,6 +149,15 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#functioncall.
     def exitFunctioncall(self, ctx:LuaParser.FunctioncallContext):
+        pass
+
+
+    # Enter a parse tree produced by LuaParser#prefixexp.
+    def enterPrefixexp(self, ctx:LuaParser.PrefixexpContext):
+        pass
+
+    # Exit a parse tree produced by LuaParser#prefixexp.
+    def exitPrefixexp(self, ctx:LuaParser.PrefixexpContext):
         pass
 
 

@@ -1,5 +1,5 @@
-from antlr.LuaListener import LuaListener
-from antlr.LuaParser import LuaParser
+from grammar.LuaListener import LuaListener
+from grammar.LuaParser import LuaParser
 
 
 class MyLuaListener(LuaListener):
