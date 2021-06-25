@@ -35,24 +35,6 @@ class LuaListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LuaParser#attnamelist.
-    def enterAttnamelist(self, ctx:LuaParser.AttnamelistContext):
-        pass
-
-    # Exit a parse tree produced by LuaParser#attnamelist.
-    def exitAttnamelist(self, ctx:LuaParser.AttnamelistContext):
-        pass
-
-
-    # Enter a parse tree produced by LuaParser#attrib.
-    def enterAttrib(self, ctx:LuaParser.AttribContext):
-        pass
-
-    # Exit a parse tree produced by LuaParser#attrib.
-    def exitAttrib(self, ctx:LuaParser.AttribContext):
-        pass
-
-
     # Enter a parse tree produced by LuaParser#retstat.
     def enterRetstat(self, ctx:LuaParser.RetstatContext):
         pass

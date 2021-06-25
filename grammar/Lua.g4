@@ -61,15 +61,7 @@ stat
     | 'for' namelist 'in' explist 'do' block 'end'
     | 'function' funcname funcbody
     | 'local' 'function' NAME funcbody
-    | 'local' attnamelist ('=' explist)?
-    ;
-
-attnamelist
-    : NAME attrib (',' NAME attrib)*
-    ;
-
-attrib
-    : ('<' NAME '>')?
+    | 'local' namelist ('=' explist)?
     ;
 
 retstat

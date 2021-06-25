@@ -1,2 +1,2 @@
-funA('str')
+local a,b
 
