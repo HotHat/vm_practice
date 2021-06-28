@@ -120,8 +120,7 @@ functioncall :  ( NAME
 		  | '(' exp ')'
 		  | prefix '[' exp ']'
 		  | prefix '.' NAME
-		  | prefix  nameAndArgs
-		  )  nameAndArgs
+		  )  nameAndArgs+
 		  ;
 
 prefixexp

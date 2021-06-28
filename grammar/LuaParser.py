@@ -3,11 +3,10 @@
 from antlr4 import *
 from io import StringIO
 import sys
-
 if sys.version_info[1] > 5:
-    from typing import TextIO
+	from typing import TextIO
 else:
-    from typing.io import TextIO
+	from typing.io import TextIO
 
 
 def serializedATN():
@@ -40,43 +39,43 @@ def serializedATN():
         buf.write("\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\5\r\u0119\n\r\3\16\3")
         buf.write("\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16")
         buf.write("\5\16\u0127\n\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3")
-        buf.write("\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17")
-        buf.write("\u013a\n\17\3\17\3\17\3\20\3\20\3\20\3\20\3\20\3\20\5")
-        buf.write("\20\u0144\n\20\3\21\3\21\3\21\3\21\3\21\5\21\u014b\n\21")
-        buf.write("\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\5\22")
-        buf.write("\u0157\n\22\3\23\7\23\u015a\n\23\f\23\16\23\u015d\13\23")
-        buf.write("\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u0165\n\23\3\24\3")
-        buf.write("\24\5\24\u0169\n\24\3\24\3\24\3\25\3\25\5\25\u016f\n\25")
-        buf.write("\3\25\3\25\3\25\5\25\u0174\n\25\3\26\3\26\3\26\3\27\3")
-        buf.write("\27\5\27\u017b\n\27\3\27\3\27\3\27\3\27\3\30\3\30\3\30")
-        buf.write("\5\30\u0184\n\30\3\30\5\30\u0187\n\30\3\31\3\31\5\31\u018b")
-        buf.write("\n\31\3\31\3\31\3\32\3\32\3\32\3\32\7\32\u0193\n\32\f")
-        buf.write("\32\16\32\u0196\13\32\3\32\5\32\u0199\n\32\3\33\3\33\3")
-        buf.write("\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\5\33\u01a5\n\33")
-        buf.write("\3\34\3\34\3\35\3\35\3\36\3\36\3\37\3\37\3 \3 \3!\3!\3")
-        buf.write("\"\3\"\3#\3#\3$\3$\3%\3%\3&\3&\3\'\3\'\3\'\2\3\24(\2\4")
-        buf.write("\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64")
-        buf.write("\668:<>@BDFHJL\2\n\4\2\3\3\21\21\3\2%*\3\2,-\3\2.\61\3")
-        buf.write("\2\62\66\5\2--\64\64\678\3\2>A\3\2;=\2\u01df\2N\3\2\2")
-        buf.write("\2\4T\3\2\2\2\6\u00ab\3\2\2\2\b\u00ad\3\2\2\2\n\u00b4")
-        buf.write("\3\2\2\2\f\u00b8\3\2\2\2\16\u00c4\3\2\2\2\20\u00cc\3\2")
-        buf.write("\2\2\22\u00d4\3\2\2\2\24\u00e9\3\2\2\2\26\u0110\3\2\2")
-        buf.write("\2\30\u0118\3\2\2\2\32\u0126\3\2\2\2\34\u0139\3\2\2\2")
-        buf.write("\36\u0143\3\2\2\2 \u014a\3\2\2\2\"\u0156\3\2\2\2$\u015b")
-        buf.write("\3\2\2\2&\u0168\3\2\2\2(\u0173\3\2\2\2*\u0175\3\2\2\2")
-        buf.write(",\u0178\3\2\2\2.\u0186\3\2\2\2\60\u0188\3\2\2\2\62\u018e")
-        buf.write("\3\2\2\2\64\u01a4\3\2\2\2\66\u01a6\3\2\2\28\u01a8\3\2")
-        buf.write("\2\2:\u01aa\3\2\2\2<\u01ac\3\2\2\2>\u01ae\3\2\2\2@\u01b0")
-        buf.write("\3\2\2\2B\u01b2\3\2\2\2D\u01b4\3\2\2\2F\u01b6\3\2\2\2")
-        buf.write("H\u01b8\3\2\2\2J\u01ba\3\2\2\2L\u01bc\3\2\2\2NO\5\4\3")
-        buf.write("\2OP\7\2\2\3P\3\3\2\2\2QS\5\6\4\2RQ\3\2\2\2SV\3\2\2\2")
-        buf.write("TR\3\2\2\2TU\3\2\2\2UX\3\2\2\2VT\3\2\2\2WY\5\b\5\2XW\3")
-        buf.write("\2\2\2XY\3\2\2\2Y\5\3\2\2\2Z\u00ac\7\3\2\2[\\\5\16\b\2")
-        buf.write("\\]\7\4\2\2]^\5\22\n\2^\u00ac\3\2\2\2_\u00ac\5\34\17\2")
-        buf.write("`\u00ac\5\n\6\2a\u00ac\7\5\2\2bc\7\6\2\2c\u00ac\7:\2\2")
-        buf.write("de\7\7\2\2ef\5\4\3\2fg\7\b\2\2g\u00ac\3\2\2\2hi\7\t\2")
-        buf.write("\2ij\5\24\13\2jk\7\7\2\2kl\5\4\3\2lm\7\b\2\2m\u00ac\3")
-        buf.write("\2\2\2no\7\n\2\2op\5\4\3\2pq\7\13\2\2qr\5\24\13\2r\u00ac")
+        buf.write("\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u0137\n\17\3\17")
+        buf.write("\6\17\u013a\n\17\r\17\16\17\u013b\3\20\3\20\3\20\3\20")
+        buf.write("\3\20\3\20\5\20\u0144\n\20\3\21\3\21\3\21\3\21\3\21\5")
+        buf.write("\21\u014b\n\21\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22")
+        buf.write("\3\22\3\22\5\22\u0157\n\22\3\23\7\23\u015a\n\23\f\23\16")
+        buf.write("\23\u015d\13\23\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u0165")
+        buf.write("\n\23\3\24\3\24\5\24\u0169\n\24\3\24\3\24\3\25\3\25\5")
+        buf.write("\25\u016f\n\25\3\25\3\25\3\25\5\25\u0174\n\25\3\26\3\26")
+        buf.write("\3\26\3\27\3\27\5\27\u017b\n\27\3\27\3\27\3\27\3\27\3")
+        buf.write("\30\3\30\3\30\5\30\u0184\n\30\3\30\5\30\u0187\n\30\3\31")
+        buf.write("\3\31\5\31\u018b\n\31\3\31\3\31\3\32\3\32\3\32\3\32\7")
+        buf.write("\32\u0193\n\32\f\32\16\32\u0196\13\32\3\32\5\32\u0199")
+        buf.write("\n\32\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33")
+        buf.write("\5\33\u01a5\n\33\3\34\3\34\3\35\3\35\3\36\3\36\3\37\3")
+        buf.write("\37\3 \3 \3!\3!\3\"\3\"\3#\3#\3$\3$\3%\3%\3&\3&\3\'\3")
+        buf.write("\'\3\'\2\3\24(\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36")
+        buf.write(" \"$&(*,.\60\62\64\668:<>@BDFHJL\2\n\4\2\3\3\21\21\3\2")
+        buf.write("%*\3\2,-\3\2.\61\3\2\62\66\5\2--\64\64\678\3\2>A\3\2;")
+        buf.write("=\2\u01df\2N\3\2\2\2\4T\3\2\2\2\6\u00ab\3\2\2\2\b\u00ad")
+        buf.write("\3\2\2\2\n\u00b4\3\2\2\2\f\u00b8\3\2\2\2\16\u00c4\3\2")
+        buf.write("\2\2\20\u00cc\3\2\2\2\22\u00d4\3\2\2\2\24\u00e9\3\2\2")
+        buf.write("\2\26\u0110\3\2\2\2\30\u0118\3\2\2\2\32\u0126\3\2\2\2")
+        buf.write("\34\u0136\3\2\2\2\36\u0143\3\2\2\2 \u014a\3\2\2\2\"\u0156")
+        buf.write("\3\2\2\2$\u015b\3\2\2\2&\u0168\3\2\2\2(\u0173\3\2\2\2")
+        buf.write("*\u0175\3\2\2\2,\u0178\3\2\2\2.\u0186\3\2\2\2\60\u0188")
+        buf.write("\3\2\2\2\62\u018e\3\2\2\2\64\u01a4\3\2\2\2\66\u01a6\3")
+        buf.write("\2\2\28\u01a8\3\2\2\2:\u01aa\3\2\2\2<\u01ac\3\2\2\2>\u01ae")
+        buf.write("\3\2\2\2@\u01b0\3\2\2\2B\u01b2\3\2\2\2D\u01b4\3\2\2\2")
+        buf.write("F\u01b6\3\2\2\2H\u01b8\3\2\2\2J\u01ba\3\2\2\2L\u01bc\3")
+        buf.write("\2\2\2NO\5\4\3\2OP\7\2\2\3P\3\3\2\2\2QS\5\6\4\2RQ\3\2")
+        buf.write("\2\2SV\3\2\2\2TR\3\2\2\2TU\3\2\2\2UX\3\2\2\2VT\3\2\2\2")
+        buf.write("WY\5\b\5\2XW\3\2\2\2XY\3\2\2\2Y\5\3\2\2\2Z\u00ac\7\3\2")
+        buf.write("\2[\\\5\16\b\2\\]\7\4\2\2]^\5\22\n\2^\u00ac\3\2\2\2_\u00ac")
+        buf.write("\5\34\17\2`\u00ac\5\n\6\2a\u00ac\7\5\2\2bc\7\6\2\2c\u00ac")
+        buf.write("\7:\2\2de\7\7\2\2ef\5\4\3\2fg\7\b\2\2g\u00ac\3\2\2\2h")
+        buf.write("i\7\t\2\2ij\5\24\13\2jk\7\7\2\2kl\5\4\3\2lm\7\b\2\2m\u00ac")
+        buf.write("\3\2\2\2no\7\n\2\2op\5\4\3\2pq\7\13\2\2qr\5\24\13\2r\u00ac")
         buf.write("\3\2\2\2st\7\f\2\2tu\5\24\13\2uv\7\r\2\2v~\5\4\3\2wx\7")
         buf.write("\16\2\2xy\5\24\13\2yz\7\r\2\2z{\5\4\3\2{}\3\2\2\2|w\3")
         buf.write("\2\2\2}\u0080\3\2\2\2~|\3\2\2\2~\177\3\2\2\2\177\u0083")
@@ -157,16 +156,16 @@ def serializedATN():
         buf.write("\5\32\16\2\u0122\u0123\5&\24\2\u0123\u0124\5\32\16\2\u0124")
         buf.write("\u0127\3\2\2\2\u0125\u0127\3\2\2\2\u0126\u011a\3\2\2\2")
         buf.write("\u0126\u011f\3\2\2\2\u0126\u0122\3\2\2\2\u0126\u0125\3")
-        buf.write("\2\2\2\u0127\33\3\2\2\2\u0128\u013a\7:\2\2\u0129\u012a")
+        buf.write("\2\2\2\u0127\33\3\2\2\2\u0128\u0137\7:\2\2\u0129\u012a")
         buf.write("\7\35\2\2\u012a\u012b\5\24\13\2\u012b\u012c\7\36\2\2\u012c")
-        buf.write("\u013a\3\2\2\2\u012d\u012e\5\26\f\2\u012e\u012f\7\37\2")
-        buf.write("\2\u012f\u0130\5\24\13\2\u0130\u0131\7 \2\2\u0131\u013a")
+        buf.write("\u0137\3\2\2\2\u012d\u012e\5\26\f\2\u012e\u012f\7\37\2")
+        buf.write("\2\u012f\u0130\5\24\13\2\u0130\u0131\7 \2\2\u0131\u0137")
         buf.write("\3\2\2\2\u0132\u0133\5\26\f\2\u0133\u0134\7\27\2\2\u0134")
-        buf.write("\u0135\7:\2\2\u0135\u013a\3\2\2\2\u0136\u0137\5\26\f\2")
-        buf.write("\u0137\u0138\5&\24\2\u0138\u013a\3\2\2\2\u0139\u0128\3")
-        buf.write("\2\2\2\u0139\u0129\3\2\2\2\u0139\u012d\3\2\2\2\u0139\u0132")
-        buf.write("\3\2\2\2\u0139\u0136\3\2\2\2\u013a\u013b\3\2\2\2\u013b")
-        buf.write("\u013c\5&\24\2\u013c\35\3\2\2\2\u013d\u0144\5\"\22\2\u013e")
+        buf.write("\u0135\7:\2\2\u0135\u0137\3\2\2\2\u0136\u0128\3\2\2\2")
+        buf.write("\u0136\u0129\3\2\2\2\u0136\u012d\3\2\2\2\u0136\u0132\3")
+        buf.write("\2\2\2\u0137\u0139\3\2\2\2\u0138\u013a\5&\24\2\u0139\u0138")
+        buf.write("\3\2\2\2\u013a\u013b\3\2\2\2\u013b\u0139\3\2\2\2\u013b")
+        buf.write("\u013c\3\2\2\2\u013c\35\3\2\2\2\u013d\u0144\5\"\22\2\u013e")
         buf.write("\u0144\5\34\17\2\u013f\u0140\7\35\2\2\u0140\u0141\5\24")
         buf.write("\13\2\u0141\u0142\7\36\2\2\u0142\u0144\3\2\2\2\u0143\u013d")
         buf.write("\3\2\2\2\u0143\u013e\3\2\2\2\u0143\u013f\3\2\2\2\u0144")
@@ -219,50 +218,51 @@ def serializedATN():
         buf.write("\5\2\2\u01b3C\3\2\2\2\u01b4\u01b5\t\6\2\2\u01b5E\3\2\2")
         buf.write("\2\u01b6\u01b7\t\7\2\2\u01b7G\3\2\2\2\u01b8\u01b9\79\2")
         buf.write("\2\u01b9I\3\2\2\2\u01ba\u01bb\t\b\2\2\u01bbK\3\2\2\2\u01bc")
-        buf.write("\u01bd\t\t\2\2\u01bdM\3\2\2\2%TX~\u0083\u008f\u00a9\u00ab")
+        buf.write("\u01bd\t\t\2\2\u01bdM\3\2\2\2&TX~\u0083\u008f\u00a9\u00ab")
         buf.write("\u00af\u00b2\u00bd\u00c2\u00c9\u00d1\u00d9\u00e9\u010b")
-        buf.write("\u010d\u0118\u0126\u0139\u0143\u014a\u0156\u015b\u0164")
-        buf.write("\u0168\u016e\u0173\u017a\u0183\u0186\u018a\u0194\u0198")
-        buf.write("\u01a4")
+        buf.write("\u010d\u0118\u0126\u0136\u013b\u0143\u014a\u0156\u015b")
+        buf.write("\u0164\u0168\u016e\u0173\u017a\u0183\u0186\u018a\u0194")
+        buf.write("\u0198\u01a4")
         return buf.getvalue()
 
 
-class LuaParser(Parser):
+class LuaParser ( Parser ):
+
     grammarFileName = "Lua.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
-    decisionsToDFA = [DFA(ds, i) for i, ds in enumerate(atn.decisionToState)]
+    decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = ["<INVALID>", "';'", "'='", "'break'", "'goto'", "'do'",
-                    "'end'", "'while'", "'repeat'", "'until'", "'if'",
-                    "'then'", "'elseif'", "'else'", "'for'", "','", "'in'",
-                    "'function'", "'local'", "'return'", "'::'", "'.'",
-                    "':'", "'nil'", "'false'", "'true'", "'...'", "'('",
-                    "')'", "'['", "']'", "'{'", "'}'", "'or'", "'and'",
-                    "'<'", "'>'", "'<='", "'>='", "'~='", "'=='", "'..'",
-                    "'+'", "'-'", "'*'", "'/'", "'%'", "'//'", "'&'", "'|'",
-                    "'~'", "'<<'", "'>>'", "'not'", "'#'", "'^'"]
+    literalNames = [ "<INVALID>", "';'", "'='", "'break'", "'goto'", "'do'", 
+                     "'end'", "'while'", "'repeat'", "'until'", "'if'", 
+                     "'then'", "'elseif'", "'else'", "'for'", "','", "'in'", 
+                     "'function'", "'local'", "'return'", "'::'", "'.'", 
+                     "':'", "'nil'", "'false'", "'true'", "'...'", "'('", 
+                     "')'", "'['", "']'", "'{'", "'}'", "'or'", "'and'", 
+                     "'<'", "'>'", "'<='", "'>='", "'~='", "'=='", "'..'", 
+                     "'+'", "'-'", "'*'", "'/'", "'%'", "'//'", "'&'", "'|'", 
+                     "'~'", "'<<'", "'>>'", "'not'", "'#'", "'^'" ]
 
-    symbolicNames = ["<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "NAME", "NORMALSTRING", "CHARSTRING", "LONGSTRING",
-                     "INT", "HEX", "FLOAT", "HEX_FLOAT", "COMMENT", "LINE_COMMENT",
-                     "WS", "SHEBANG"]
+    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "NAME", "NORMALSTRING", "CHARSTRING", "LONGSTRING", 
+                      "INT", "HEX", "FLOAT", "HEX_FLOAT", "COMMENT", "LINE_COMMENT", 
+                      "WS", "SHEBANG" ]
 
     RULE_chunk = 0
     RULE_block = 1
@@ -303,100 +303,104 @@ class LuaParser(Parser):
     RULE_number = 36
     RULE_string = 37
 
-    ruleNames = ["chunk", "block", "stat", "retstat", "label", "funcname",
-                 "varlist", "namelist", "explist", "exp", "prefix", "nameOrExp",
-                 "prefix_", "functioncall", "prefixexp", "varOrExp", "var_",
-                 "varSuffix", "nameAndArgs", "args", "functiondef", "funcbody",
-                 "parlist", "tableconstructor", "fieldlist", "field",
-                 "fieldsep", "operatorOr", "operatorAnd", "operatorComparison",
-                 "operatorStrcat", "operatorAddSub", "operatorMulDivMod",
-                 "operatorBitwise", "operatorUnary", "operatorPower",
-                 "number", "string"]
+    ruleNames =  [ "chunk", "block", "stat", "retstat", "label", "funcname", 
+                   "varlist", "namelist", "explist", "exp", "prefix", "nameOrExp", 
+                   "prefix_", "functioncall", "prefixexp", "varOrExp", "var_", 
+                   "varSuffix", "nameAndArgs", "args", "functiondef", "funcbody", 
+                   "parlist", "tableconstructor", "fieldlist", "field", 
+                   "fieldsep", "operatorOr", "operatorAnd", "operatorComparison", 
+                   "operatorStrcat", "operatorAddSub", "operatorMulDivMod", 
+                   "operatorBitwise", "operatorUnary", "operatorPower", 
+                   "number", "string" ]
 
     EOF = Token.EOF
-    T__0 = 1
-    T__1 = 2
-    T__2 = 3
-    T__3 = 4
-    T__4 = 5
-    T__5 = 6
-    T__6 = 7
-    T__7 = 8
-    T__8 = 9
-    T__9 = 10
-    T__10 = 11
-    T__11 = 12
-    T__12 = 13
-    T__13 = 14
-    T__14 = 15
-    T__15 = 16
-    T__16 = 17
-    T__17 = 18
-    T__18 = 19
-    T__19 = 20
-    T__20 = 21
-    T__21 = 22
-    T__22 = 23
-    T__23 = 24
-    T__24 = 25
-    T__25 = 26
-    T__26 = 27
-    T__27 = 28
-    T__28 = 29
-    T__29 = 30
-    T__30 = 31
-    T__31 = 32
-    T__32 = 33
-    T__33 = 34
-    T__34 = 35
-    T__35 = 36
-    T__36 = 37
-    T__37 = 38
-    T__38 = 39
-    T__39 = 40
-    T__40 = 41
-    T__41 = 42
-    T__42 = 43
-    T__43 = 44
-    T__44 = 45
-    T__45 = 46
-    T__46 = 47
-    T__47 = 48
-    T__48 = 49
-    T__49 = 50
-    T__50 = 51
-    T__51 = 52
-    T__52 = 53
-    T__53 = 54
-    T__54 = 55
-    NAME = 56
-    NORMALSTRING = 57
-    CHARSTRING = 58
-    LONGSTRING = 59
-    INT = 60
-    HEX = 61
-    FLOAT = 62
-    HEX_FLOAT = 63
-    COMMENT = 64
-    LINE_COMMENT = 65
-    WS = 66
-    SHEBANG = 67
+    T__0=1
+    T__1=2
+    T__2=3
+    T__3=4
+    T__4=5
+    T__5=6
+    T__6=7
+    T__7=8
+    T__8=9
+    T__9=10
+    T__10=11
+    T__11=12
+    T__12=13
+    T__13=14
+    T__14=15
+    T__15=16
+    T__16=17
+    T__17=18
+    T__18=19
+    T__19=20
+    T__20=21
+    T__21=22
+    T__22=23
+    T__23=24
+    T__24=25
+    T__25=26
+    T__26=27
+    T__27=28
+    T__28=29
+    T__29=30
+    T__30=31
+    T__31=32
+    T__32=33
+    T__33=34
+    T__34=35
+    T__35=36
+    T__36=37
+    T__37=38
+    T__38=39
+    T__39=40
+    T__40=41
+    T__41=42
+    T__42=43
+    T__43=44
+    T__44=45
+    T__45=46
+    T__46=47
+    T__47=48
+    T__48=49
+    T__49=50
+    T__50=51
+    T__51=52
+    T__52=53
+    T__53=54
+    T__54=55
+    NAME=56
+    NORMALSTRING=57
+    CHARSTRING=58
+    LONGSTRING=59
+    INT=60
+    HEX=61
+    FLOAT=62
+    HEX_FLOAT=63
+    COMMENT=64
+    LINE_COMMENT=65
+    WS=66
+    SHEBANG=67
 
-    def __init__(self, input: TokenStream, output: TextIO = sys.stdout):
+    def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.9.2")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
+
+
+
     class ChunkContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def block(self):
-            return self.getTypedRuleContext(LuaParser.BlockContext, 0)
+            return self.getTypedRuleContext(LuaParser.BlockContext,0)
+
 
         def EOF(self):
             return self.getToken(LuaParser.EOF, 0)
@@ -404,13 +408,16 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_chunk
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterChunk"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterChunk" ):
                 listener.enterChunk(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitChunk"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitChunk" ):
                 listener.exitChunk(self)
+
+
+
 
     def chunk(self):
 
@@ -430,48 +437,50 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class BlockContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def stat(self, i: int = None):
+        def stat(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.StatContext)
             else:
-                return self.getTypedRuleContext(LuaParser.StatContext, i)
+                return self.getTypedRuleContext(LuaParser.StatContext,i)
+
 
         def retstat(self):
-            return self.getTypedRuleContext(LuaParser.RetstatContext, 0)
+            return self.getTypedRuleContext(LuaParser.RetstatContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_block
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterBlock"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterBlock" ):
                 listener.enterBlock(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitBlock"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitBlock" ):
                 listener.exitBlock(self)
+
+
+
 
     def block(self):
 
         localctx = LuaParser.BlockContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_block)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 82
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__0) | (1 << LuaParser.T__2) | (1 << LuaParser.T__3) | (1 << LuaParser.T__4) | (
-                    1 << LuaParser.T__6) | (1 << LuaParser.T__7) | (1 << LuaParser.T__9) | (1 << LuaParser.T__13) | (
-                            1 << LuaParser.T__16) | (1 << LuaParser.T__17) | (1 << LuaParser.T__19) | (
-                            1 << LuaParser.T__26) | (1 << LuaParser.NAME))) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__0) | (1 << LuaParser.T__2) | (1 << LuaParser.T__3) | (1 << LuaParser.T__4) | (1 << LuaParser.T__6) | (1 << LuaParser.T__7) | (1 << LuaParser.T__9) | (1 << LuaParser.T__13) | (1 << LuaParser.T__16) | (1 << LuaParser.T__17) | (1 << LuaParser.T__19) | (1 << LuaParser.T__26) | (1 << LuaParser.NAME))) != 0):
                 self.state = 79
                 self.stat()
                 self.state = 84
@@ -481,7 +490,7 @@ class LuaParser(Parser):
             self.state = 86
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == LuaParser.T__18:
+            if _la==LuaParser.T__18:
                 self.state = 85
                 self.retstat()
 
@@ -494,69 +503,82 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class StatContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def varlist(self):
-            return self.getTypedRuleContext(LuaParser.VarlistContext, 0)
+            return self.getTypedRuleContext(LuaParser.VarlistContext,0)
+
 
         def explist(self):
-            return self.getTypedRuleContext(LuaParser.ExplistContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExplistContext,0)
+
 
         def functioncall(self):
-            return self.getTypedRuleContext(LuaParser.FunctioncallContext, 0)
+            return self.getTypedRuleContext(LuaParser.FunctioncallContext,0)
+
 
         def label(self):
-            return self.getTypedRuleContext(LuaParser.LabelContext, 0)
+            return self.getTypedRuleContext(LuaParser.LabelContext,0)
+
 
         def NAME(self):
             return self.getToken(LuaParser.NAME, 0)
 
-        def block(self, i: int = None):
+        def block(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.BlockContext)
             else:
-                return self.getTypedRuleContext(LuaParser.BlockContext, i)
+                return self.getTypedRuleContext(LuaParser.BlockContext,i)
 
-        def exp(self, i: int = None):
+
+        def exp(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.ExpContext)
             else:
-                return self.getTypedRuleContext(LuaParser.ExpContext, i)
+                return self.getTypedRuleContext(LuaParser.ExpContext,i)
+
 
         def namelist(self):
-            return self.getTypedRuleContext(LuaParser.NamelistContext, 0)
+            return self.getTypedRuleContext(LuaParser.NamelistContext,0)
+
 
         def funcname(self):
-            return self.getTypedRuleContext(LuaParser.FuncnameContext, 0)
+            return self.getTypedRuleContext(LuaParser.FuncnameContext,0)
+
 
         def funcbody(self):
-            return self.getTypedRuleContext(LuaParser.FuncbodyContext, 0)
+            return self.getTypedRuleContext(LuaParser.FuncbodyContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_stat
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterStat"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterStat" ):
                 listener.enterStat(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitStat"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitStat" ):
                 listener.exitStat(self)
+
+
+
 
     def stat(self):
 
         localctx = LuaParser.StatContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_stat)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.state = 169
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 6, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,6,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 88
@@ -648,7 +670,7 @@ class LuaParser(Parser):
                 self.state = 124
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la == LuaParser.T__11:
+                while _la==LuaParser.T__11:
                     self.state = 117
                     self.match(LuaParser.T__11)
                     self.state = 118
@@ -664,11 +686,12 @@ class LuaParser(Parser):
                 self.state = 129
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == LuaParser.T__12:
+                if _la==LuaParser.T__12:
                     self.state = 127
                     self.match(LuaParser.T__12)
                     self.state = 128
                     self.block()
+
 
                 self.state = 131
                 self.match(LuaParser.T__5)
@@ -691,11 +714,12 @@ class LuaParser(Parser):
                 self.state = 141
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == LuaParser.T__14:
+                if _la==LuaParser.T__14:
                     self.state = 139
                     self.match(LuaParser.T__14)
                     self.state = 140
                     self.exp(0)
+
 
                 self.state = 143
                 self.match(LuaParser.T__4)
@@ -754,11 +778,12 @@ class LuaParser(Parser):
                 self.state = 167
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == LuaParser.T__1:
+                if _la==LuaParser.T__1:
                     self.state = 165
                     self.match(LuaParser.T__1)
                     self.state = 166
                     self.explist()
+
 
                 pass
 
@@ -771,32 +796,37 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class RetstatContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def explist(self):
-            return self.getTypedRuleContext(LuaParser.ExplistContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExplistContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_retstat
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterRetstat"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterRetstat" ):
                 listener.enterRetstat(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitRetstat"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitRetstat" ):
                 listener.exitRetstat(self)
+
+
+
 
     def retstat(self):
 
         localctx = LuaParser.RetstatContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_retstat)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 171
@@ -804,20 +834,15 @@ class LuaParser(Parser):
             self.state = 173
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__16) | (1 << LuaParser.T__22) | (1 << LuaParser.T__23) | (
-                    1 << LuaParser.T__24) | (1 << LuaParser.T__25) | (1 << LuaParser.T__26) | (1 << LuaParser.T__30) | (
-                            1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (1 << LuaParser.T__52) | (
-                            1 << LuaParser.T__53) | (1 << LuaParser.NAME) | (1 << LuaParser.NORMALSTRING) | (
-                            1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING) | (1 << LuaParser.INT) | (
-                            1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (1 << LuaParser.HEX_FLOAT))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__16) | (1 << LuaParser.T__22) | (1 << LuaParser.T__23) | (1 << LuaParser.T__24) | (1 << LuaParser.T__25) | (1 << LuaParser.T__26) | (1 << LuaParser.T__30) | (1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (1 << LuaParser.T__52) | (1 << LuaParser.T__53) | (1 << LuaParser.NAME) | (1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING) | (1 << LuaParser.INT) | (1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (1 << LuaParser.HEX_FLOAT))) != 0):
                 self.state = 172
                 self.explist()
+
 
             self.state = 176
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == LuaParser.T__0:
+            if _la==LuaParser.T__0:
                 self.state = 175
                 self.match(LuaParser.T__0)
 
@@ -830,10 +855,11 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class LabelContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -843,13 +869,16 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_label
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterLabel"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterLabel" ):
                 listener.enterLabel(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitLabel"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitLabel" ):
                 listener.exitLabel(self)
+
+
+
 
     def label(self):
 
@@ -871,14 +900,15 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FuncnameContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def NAME(self, i: int = None):
+        def NAME(self, i:int=None):
             if i is None:
                 return self.getTokens(LuaParser.NAME)
             else:
@@ -887,19 +917,22 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_funcname
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterFuncname"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFuncname" ):
                 listener.enterFuncname(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitFuncname"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFuncname" ):
                 listener.exitFuncname(self)
+
+
+
 
     def funcname(self):
 
         localctx = LuaParser.FuncnameContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_funcname)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 182
@@ -907,7 +940,7 @@ class LuaParser(Parser):
             self.state = 187
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la == LuaParser.T__20:
+            while _la==LuaParser.T__20:
                 self.state = 183
                 self.match(LuaParser.T__20)
                 self.state = 184
@@ -919,7 +952,7 @@ class LuaParser(Parser):
             self.state = 192
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == LuaParser.T__21:
+            if _la==LuaParser.T__21:
                 self.state = 190
                 self.match(LuaParser.T__21)
                 self.state = 191
@@ -934,35 +967,40 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class VarlistContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def var_(self, i: int = None):
+        def var_(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.Var_Context)
             else:
-                return self.getTypedRuleContext(LuaParser.Var_Context, i)
+                return self.getTypedRuleContext(LuaParser.Var_Context,i)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_varlist
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterVarlist"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterVarlist" ):
                 listener.enterVarlist(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitVarlist"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitVarlist" ):
                 listener.exitVarlist(self)
+
+
+
 
     def varlist(self):
 
         localctx = LuaParser.VarlistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_varlist)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 194
@@ -970,7 +1008,7 @@ class LuaParser(Parser):
             self.state = 199
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la == LuaParser.T__14:
+            while _la==LuaParser.T__14:
                 self.state = 195
                 self.match(LuaParser.T__14)
                 self.state = 196
@@ -987,14 +1025,15 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class NamelistContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def NAME(self, i: int = None):
+        def NAME(self, i:int=None):
             if i is None:
                 return self.getTokens(LuaParser.NAME)
             else:
@@ -1003,13 +1042,16 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_namelist
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterNamelist"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterNamelist" ):
                 listener.enterNamelist(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitNamelist"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitNamelist" ):
                 listener.exitNamelist(self)
+
+
+
 
     def namelist(self):
 
@@ -1021,16 +1063,16 @@ class LuaParser(Parser):
             self.match(LuaParser.NAME)
             self.state = 207
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input, 12, self._ctx)
-            while _alt != 2 and _alt != ATN.INVALID_ALT_NUMBER:
-                if _alt == 1:
+            _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
                     self.state = 203
                     self.match(LuaParser.T__14)
                     self.state = 204
-                    self.match(LuaParser.NAME)
+                    self.match(LuaParser.NAME) 
                 self.state = 209
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input, 12, self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1040,35 +1082,40 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class ExplistContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def exp(self, i: int = None):
+        def exp(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.ExpContext)
             else:
-                return self.getTypedRuleContext(LuaParser.ExpContext, i)
+                return self.getTypedRuleContext(LuaParser.ExpContext,i)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_explist
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterExplist"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExplist" ):
                 listener.enterExplist(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitExplist"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExplist" ):
                 listener.exitExplist(self)
+
+
+
 
     def explist(self):
 
         localctx = LuaParser.ExplistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_explist)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 210
@@ -1076,7 +1123,7 @@ class LuaParser(Parser):
             self.state = 215
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la == LuaParser.T__14:
+            while _la==LuaParser.T__14:
                 self.state = 211
                 self.match(LuaParser.T__14)
                 self.state = 212
@@ -1093,73 +1140,91 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class ExpContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def number(self):
-            return self.getTypedRuleContext(LuaParser.NumberContext, 0)
+            return self.getTypedRuleContext(LuaParser.NumberContext,0)
+
 
         def string(self):
-            return self.getTypedRuleContext(LuaParser.StringContext, 0)
+            return self.getTypedRuleContext(LuaParser.StringContext,0)
+
 
         def functiondef(self):
-            return self.getTypedRuleContext(LuaParser.FunctiondefContext, 0)
+            return self.getTypedRuleContext(LuaParser.FunctiondefContext,0)
+
 
         def prefixexp(self):
-            return self.getTypedRuleContext(LuaParser.PrefixexpContext, 0)
+            return self.getTypedRuleContext(LuaParser.PrefixexpContext,0)
+
 
         def tableconstructor(self):
-            return self.getTypedRuleContext(LuaParser.TableconstructorContext, 0)
+            return self.getTypedRuleContext(LuaParser.TableconstructorContext,0)
+
 
         def operatorUnary(self):
-            return self.getTypedRuleContext(LuaParser.OperatorUnaryContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorUnaryContext,0)
 
-        def exp(self, i: int = None):
+
+        def exp(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.ExpContext)
             else:
-                return self.getTypedRuleContext(LuaParser.ExpContext, i)
+                return self.getTypedRuleContext(LuaParser.ExpContext,i)
+
 
         def operatorPower(self):
-            return self.getTypedRuleContext(LuaParser.OperatorPowerContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorPowerContext,0)
+
 
         def operatorMulDivMod(self):
-            return self.getTypedRuleContext(LuaParser.OperatorMulDivModContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorMulDivModContext,0)
+
 
         def operatorAddSub(self):
-            return self.getTypedRuleContext(LuaParser.OperatorAddSubContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorAddSubContext,0)
+
 
         def operatorStrcat(self):
-            return self.getTypedRuleContext(LuaParser.OperatorStrcatContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorStrcatContext,0)
+
 
         def operatorComparison(self):
-            return self.getTypedRuleContext(LuaParser.OperatorComparisonContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorComparisonContext,0)
+
 
         def operatorAnd(self):
-            return self.getTypedRuleContext(LuaParser.OperatorAndContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorAndContext,0)
+
 
         def operatorOr(self):
-            return self.getTypedRuleContext(LuaParser.OperatorOrContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorOrContext,0)
+
 
         def operatorBitwise(self):
-            return self.getTypedRuleContext(LuaParser.OperatorBitwiseContext, 0)
+            return self.getTypedRuleContext(LuaParser.OperatorBitwiseContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_exp
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterExp"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExp" ):
                 listener.enterExp(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitExp"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExp" ):
                 listener.exitExp(self)
 
-    def exp(self, _p: int = 0):
+
+
+    def exp(self, _p:int=0):
         _parentctx = self._ctx
         _parentState = self.state
         localctx = LuaParser.ExpContext(self, self._ctx, _parentState)
@@ -1219,15 +1284,15 @@ class LuaParser(Parser):
             self._ctx.stop = self._input.LT(-1)
             self.state = 267
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input, 16, self._ctx)
-            while _alt != 2 and _alt != ATN.INVALID_ALT_NUMBER:
-                if _alt == 1:
+            _alt = self._interp.adaptivePredict(self._input,16,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
                     self.state = 265
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(self._input, 15, self._ctx)
+                    la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
                     if la_ == 1:
                         localctx = LuaParser.ExpContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_exp)
@@ -1332,9 +1397,10 @@ class LuaParser(Parser):
                         self.exp(2)
                         pass
 
+             
                 self.state = 269
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input, 16, self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,16,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1344,29 +1410,35 @@ class LuaParser(Parser):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
+
     class PrefixContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def nameOrExp(self):
-            return self.getTypedRuleContext(LuaParser.NameOrExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.NameOrExpContext,0)
+
 
         def prefix_(self):
-            return self.getTypedRuleContext(LuaParser.Prefix_Context, 0)
+            return self.getTypedRuleContext(LuaParser.Prefix_Context,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_prefix
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterPrefix"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrefix" ):
                 listener.enterPrefix(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitPrefix"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrefix" ):
                 listener.exitPrefix(self)
+
+
+
 
     def prefix(self):
 
@@ -1386,10 +1458,11 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class NameOrExpContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1397,18 +1470,22 @@ class LuaParser(Parser):
             return self.getToken(LuaParser.NAME, 0)
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_nameOrExp
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterNameOrExp"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterNameOrExp" ):
                 listener.enterNameOrExp(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitNameOrExp"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitNameOrExp" ):
                 listener.exitNameOrExp(self)
+
+
+
 
     def nameOrExp(self):
 
@@ -1443,35 +1520,42 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class Prefix_Context(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def prefix_(self):
-            return self.getTypedRuleContext(LuaParser.Prefix_Context, 0)
+            return self.getTypedRuleContext(LuaParser.Prefix_Context,0)
+
 
         def NAME(self):
             return self.getToken(LuaParser.NAME, 0)
 
         def nameAndArgs(self):
-            return self.getTypedRuleContext(LuaParser.NameAndArgsContext, 0)
+            return self.getTypedRuleContext(LuaParser.NameAndArgsContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_prefix_
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterPrefix_"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrefix_" ):
                 listener.enterPrefix_(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitPrefix_"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrefix_" ):
                 listener.exitPrefix_(self)
+
+
+
 
     def prefix_(self):
 
@@ -1480,7 +1564,7 @@ class LuaParser(Parser):
         try:
             self.state = 292
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 18, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,18,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 280
@@ -1525,38 +1609,45 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FunctioncallContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-
-        def nameAndArgs(self, i: int = None):
-            if i is None:
-                return self.getTypedRuleContexts(LuaParser.NameAndArgsContext)
-            else:
-                return self.getTypedRuleContext(LuaParser.NameAndArgsContext, i)
 
         def NAME(self):
             return self.getToken(LuaParser.NAME, 0)
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def prefix(self):
-            return self.getTypedRuleContext(LuaParser.PrefixContext, 0)
+            return self.getTypedRuleContext(LuaParser.PrefixContext,0)
+
+
+        def nameAndArgs(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(LuaParser.NameAndArgsContext)
+            else:
+                return self.getTypedRuleContext(LuaParser.NameAndArgsContext,i)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_functioncall
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterFunctioncall"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFunctioncall" ):
                 listener.enterFunctioncall(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitFunctioncall"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFunctioncall" ):
                 listener.exitFunctioncall(self)
+
+
+
 
     def functioncall(self):
 
@@ -1564,9 +1655,9 @@ class LuaParser(Parser):
         self.enterRule(localctx, 26, self.RULE_functioncall)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 311
+            self.state = 308
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 19, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,19,self._ctx)
             if la_ == 1:
                 self.state = 294
                 self.match(LuaParser.NAME)
@@ -1601,15 +1692,21 @@ class LuaParser(Parser):
                 self.match(LuaParser.NAME)
                 pass
 
-            elif la_ == 5:
-                self.state = 308
-                self.prefix()
-                self.state = 309
-                self.nameAndArgs()
-                pass
 
-            self.state = 313
-            self.nameAndArgs()
+            self.state = 311 
+            self._errHandler.sync(self)
+            _alt = 1
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt == 1:
+                    self.state = 310
+                    self.nameAndArgs()
+
+                else:
+                    raise NoViableAltException(self)
+                self.state = 313 
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,20,self._ctx)
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1618,32 +1715,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class PrefixexpContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def var_(self):
-            return self.getTypedRuleContext(LuaParser.Var_Context, 0)
+            return self.getTypedRuleContext(LuaParser.Var_Context,0)
+
 
         def functioncall(self):
-            return self.getTypedRuleContext(LuaParser.FunctioncallContext, 0)
+            return self.getTypedRuleContext(LuaParser.FunctioncallContext,0)
+
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_prefixexp
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterPrefixexp"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrefixexp" ):
                 listener.enterPrefixexp(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitPrefixexp"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrefixexp" ):
                 listener.exitPrefixexp(self)
+
+
+
 
     def prefixexp(self):
 
@@ -1652,7 +1756,7 @@ class LuaParser(Parser):
         try:
             self.state = 321
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 20, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,21,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 315
@@ -1684,29 +1788,35 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class VarOrExpContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def var_(self):
-            return self.getTypedRuleContext(LuaParser.Var_Context, 0)
+            return self.getTypedRuleContext(LuaParser.Var_Context,0)
+
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_varOrExp
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterVarOrExp"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterVarOrExp" ):
                 listener.enterVarOrExp(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitVarOrExp"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitVarOrExp" ):
                 listener.exitVarOrExp(self)
+
+
+
 
     def varOrExp(self):
 
@@ -1715,7 +1825,7 @@ class LuaParser(Parser):
         try:
             self.state = 328
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 21, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,22,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 323
@@ -1741,10 +1851,11 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class Var_Context(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1752,21 +1863,26 @@ class LuaParser(Parser):
             return self.getToken(LuaParser.NAME, 0)
 
         def prefix(self):
-            return self.getTypedRuleContext(LuaParser.PrefixContext, 0)
+            return self.getTypedRuleContext(LuaParser.PrefixContext,0)
+
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_var_
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterVar_"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterVar_" ):
                 listener.enterVar_(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitVar_"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitVar_" ):
                 listener.exitVar_(self)
+
+
+
 
     def var_(self):
 
@@ -1775,7 +1891,7 @@ class LuaParser(Parser):
         try:
             self.state = 340
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 22, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,23,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 330
@@ -1813,49 +1929,53 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class VarSuffixContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def exp(self):
-            return self.getTypedRuleContext(LuaParser.ExpContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExpContext,0)
+
 
         def NAME(self):
             return self.getToken(LuaParser.NAME, 0)
 
-        def nameAndArgs(self, i: int = None):
+        def nameAndArgs(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.NameAndArgsContext)
             else:
-                return self.getTypedRuleContext(LuaParser.NameAndArgsContext, i)
+                return self.getTypedRuleContext(LuaParser.NameAndArgsContext,i)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_varSuffix
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterVarSuffix"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterVarSuffix" ):
                 listener.enterVarSuffix(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitVarSuffix"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitVarSuffix" ):
                 listener.exitVarSuffix(self)
+
+
+
 
     def varSuffix(self):
 
         localctx = LuaParser.VarSuffixContext(self, self._ctx, self.state)
         self.enterRule(localctx, 34, self.RULE_varSuffix)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 345
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__21) | (1 << LuaParser.T__26) | (1 << LuaParser.T__30) | (
-                    1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING))) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__21) | (1 << LuaParser.T__26) | (1 << LuaParser.T__30) | (1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING))) != 0):
                 self.state = 342
                 self.nameAndArgs()
                 self.state = 347
@@ -1890,15 +2010,17 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class NameAndArgsContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def args(self):
-            return self.getTypedRuleContext(LuaParser.ArgsContext, 0)
+            return self.getTypedRuleContext(LuaParser.ArgsContext,0)
+
 
         def NAME(self):
             return self.getToken(LuaParser.NAME, 0)
@@ -1906,29 +2028,33 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_nameAndArgs
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterNameAndArgs"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterNameAndArgs" ):
                 listener.enterNameAndArgs(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitNameAndArgs"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitNameAndArgs" ):
                 listener.exitNameAndArgs(self)
+
+
+
 
     def nameAndArgs(self):
 
         localctx = LuaParser.NameAndArgsContext(self, self._ctx, self.state)
         self.enterRule(localctx, 36, self.RULE_nameAndArgs)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 358
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == LuaParser.T__21:
+            if _la==LuaParser.T__21:
                 self.state = 356
                 self.match(LuaParser.T__21)
                 self.state = 357
                 self.match(LuaParser.NAME)
+
 
             self.state = 360
             self.args()
@@ -1940,38 +2066,45 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class ArgsContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def explist(self):
-            return self.getTypedRuleContext(LuaParser.ExplistContext, 0)
+            return self.getTypedRuleContext(LuaParser.ExplistContext,0)
+
 
         def tableconstructor(self):
-            return self.getTypedRuleContext(LuaParser.TableconstructorContext, 0)
+            return self.getTypedRuleContext(LuaParser.TableconstructorContext,0)
+
 
         def string(self):
-            return self.getTypedRuleContext(LuaParser.StringContext, 0)
+            return self.getTypedRuleContext(LuaParser.StringContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_args
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterArgs"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterArgs" ):
                 listener.enterArgs(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitArgs"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitArgs" ):
                 listener.exitArgs(self)
+
+
+
 
     def args(self):
 
         localctx = LuaParser.ArgsContext(self, self._ctx, self.state)
         self.enterRule(localctx, 38, self.RULE_args)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.state = 369
             self._errHandler.sync(self)
@@ -1983,16 +2116,10 @@ class LuaParser(Parser):
                 self.state = 364
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if (((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                        (1 << LuaParser.T__16) | (1 << LuaParser.T__22) | (1 << LuaParser.T__23) | (
-                        1 << LuaParser.T__24) | (1 << LuaParser.T__25) | (1 << LuaParser.T__26) | (
-                                1 << LuaParser.T__30) | (1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (
-                                1 << LuaParser.T__52) | (1 << LuaParser.T__53) | (1 << LuaParser.NAME) | (
-                                1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (
-                                1 << LuaParser.LONGSTRING) | (1 << LuaParser.INT) | (1 << LuaParser.HEX) | (
-                                1 << LuaParser.FLOAT) | (1 << LuaParser.HEX_FLOAT))) != 0):
+                if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__16) | (1 << LuaParser.T__22) | (1 << LuaParser.T__23) | (1 << LuaParser.T__24) | (1 << LuaParser.T__25) | (1 << LuaParser.T__26) | (1 << LuaParser.T__30) | (1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (1 << LuaParser.T__52) | (1 << LuaParser.T__53) | (1 << LuaParser.NAME) | (1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING) | (1 << LuaParser.INT) | (1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (1 << LuaParser.HEX_FLOAT))) != 0):
                     self.state = 363
                     self.explist()
+
 
                 self.state = 366
                 self.match(LuaParser.T__27)
@@ -2018,26 +2145,31 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FunctiondefContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def funcbody(self):
-            return self.getTypedRuleContext(LuaParser.FuncbodyContext, 0)
+            return self.getTypedRuleContext(LuaParser.FuncbodyContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_functiondef
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterFunctiondef"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFunctiondef" ):
                 listener.enterFunctiondef(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitFunctiondef"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFunctiondef" ):
                 listener.exitFunctiondef(self)
+
+
+
 
     def functiondef(self):
 
@@ -2057,35 +2189,41 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FuncbodyContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def block(self):
-            return self.getTypedRuleContext(LuaParser.BlockContext, 0)
+            return self.getTypedRuleContext(LuaParser.BlockContext,0)
+
 
         def parlist(self):
-            return self.getTypedRuleContext(LuaParser.ParlistContext, 0)
+            return self.getTypedRuleContext(LuaParser.ParlistContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_funcbody
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterFuncbody"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFuncbody" ):
                 listener.enterFuncbody(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitFuncbody"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFuncbody" ):
                 listener.exitFuncbody(self)
+
+
+
 
     def funcbody(self):
 
         localctx = LuaParser.FuncbodyContext(self, self._ctx, self.state)
         self.enterRule(localctx, 42, self.RULE_funcbody)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 374
@@ -2093,9 +2231,10 @@ class LuaParser(Parser):
             self.state = 376
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == LuaParser.T__25 or _la == LuaParser.NAME:
+            if _la==LuaParser.T__25 or _la==LuaParser.NAME:
                 self.state = 375
                 self.parlist()
+
 
             self.state = 378
             self.match(LuaParser.T__27)
@@ -2111,32 +2250,37 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class ParlistContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def namelist(self):
-            return self.getTypedRuleContext(LuaParser.NamelistContext, 0)
+            return self.getTypedRuleContext(LuaParser.NamelistContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_parlist
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterParlist"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterParlist" ):
                 listener.enterParlist(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitParlist"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitParlist" ):
                 listener.exitParlist(self)
+
+
+
 
     def parlist(self):
 
         localctx = LuaParser.ParlistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 44, self.RULE_parlist)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.state = 388
             self._errHandler.sync(self)
@@ -2148,11 +2292,12 @@ class LuaParser(Parser):
                 self.state = 385
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == LuaParser.T__14:
+                if _la==LuaParser.T__14:
                     self.state = 383
                     self.match(LuaParser.T__14)
                     self.state = 384
                     self.match(LuaParser.T__25)
+
 
                 pass
             elif token in [LuaParser.T__25]:
@@ -2171,32 +2316,37 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class TableconstructorContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def fieldlist(self):
-            return self.getTypedRuleContext(LuaParser.FieldlistContext, 0)
+            return self.getTypedRuleContext(LuaParser.FieldlistContext,0)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_tableconstructor
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterTableconstructor"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterTableconstructor" ):
                 listener.enterTableconstructor(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitTableconstructor"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitTableconstructor" ):
                 listener.exitTableconstructor(self)
+
+
+
 
     def tableconstructor(self):
 
         localctx = LuaParser.TableconstructorContext(self, self._ctx, self.state)
         self.enterRule(localctx, 46, self.RULE_tableconstructor)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 390
@@ -2204,16 +2354,10 @@ class LuaParser(Parser):
             self.state = 392
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__16) | (1 << LuaParser.T__22) | (1 << LuaParser.T__23) | (
-                    1 << LuaParser.T__24) | (1 << LuaParser.T__25) | (1 << LuaParser.T__26) | (1 << LuaParser.T__28) | (
-                            1 << LuaParser.T__30) | (1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (
-                            1 << LuaParser.T__52) | (1 << LuaParser.T__53) | (1 << LuaParser.NAME) | (
-                            1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING) | (
-                            1 << LuaParser.INT) | (1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (
-                            1 << LuaParser.HEX_FLOAT))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__16) | (1 << LuaParser.T__22) | (1 << LuaParser.T__23) | (1 << LuaParser.T__24) | (1 << LuaParser.T__25) | (1 << LuaParser.T__26) | (1 << LuaParser.T__28) | (1 << LuaParser.T__30) | (1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (1 << LuaParser.T__52) | (1 << LuaParser.T__53) | (1 << LuaParser.NAME) | (1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING) | (1 << LuaParser.INT) | (1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (1 << LuaParser.HEX_FLOAT))) != 0):
                 self.state = 391
                 self.fieldlist()
+
 
             self.state = 394
             self.match(LuaParser.T__31)
@@ -2225,62 +2369,68 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FieldlistContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def field(self, i: int = None):
+        def field(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.FieldContext)
             else:
-                return self.getTypedRuleContext(LuaParser.FieldContext, i)
+                return self.getTypedRuleContext(LuaParser.FieldContext,i)
 
-        def fieldsep(self, i: int = None):
+
+        def fieldsep(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.FieldsepContext)
             else:
-                return self.getTypedRuleContext(LuaParser.FieldsepContext, i)
+                return self.getTypedRuleContext(LuaParser.FieldsepContext,i)
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_fieldlist
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterFieldlist"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFieldlist" ):
                 listener.enterFieldlist(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitFieldlist"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFieldlist" ):
                 listener.exitFieldlist(self)
+
+
+
 
     def fieldlist(self):
 
         localctx = LuaParser.FieldlistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 48, self.RULE_fieldlist)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 396
             self.field()
             self.state = 402
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input, 32, self._ctx)
-            while _alt != 2 and _alt != ATN.INVALID_ALT_NUMBER:
-                if _alt == 1:
+            _alt = self._interp.adaptivePredict(self._input,33,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
                     self.state = 397
                     self.fieldsep()
                     self.state = 398
-                    self.field()
+                    self.field() 
                 self.state = 404
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input, 32, self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,33,self._ctx)
 
             self.state = 406
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == LuaParser.T__0 or _la == LuaParser.T__14:
+            if _la==LuaParser.T__0 or _la==LuaParser.T__14:
                 self.state = 405
                 self.fieldsep()
 
@@ -2293,18 +2443,20 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FieldContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def exp(self, i: int = None):
+        def exp(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LuaParser.ExpContext)
             else:
-                return self.getTypedRuleContext(LuaParser.ExpContext, i)
+                return self.getTypedRuleContext(LuaParser.ExpContext,i)
+
 
         def NAME(self):
             return self.getToken(LuaParser.NAME, 0)
@@ -2312,13 +2464,16 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_field
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterField"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterField" ):
                 listener.enterField(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitField"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitField" ):
                 listener.exitField(self)
+
+
+
 
     def field(self):
 
@@ -2327,7 +2482,7 @@ class LuaParser(Parser):
         try:
             self.state = 418
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 34, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,35,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 408
@@ -2367,34 +2522,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class FieldsepContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_fieldsep
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterFieldsep"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFieldsep" ):
                 listener.enterFieldsep(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitFieldsep"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFieldsep" ):
                 listener.exitFieldsep(self)
+
+
+
 
     def fieldsep(self):
 
         localctx = LuaParser.FieldsepContext(self, self._ctx, self.state)
         self.enterRule(localctx, 52, self.RULE_fieldsep)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 420
             _la = self._input.LA(1)
-            if not (_la == LuaParser.T__0 or _la == LuaParser.T__14):
+            if not(_la==LuaParser.T__0 or _la==LuaParser.T__14):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2407,23 +2567,28 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorOrContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorOr
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorOr"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorOr" ):
                 listener.enterOperatorOr(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorOr"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorOr" ):
                 listener.exitOperatorOr(self)
+
+
+
 
     def operatorOr(self):
 
@@ -2441,23 +2606,28 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorAndContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorAnd
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorAnd"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorAnd" ):
                 listener.enterOperatorAnd(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorAnd"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorAnd" ):
                 listener.exitOperatorAnd(self)
+
+
+
 
     def operatorAnd(self):
 
@@ -2475,36 +2645,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorComparisonContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorComparison
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorComparison"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorComparison" ):
                 listener.enterOperatorComparison(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorComparison"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorComparison" ):
                 listener.exitOperatorComparison(self)
+
+
+
 
     def operatorComparison(self):
 
         localctx = LuaParser.OperatorComparisonContext(self, self._ctx, self.state)
         self.enterRule(localctx, 58, self.RULE_operatorComparison)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 426
             _la = self._input.LA(1)
-            if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__34) | (1 << LuaParser.T__35) | (1 << LuaParser.T__36) | (
-                    1 << LuaParser.T__37) | (1 << LuaParser.T__38) | (1 << LuaParser.T__39))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__34) | (1 << LuaParser.T__35) | (1 << LuaParser.T__36) | (1 << LuaParser.T__37) | (1 << LuaParser.T__38) | (1 << LuaParser.T__39))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2517,23 +2690,28 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorStrcatContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorStrcat
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorStrcat"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorStrcat" ):
                 listener.enterOperatorStrcat(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorStrcat"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorStrcat" ):
                 listener.exitOperatorStrcat(self)
+
+
+
 
     def operatorStrcat(self):
 
@@ -2551,34 +2729,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorAddSubContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorAddSub
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorAddSub"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorAddSub" ):
                 listener.enterOperatorAddSub(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorAddSub"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorAddSub" ):
                 listener.exitOperatorAddSub(self)
+
+
+
 
     def operatorAddSub(self):
 
         localctx = LuaParser.OperatorAddSubContext(self, self._ctx, self.state)
         self.enterRule(localctx, 62, self.RULE_operatorAddSub)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 430
             _la = self._input.LA(1)
-            if not (_la == LuaParser.T__41 or _la == LuaParser.T__42):
+            if not(_la==LuaParser.T__41 or _la==LuaParser.T__42):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2591,36 +2774,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorMulDivModContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorMulDivMod
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorMulDivMod"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorMulDivMod" ):
                 listener.enterOperatorMulDivMod(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorMulDivMod"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorMulDivMod" ):
                 listener.exitOperatorMulDivMod(self)
+
+
+
 
     def operatorMulDivMod(self):
 
         localctx = LuaParser.OperatorMulDivModContext(self, self._ctx, self.state)
         self.enterRule(localctx, 64, self.RULE_operatorMulDivMod)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 432
             _la = self._input.LA(1)
-            if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__43) | (1 << LuaParser.T__44) | (1 << LuaParser.T__45) | (
-                    1 << LuaParser.T__46))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__43) | (1 << LuaParser.T__44) | (1 << LuaParser.T__45) | (1 << LuaParser.T__46))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2633,36 +2819,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorBitwiseContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorBitwise
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorBitwise"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorBitwise" ):
                 listener.enterOperatorBitwise(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorBitwise"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorBitwise" ):
                 listener.exitOperatorBitwise(self)
+
+
+
 
     def operatorBitwise(self):
 
         localctx = LuaParser.OperatorBitwiseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 66, self.RULE_operatorBitwise)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 434
             _la = self._input.LA(1)
-            if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__47) | (1 << LuaParser.T__48) | (1 << LuaParser.T__49) | (
-                    1 << LuaParser.T__50) | (1 << LuaParser.T__51))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__47) | (1 << LuaParser.T__48) | (1 << LuaParser.T__49) | (1 << LuaParser.T__50) | (1 << LuaParser.T__51))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2675,36 +2864,39 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorUnaryContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorUnary
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorUnary"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorUnary" ):
                 listener.enterOperatorUnary(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorUnary"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorUnary" ):
                 listener.exitOperatorUnary(self)
+
+
+
 
     def operatorUnary(self):
 
         localctx = LuaParser.OperatorUnaryContext(self, self._ctx, self.state)
         self.enterRule(localctx, 68, self.RULE_operatorUnary)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 436
             _la = self._input.LA(1)
-            if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (1 << LuaParser.T__52) | (
-                    1 << LuaParser.T__53))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.T__42) | (1 << LuaParser.T__49) | (1 << LuaParser.T__52) | (1 << LuaParser.T__53))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2717,23 +2909,28 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class OperatorPowerContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return LuaParser.RULE_operatorPower
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterOperatorPower"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterOperatorPower" ):
                 listener.enterOperatorPower(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitOperatorPower"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitOperatorPower" ):
                 listener.exitOperatorPower(self)
+
+
+
 
     def operatorPower(self):
 
@@ -2751,10 +2948,11 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class NumberContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -2773,26 +2971,27 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_number
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterNumber"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterNumber" ):
                 listener.enterNumber(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitNumber"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitNumber" ):
                 listener.exitNumber(self)
+
+
+
 
     def number(self):
 
         localctx = LuaParser.NumberContext(self, self._ctx, self.state)
         self.enterRule(localctx, 72, self.RULE_number)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 440
             _la = self._input.LA(1)
-            if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.INT) | (1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (
-                    1 << LuaParser.HEX_FLOAT))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.INT) | (1 << LuaParser.HEX) | (1 << LuaParser.FLOAT) | (1 << LuaParser.HEX_FLOAT))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2805,10 +3004,11 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
+
     class StringContext(ParserRuleContext):
         __slots__ = 'parser'
 
-        def __init__(self, parser, parent: ParserRuleContext = None, invokingState: int = -1):
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -2824,25 +3024,27 @@ class LuaParser(Parser):
         def getRuleIndex(self):
             return LuaParser.RULE_string
 
-        def enterRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "enterString"):
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterString" ):
                 listener.enterString(self)
 
-        def exitRule(self, listener: ParseTreeListener):
-            if hasattr(listener, "exitString"):
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitString" ):
                 listener.exitString(self)
+
+
+
 
     def string(self):
 
         localctx = LuaParser.StringContext(self, self._ctx, self.state)
         self.enterRule(localctx, 74, self.RULE_string)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 442
             _la = self._input.LA(1)
-            if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & (
-                    (1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << LuaParser.NORMALSTRING) | (1 << LuaParser.CHARSTRING) | (1 << LuaParser.LONGSTRING))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -2855,7 +3057,9 @@ class LuaParser(Parser):
             self.exitRule()
         return localctx
 
-    def sempred(self, localctx: RuleContext, ruleIndex: int, predIndex: int):
+
+
+    def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
         if self._predicates == None:
             self._predicates = dict()
         self._predicates[9] = self.exp_sempred
@@ -2865,27 +3069,39 @@ class LuaParser(Parser):
         else:
             return pred(localctx, predIndex)
 
-    def exp_sempred(self, localctx: ExpContext, predIndex: int):
-        if predIndex == 0:
-            return self.precpred(self._ctx, 9)
+    def exp_sempred(self, localctx:ExpContext, predIndex:int):
+            if predIndex == 0:
+                return self.precpred(self._ctx, 9)
+         
 
-        if predIndex == 1:
-            return self.precpred(self._ctx, 7)
+            if predIndex == 1:
+                return self.precpred(self._ctx, 7)
+         
 
-        if predIndex == 2:
-            return self.precpred(self._ctx, 6)
+            if predIndex == 2:
+                return self.precpred(self._ctx, 6)
+         
 
-        if predIndex == 3:
-            return self.precpred(self._ctx, 5)
+            if predIndex == 3:
+                return self.precpred(self._ctx, 5)
+         
 
-        if predIndex == 4:
-            return self.precpred(self._ctx, 4)
+            if predIndex == 4:
+                return self.precpred(self._ctx, 4)
+         
 
-        if predIndex == 5:
-            return self.precpred(self._ctx, 3)
+            if predIndex == 5:
+                return self.precpred(self._ctx, 3)
+         
 
-        if predIndex == 6:
-            return self.precpred(self._ctx, 2)
+            if predIndex == 6:
+                return self.precpred(self._ctx, 2)
+         
 
-        if predIndex == 7:
-            return self.precpred(self._ctx, 1)
+            if predIndex == 7:
+                return self.precpred(self._ctx, 1)
+         
+
+
+
+
