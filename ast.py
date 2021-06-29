@@ -519,7 +519,12 @@ class Var(DotLangTag):
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"name\"]"
+        if self.kind == Var.NAME:
+            return f"{self.get_tag()}[label=\"name\"]"
+        elif self.kind == Var.BRACKET:
+            return f"{self.get_tag()}[label=\"bracket\"]"
+        else:
+            return f"{self.get_tag()}[label=\"dot\"]"
 
     def __str__(self):
         tag = self.get_tag()
@@ -707,11 +712,12 @@ class Args(DotLangTag):
     STRING = 3
 
     def __init__(self, kind, params: Optional['ExprList'], table_constructor: Optional['TableContructor'],
-                 term_string: Optional[TermString]):
+                 term_string: Optional[TermString], opt_name: Optional[TermName]):
         self.kind = kind
         self.params = params
         self.table_constructor = table_constructor
         self.string = term_string
+        self.opt_name = opt_name
         self.tag = None
 
     def get_tag_name(self):
@@ -733,16 +739,16 @@ class Args(DotLangTag):
                    f"{self.string.__str__()}"
 
     @staticmethod
-    def params(p: 'ExprList'):
-        return Args(Args.PARAMS, p, None, None)
+    def params(p: 'ExprList', name: Optional[TermName] = None):
+        return Args(Args.PARAMS, p, None, None, name)
 
     @staticmethod
     def table_constructor(tb: 'TableConstructor'):
-        return Args(Args.PARAMS, None, tb, None)
+        return Args(Args.PARAMS, None, tb, None, None)
 
     @staticmethod
     def string(s: TermString):
-        return Args(Args.PARAMS, None, None, s)
+        return Args(Args.PARAMS, None, None, s, None)
 
 
 class FunctionExpr(DotLangTag):

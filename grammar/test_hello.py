@@ -25,7 +25,8 @@ def main(file):
     parser.addParseListener(listener)
     tree = parser.chunk()
     a = listener.get_chuck()
-    # pp(a )
+    pp(a)
+    # pp(a, True)
     print(tree.toStringTree(recog=parser))
     pass
 
