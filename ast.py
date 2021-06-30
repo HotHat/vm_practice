@@ -617,6 +617,8 @@ class Expr(DotLangTag):
             self.kind = ExprEnum.PREFIX
         elif type(value) is BinOpExpr:
             self.kind = ExprEnum.BINOP
+        elif type(value) is UnOpExpr:
+            self.kind = ExprEnum.UNOP
         elif type(value) is FunctionExpr:
             self.kind = ExprEnum.FUNCTION
 
@@ -857,6 +859,23 @@ class BinOpEnum(Enum):
     AND = 14
     OR = 15
 
+    @staticmethod
+    def from_symbol(sym: str):
+        if sym == '+':
+            return BinOpEnum.ADD
+        elif sym == '-':
+            return BinOpEnum.SUB
+        elif sym == '*':
+            return BinOpEnum.MUL
+        elif sym == '/':
+            return BinOpEnum.DIV
+        elif sym == '//':
+            return BinOpEnum.MOD
+        elif sym == '%':
+            return BinOpEnum.MOD
+        else:
+            raise Exception('error binop symbol')
+
 
 class BinOpExpr(DotLangTag):
     def __init__(self, op: BinOpEnum, left: Expr, right: Expr):
@@ -877,6 +896,45 @@ class BinOpExpr(DotLangTag):
         tag = self.get_tag()
         return f"{self.get_tag_name()}\n{tag}->{self.left.get_tag()}\n{tag}->{self.right.get_tag()}\n" \
                f"{self.left.__str__()}\n{self.right.__str__()}"
+
+
+class UnOpEnum(Enum):
+    MINUS = 1
+    NOT = 2
+    SHARP = 3
+    TILDE = 4
+
+    @staticmethod
+    def from_symbol(sym: str):
+        if sym == '-':
+            return UnOpEnum.MINUS
+        elif sym == 'not':
+            return UnOpEnum.NOT
+        elif sym == '#':
+            return UnOpEnum.SHARP
+        elif sym == '~':
+            return UnOpEnum.TILDE
+        else:
+            raise Exception('error unop symbol')
+
+
+class UnOpExpr(DotLangTag):
+    def __init__(self, op: UnOpEnum, expr: Expr):
+        self.operator = op
+        self.expr = expr
+        self.false_list = []
+        self.true_list = []
+        self.next_list = []
+        # for dot lang
+        self.tag = None
+        self.tag_name = self.operator
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"{self.operator.name}\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n{tag}->{self.expr.get_tag()}\n{self.expr.__str__()}"
 
 
 # --------------  expression end ---------------
