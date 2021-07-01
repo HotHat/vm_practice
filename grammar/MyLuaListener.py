@@ -7,7 +7,8 @@ class MyLuaListener(LuaListener):
     def __init__(self):
         self.chuck = None
         self.block = None
-        self.stat = []
+        self.block_stack = []
+        self.stat_stack = []
         self.ret_stat = None
         self.prefix_expr = None
         self.prefix = None
@@ -24,7 +25,7 @@ class MyLuaListener(LuaListener):
         self.namelist = []
         self.is_exprlist_level = 0
         self.is_binary_expr = False
-        self.binary_exprlist = []
+        self.exprlist_stack = []
         self.exprlist = []
         self.expr = None
         self.table_constructor = None
@@ -38,43 +39,102 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#chunk.
     def exitChunk(self, ctx: LuaParser.ChunkContext):
-        self.chuck = Chunk(self.block)
+        self.chuck = Chunk(self.block_stack[0])
 
     # Enter a parse tree produced by LuaParser#block.
     def enterBlock(self, ctx: LuaParser.BlockContext):
+        print('----enter block-----')
+        self.stat_stack.append([])
         pass
 
     # Exit a parse tree produced by LuaParser#block.
     def exitBlock(self, ctx: LuaParser.BlockContext):
-        self.block = Block(self.stat, self.ret_stat)
+        cur_stat = self.stat_stack[-1]
+        print('----exit block---')
+        self.block = Block(cur_stat, self.ret_stat)
+        self.stat_stack.pop()
+        self.block_stack.append(self.block)
 
-    # Enter a parse tree produced by LuaParser#stat.
+    # Enter a parse tree produced by LuaParser#stat_stack.
     def enterStat(self, ctx: LuaParser.StatContext):
         pass
 
-    # Exit a parse tree produced by LuaParser#stat.
+    # Exit a parse tree produced by LuaParser#stat_stack.
     def exitStat(self, ctx: LuaParser.StatContext):
-        # pass
-        # self.stat.append(Stmt(FunctionCallStmt(self.prefix_expr, None, self.args)))
-        # print(ctx.getRuleIndex())
-        # print(ctx.invokingState)
-        # local assign
-        count = ctx.getChildCount()
-        if ctx.getChild(0).getText() == 'local' and ctx.namelist() is not None:
-            self.stat.append(Stmt(LocalAssignStmt(NameList(*self.namelist), ExprList(*self.exprlist))))
-            self.namelist = []
-            self.exprlist = []
-        if ctx.functioncall() is not None:
-            self.stat.append(Stmt(self.function_call))
+        cur_stat = self.stat_stack[-1]
+        if ctx.label():
+            pass
+        elif ctx.getChild(0).getText() == 'break':
+            pass
+        elif ctx.getChild(0).getText() == 'goto':
+            pass
+        elif ctx.getChild(0).getText() == 'do':
+            pass
+        elif ctx.getChild(0).getText() == 'while':
+            pass
+        elif ctx.getChild(0).getText() == 'repeat':
+            pass
+        elif ctx.getChild(0).getText() == 'if':
+            print('------exit if--------')
+            print(self.exprlist_stack)
+            print(self.block_stack)
+            elseif_count = else_count = 0
+            for i in ctx.getChildren():
+                if i.getText() == 'elseif':
+                    elseif_count += 1
+                elif i.getText() == 'else':
+                    else_count += 1
+            consume_block_count = 1 + elseif_count + else_count
+            consume_expr_count = 1 + elseif_count
 
-        # l = ctx.getChildren()
-        # print()
-        # for i in l:
-        #     print(type(i))
+            block_list = self.block_stack[-consume_block_count:]
+            expr_list = self.exprlist_stack[-consume_expr_count:]
 
-        # print(ctx.namelist())
-        # print(ctx.explist())
-        # print(ctx.block())
+            # pop consume block
+            for i in range(consume_block_count):
+                self.block_stack.pop()
+            # pop consume expr
+            for i in range(consume_expr_count):
+                self.exprlist_stack.pop()
+
+            print('some count:', elseif_count, else_count, len(block_list))
+            elseif_stmt = []
+            if elseif_count > 0:
+                elseif_expr = expr_list[1:]
+                elseif_block = block_list[1: 1 + len(elseif_expr)]
+                for idx, _ in enumerate(elseif_expr):
+                    elseif_stmt.append(ElifStmt(elseif_expr[idx], elseif_block[idx]))
+
+            if else_count == 1:
+                else_stmt = block_list[-1]
+            else:
+                else_stmt = None
+            if_stmt = IfStmt(expr_list[0],
+                             block_list[0],
+                             None if len(elseif_stmt) == 0 else elseif_stmt,
+                             else_stmt)
+
+            cur_stat.append(Stmt(if_stmt))
+
+        elif ctx.getChild(0).getText() == 'for':
+            pass
+        elif ctx.getChild(0).getText() == 'function':
+            pass
+        elif ctx.getChild(0).getText() == 'local':
+            print('---local assign---')
+            if ctx.namelist() is not None:
+                cur_stat.append(Stmt(LocalAssignStmt(NameList(*self.namelist), ExprList(*self.exprlist))))
+                self.namelist = []
+                self.exprlist = []
+            else:
+                # local function
+                pass
+        elif ctx.functioncall() is not None:
+            print('---function call ---')
+            cur_stat.append(Stmt(self.function_call))
+        else:
+            # varlist = explist
+            pass
 
 
     # Enter a parse tree produced by LuaParser#retstat.
@@ -121,28 +181,33 @@ class MyLuaListener(LuaListener):
 
     # Enter a parse tree produced by LuaParser#explist.
     def enterExplist(self, ctx: LuaParser.ExplistContext):
-        print('enter explist', ctx.getChildCount())
+        pass
+        # print('enter explist', ctx.getChildCount())
         # print(ctx.getChildCount())
 
     # Exit a parse tree produced by LuaParser#explist.
     def exitExplist(self, ctx: LuaParser.ExplistContext):
-        print('exit explist', ctx.getChildCount())
-        for expr in self.binary_exprlist:
+        pass
+        # print('exit explist', ctx.getChildCount())
+        for expr in self.exprlist_stack:
             self.exprlist.append(expr)
 
     # Enter a parse tree produced by LuaParser#exp.
     def enterExp(self, ctx: LuaParser.ExpContext):
-        print('enter exp')
+        pass
+        # print('enter exp')
 
     # Exit a parse tree produced by LuaParser#exp.
     def exitExp(self, ctx: LuaParser.ExpContext):
-        print('exit exp', ctx.parentCtx, ctx.getChildCount())
+        # print('exit exp', ctx.parentCtx, ctx.getChildCount())
         if ctx.getChild(0).getText() == 'nil':
             self.expr = Expr(TermNil())
         elif ctx.getChild(0).getText() == 'false':
             self.expr = Expr(TermFalse())
         elif ctx.getChild(0).getText() == 'true':
             self.expr = Expr(TermTrue())
+        elif ctx.getChild(0).getText() == '...':
+            self.expr = Expr(TermEllipsis())
         elif ctx.number() is not None:
             self.expr = Expr(self.number)
         elif ctx.string() is not None:
@@ -154,12 +219,12 @@ class MyLuaListener(LuaListener):
             self.expr = Expr(UnOpExpr(UnOpEnum.from_symbol(ctx.operatorUnary().getText()), self.expr))
         # binary operation
         elif ctx.exp() is not None:
-            self.expr = Expr(BinOpExpr(BinOpEnum.from_symbol(ctx.getChild(1).getText()),
-                                       self.binary_exprlist[0],
-                                       self.binary_exprlist[1]))
-            self.binary_exprlist = []
-
-        self.binary_exprlist.append(self.expr)
+            # first in last out
+            right = self.exprlist_stack.pop()
+            left = self.exprlist_stack.pop()
+            self.expr = Expr(BinOpExpr(BinOpEnum.from_symbol(ctx.getChild(1).getText()), left, right))
+        # TODO: missing functiondef, tableconstructor
+        self.exprlist_stack.append(self.expr)
 
 
     # Enter a parse tree produced by LuaParser#prefix.

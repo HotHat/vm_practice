@@ -100,7 +100,7 @@ class Block(DotLangTag):
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"chunk\"]"
+        return f"{self.get_tag()}[label=\"block\"]"
 
     def __str__(self):
         tag = self.get_tag()
@@ -873,6 +873,8 @@ class BinOpEnum(Enum):
             return BinOpEnum.MOD
         elif sym == '%':
             return BinOpEnum.MOD
+        elif sym == '==':
+            return BinOpEnum.EQ
         else:
             raise Exception('error binop symbol')
 
