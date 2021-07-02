@@ -128,7 +128,7 @@ class Chunk(DotLangTag):
         self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"block\"]"
+        return f"{self.get_tag()}[label=\"chunk\"]"
 
     def __str__(self):
         tag = self.get_tag()
@@ -273,7 +273,19 @@ class WhileStmt(Stmt):
 class RepeatStmt(Stmt):
     def __init__(self, block: Block, exp: 'Expr'):
         self.block = block
-        self.exp = exp
+        self.expr = exp
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"repeat_stmt\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n" \
+               f"{tag}->{self.block.get_tag()}\n" \
+               f"{tag}->{self.expr.get_tag()}\n" \
+               f"{self.block.__str__()}\n" \
+               f"{self.expr.__str__()}"
 
 
 class IfStmt(Stmt):
@@ -937,6 +949,47 @@ class UnOpExpr(DotLangTag):
     def __str__(self):
         tag = self.get_tag()
         return f"{self.get_tag_name()}\n{tag}->{self.expr.get_tag()}\n{self.expr.__str__()}"
+
+
+class Label(DotLangTag):
+    def __init__(self, label: TermString):
+        self.label = label
+        # for dot lang
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"{self.label}\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n"
+
+
+class Break(DotLangTag):
+    def __init__(self):
+        # for dot lang
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"break\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n"
+
+
+class Goto(DotLangTag):
+    def __init__(self, label: TermName):
+        self.label = label
+        # for dot lang
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"goto\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        return f"{self.get_tag_name()}\n{tag}->{self.label.get_tag()}\n{self.label.__str__()}"
 
 
 # --------------  expression end ---------------

@@ -9,14 +9,29 @@
 
 -- local a = not false
 -- local a = 1 + 2
-local a = 1 - 2
-if b==1 then
-    fnA()
+-- local x = 1 - 2
+-- if b==1 then
+--     fnA()
+-- end
+-- if a == 1 then
+--     fnA()
+-- elseif  a == 2 then
+--     funB()
+-- else
+--     funZ()
+-- end
+
+--a,b = 123,456
+--do
+--    c = 112
+--end
+--
+--break
+--goto ABC
+while true do
+    z = 99
 end
-if a == 1 then
-    fnA()
-elseif  a == 2 then
-    funB()
-else
-    funZ()
-end
+
+repeat
+    x = 123
+until true
