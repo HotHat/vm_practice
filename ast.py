@@ -417,7 +417,7 @@ class FunctionStmt(Stmt, DotLangTag):
 
 
 class LocalFunctionStmt(Stmt):
-    def __init__(self, name: TermName, args, body: Block):
+    def __init__(self, name: TermName, args: 'ParList', body: Block):
         self.name = name
         self.args = args
         self.body = body
@@ -508,7 +508,7 @@ class FunctionName(DotLangTag):
         if self.opt_name:
             name = f"{name}.{'.'.join([tn.value for tn in self.opt_name])}"
         if self.colon_name:
-            name = f"{name}:{self.colon_name}"
+            name = f"{name}:{self.colon_name.value}"
         return f"{self.get_tag()}[label=\"{name}\"]"
 
     def __str__(self):

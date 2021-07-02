@@ -30,6 +30,8 @@ class MyLuaListener(LuaListener):
         self.varlist = []
         self.expr = None
         self.table_constructor = None
+        self.parlist = []
+        self.func_body_stack = []
 
     def get_chuck(self):
         return self.chuck
@@ -97,17 +99,10 @@ class MyLuaListener(LuaListener):
                 elif i.getText() == 'else':
                     else_count += 1
             consume_block_count = 1 + elseif_count + else_count
+            consume_expr_count = 1 + elseif_count
 
             block_list = self.block_stack[-consume_block_count:]
             expr_list = self.exprlist_stack[-1]
-
-            # pop consume block
-            for i in range(consume_block_count):
-                self.block_stack.pop()
-            # pop consume expr
-            # for i in range(consume_expr_count):
-                # self.exprlist_stack.pop()
-
             print('some count:', elseif_count, else_count, len(block_list))
             elseif_stmt = []
             if elseif_count > 0:
@@ -126,11 +121,36 @@ class MyLuaListener(LuaListener):
                              else_stmt)
 
             cur_stat.append(Stmt(if_stmt))
+            # pop consume block
+            for i in range(consume_block_count):
+                self.block_stack.pop()
+            # pop consume expr
+            for i in range(consume_expr_count):
+                self.exprlist_stack[-1].pop()
 
         elif ctx.getChild(0).getText() == 'for':
             pass
         elif ctx.getChild(0).getText() == 'function':
-            pass
+            name_list = [TermName(i.getText()) for i in ctx.funcname().NAME()]
+            colon_name = False
+            for i in ctx.funcname().getChildren():
+                if i.getText() == ':':
+                    colon_name = True
+            opt_colon_name = None
+            opt_name = []
+            if colon_name:
+                opt_colon_name = name_list[-1]
+                if len(name_list) > 2:
+                    opt_name = name_list[1:-2]
+            else:
+                if len(name_list) > 2:
+                    opt_name = name_list[1:]
+            func_name = FunctionName(name_list[0], opt_name, opt_colon_name)
+
+            func_body = self.func_body_stack[-1]
+            cur_stat.append(Stmt(FunctionStmt(func_name, func_body['args'], func_body['body'])))
+            self.func_body_stack.pop()
+
         elif ctx.getChild(0).getText() == 'local':
             print('---local assign---')
             if ctx.namelist() is not None:
@@ -138,7 +158,11 @@ class MyLuaListener(LuaListener):
                 self.namelist = []
                 self.exprlist_stack.pop()
             else:
-                # local function
+                print('-----exit local function------')
+                name = TermName(ctx.getChild(2).getText())
+                func_body = self.func_body_stack[-1]
+                cur_stat.append(Stmt(LocalFunctionStmt(name, func_body['args'], func_body['body'])))
+                self.func_body_stack.pop()
                 pass
         elif ctx.functioncall() is not None:
             print('---function call ---')
@@ -229,7 +253,8 @@ class MyLuaListener(LuaListener):
             self.expr = Expr(self.prefix_expr)
         # unary operation
         elif ctx.operatorUnary() is not None:
-            self.expr = Expr(UnOpExpr(UnOpEnum.from_symbol(ctx.operatorUnary().getText()), self.expr))
+            expr = self.exprlist_stack[-1].pop()
+            self.expr = Expr(UnOpExpr(UnOpEnum.from_symbol(ctx.operatorUnary().getText()), expr))
         # binary operation
         elif ctx.exp() is not None:
             # first in last out
@@ -392,7 +417,17 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#funcbody.
     def exitFuncbody(self, ctx: LuaParser.FuncbodyContext):
-        pass
+        if ctx.parlist() is None:
+            parlist = ParList.name(NameList(), None)
+        else:
+            parlist = self.parlist[-1]
+
+        self.func_body_stack.append({
+            'args': parlist,
+            'body': self.block_stack.pop()
+        })
+        if ctx.parlist():
+            self.parlist.pop()
 
     # Enter a parse tree produced by LuaParser#parlist.
     def enterParlist(self, ctx: LuaParser.ParlistContext):
@@ -400,7 +435,17 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#parlist.
     def exitParlist(self, ctx: LuaParser.ParlistContext):
-        pass
+        if ctx.namelist() is not None:
+            name_list = [TermName(i.getText()) for i in ctx.namelist().NAME()]
+            if ctx.getChild(ctx.getChildCount() - 1).getText() == '...':
+                elp = TermEllipsis()
+            else:
+                elp = None
+            parlist = ParList.name(NameList(*name_list), elp)
+        else:
+            parlist = ParList.ellipsis(TermEllipsis())
+
+        self.parlist.append(parlist)
 
     # Enter a parse tree produced by LuaParser#tableconstructor.
     def enterTableconstructor(self, ctx: LuaParser.TableconstructorContext):

@@ -20,18 +20,29 @@
 -- else
 --     funZ()
 -- end
-
---a,b = 123,456
---do
---    c = 112
---end
 --
---break
---goto ABC
-while true do
-    z = 99
-end
+-- a,b = 123,456
+-- do
+--     c = 112
+-- end
+--
+-- break
+-- goto ABC
+-- while true do
+--     z = 99
+-- end
 
-repeat
-    x = 123
-until true
+--repeat
+--    x = 123
+--until true
+
+-- local function funA(a, b, ...)
+--     local function funB()
+--     end
+-- end
+
+function funA.B.C:P(a, b, c)
+    a = 3
+    local function la()
+    end
+end
