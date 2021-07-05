@@ -46,9 +46,8 @@ class MyLuaListener(LuaListener):
 
     # Enter a parse tree produced by LuaParser#block.
     def enterBlock(self, ctx: LuaParser.BlockContext):
-        print('----enter block-----')
         self.stat_stack.append([])
-        self.exprlist_stack.append([])
+        print('----enter block-----')
         pass
 
     # Exit a parse tree produced by LuaParser#block.
@@ -58,10 +57,11 @@ class MyLuaListener(LuaListener):
         self.block = Block(cur_stat, self.ret_stat)
         self.stat_stack.pop()
         self.block_stack.append(self.block)
-        self.exprlist_stack.pop()
 
     # Enter a parse tree produced by LuaParser#stat_stack.
     def enterStat(self, ctx: LuaParser.StatContext):
+        self.exprlist_stack.append([])
+        self.varlist.append([])
         pass
 
     # Exit a parse tree produced by LuaParser#stat_stack.
@@ -129,6 +129,34 @@ class MyLuaListener(LuaListener):
                 self.exprlist_stack[-1].pop()
 
         elif ctx.getChild(0).getText() == 'for':
+            expr_list = self.exprlist_stack[-1]
+            # for
+            if ctx.NAME():
+                name = TermName(ctx.getChild(1).getText())
+                expr_count = len([i for i in ctx.exp()])
+                assign = None
+                cond = None
+                nxt = None
+                if expr_count == 3:
+                    nxt = expr_list[-1]
+                    cond = expr_list[-2]
+                    assign = expr_list[-3]
+                else:
+                    cond = expr_list[-1]
+                    assign = expr_list[-2]
+
+                block = self.block_stack[-1]
+                cur_stat.append(Stmt(ForStmt(name, assign, cond, nxt, block)))
+                self.block_stack.pop()
+                for i in range(expr_count):
+                    expr_list.pop()
+
+            else:
+                # foreach
+                name_list = [TermName(i.getText()) for i in ctx.namelist().NAME()]
+                expr_list = self.exprlist_stack[-1]
+                cur_stat.append(Stmt(ForeachStmt(NameList(*name_list), ExprList(*expr_list), self.block_stack[-1])))
+                self.block_stack.pop()
             pass
         elif ctx.getChild(0).getText() == 'function':
             name_list = [TermName(i.getText()) for i in ctx.funcname().NAME()]
@@ -154,9 +182,9 @@ class MyLuaListener(LuaListener):
         elif ctx.getChild(0).getText() == 'local':
             print('---local assign---')
             if ctx.namelist() is not None:
-                cur_stat.append(Stmt(LocalAssignStmt(NameList(*self.namelist), ExprList(*self.exprlist_stack[-1]))))
+                name_list = [TermName(i.getText()) for i in ctx.namelist().NAME()]
+                cur_stat.append(Stmt(LocalAssignStmt(NameList(*name_list), ExprList(*self.exprlist_stack[-1]))))
                 self.namelist = []
-                self.exprlist_stack.pop()
             else:
                 print('-----exit local function------')
                 name = TermName(ctx.getChild(2).getText())
@@ -169,9 +197,12 @@ class MyLuaListener(LuaListener):
             cur_stat.append(Stmt(self.function_call))
         else:
             # varlist = explist
-            cur_stat.append(Stmt(AssignStmt(VarList(*self.varlist), ExprList(*self.exprlist_stack[-1]))))
-            self.varlist = []
-            self.exprlist_stack.pop()
+            cur_stat.append(Stmt(AssignStmt(VarList(*self.varlist[-1]), ExprList(*self.exprlist_stack[-1]))))
+
+        # clean
+        self.exprlist_stack.pop()
+        self.varlist.pop()
+
 
     # Enter a parse tree produced by LuaParser#retstat.
     def enterRetstat(self, ctx: LuaParser.RetstatContext):
@@ -217,7 +248,7 @@ class MyLuaListener(LuaListener):
 
     # Enter a parse tree produced by LuaParser#explist.
     def enterExplist(self, ctx: LuaParser.ExplistContext):
-        self.exprlist_stack.append([])
+        # self.exprlist_stack.append([])
         pass
         # print('enter explist', ctx.getChildCount())
         # print(ctx.getChildCount())
@@ -347,7 +378,7 @@ class MyLuaListener(LuaListener):
     # Exit a parse tree produced by LuaParser#prefixexp.
     def exitPrefixexp(self, ctx: LuaParser.PrefixexpContext):
         if ctx.var_() is not None:
-            self.prefix_expr = PrefixExpr.var(self.var)
+            self.prefix_expr = PrefixExpr.var(self.varlist[-1].pop())
 
     # Enter a parse tree produced by LuaParser#varOrExp.
     def enterVarOrExp(self, ctx: LuaParser.VarOrExpContext):
@@ -371,8 +402,7 @@ class MyLuaListener(LuaListener):
         else:
             self.var = Var.name(TermName(ctx.NAME().getText()))
 
-        if self.is_var_list:
-            self.varlist.append(self.var)
+        self.varlist[-1].append(self.var)
 
     # Enter a parse tree produced by LuaParser#varSuffix.
     def enterVarSuffix(self, ctx: LuaParser.VarSuffixContext):

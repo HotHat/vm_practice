@@ -41,8 +41,15 @@
 --     end
 -- end
 
-function funA.B.C:P(a, b, c)
-    a = 3
-    local function la()
-    end
+-- function funA.B.C:P(a, b, c)
+--     a = 3
+--     local function la()
+--     end
+-- end
+for a=1, a==3, a+1 do
+
+end
+
+for a,b in 1,2,3,4 do
+    a = true
 end
