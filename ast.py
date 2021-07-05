@@ -94,7 +94,7 @@ def string(s):
 
 
 class Block(DotLangTag):
-    def __init__(self, stat_arr: Sequence['Stmt'], ret_stat: Optional['LastStmt'] = None):
+    def __init__(self, stat_arr: Sequence['Stmt'], ret_stat: Optional['ReturnStmt'] = None):
         self.stat_arr = stat_arr
         self.ret_stat = ret_stat
         self.tag = None
@@ -455,38 +455,35 @@ class LocalAssignStmt(Stmt, DotLangTag):
                f"{self.right.__str__()}"
 
 
-class LastStmt(Stmt):
+class ReturnStmt(Stmt):
     RETURN = 1
     BREAK = 2
 
-    def __init__(self, kind, exp_list: Optional['ExprList']):
-        self.kind = kind
+    def __init__(self, exp_list: Optional['ExprList']):
         self.exp_list = exp_list
+        self.tag = None
 
     def get_tag_name(self):
-        return f"{self.get_tag()}[label=\"last_stmt\"]"
+        return f"{self.get_tag()}[label=\"return_stmt\"]"
 
     def __str__(self):
         tag = self.get_tag()
-        if self.kind == LastStmt.RETURN:
-            name = f"{self.get_tag()}[label=\"return\"]"
-            return f"{name}\n" \
-                   f"{tag}->{self.exp_list.get_tag()}\n" \
-                   f"{self.exp_list.__str__()}"
+        name = self.get_tag_name()
+        return f"{name}\n" \
+               f"{tag}->{self.exp_list.get_tag()}\n" \
+               f"{self.exp_list.__str__()}"
 
-        elif self.kind == LastStmt.BREAK:
-            return f"{self.get_tag()}[label=\"break\"]"
 
     def is_break(self):
-        return self.kind == LastStmt.BREAK
+        return self.kind == ReturnStmt.BREAK
 
     @staticmethod
     def ret(exp_list):
-        return LastStmt(LastStmt.RETURN, exp_list)
+        return ReturnStmt(ReturnStmt.RETURN, exp_list)
 
     @staticmethod
     def brk():
-        return LastStmt(LastStmt.BREAK, None)
+        return ReturnStmt(ReturnStmt.BREAK, None)
 
 
 # --------------  stmt end ---------------
@@ -823,12 +820,24 @@ class ParList(DotLangTag):
         return ParList(ParList.ELLIPSIS, None, elp)
 
 
-class TableConstructor:
-    def __init__(self, field_list):
+class TableConstructor(DotLangTag):
+    def __init__(self, field_list: Optional[Sequence['Field']]):
         self.field_list = field_list
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"table constructor\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        field_arr_s = "\n".join([f"{tag}->{field.get_tag()}" for field in self.field_list])
+        for field in self.field_list:
+            field_arr_s += f"\n{field.__str__()}"
+        return f"{self.get_tag_name()}\n" \
+               f"{field_arr_s}"
 
 
-class Field:
+class Field(DotLangTag):
     BRACKET_ASSIGN = 1
     ASSIGN = 2
     EXP = 3
@@ -837,8 +846,31 @@ class Field:
                  right: Optional[Expr]):
         self.kind = kind
         self.left = left
-        self.left = left_name
+        self.left_name = left_name
         self.right = right
+        self.tag = None
+
+    def get_tag_name(self):
+        return f"{self.get_tag()}[label=\"field\"]"
+
+    def __str__(self):
+        tag = self.get_tag()
+        if self.kind == Field.BRACKET_ASSIGN:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.left.get_tag()}\n" \
+                   f"{tag}->{self.right.get_tag()}\n" \
+                   f"{self.left.__str__()}\n" \
+                   f"{self.right.__str__()}"
+        elif self.kind == Field.ASSIGN:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.left_name.get_tag()}\n" \
+                   f"{tag}->{self.right.get_tag()}\n" \
+                   f"{self.left_name.__str__()}\n" \
+                   f"{self.right.__str__()}"
+        else:
+            return f"{self.get_tag_name()}\n" \
+                   f"{tag}->{self.right.get_tag()}\n" \
+                   f"{self.right.__str__()}"
 
     @staticmethod
     def bracket(left: Expr, right: Expr):

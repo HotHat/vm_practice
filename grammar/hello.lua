@@ -46,10 +46,18 @@
 --     local function la()
 --     end
 -- end
-for a=1, a==3, a+1 do
+-- for a=1, a==3, a+1 do
+--
+-- end
+--
+-- for a,b in 1,2,3,4 do
+--     a = true
+-- end
 
-end
+-- return a, b, c
+-- a = {[1] => 2, abc=455, {boy=1, girl=2}}
+function A()
+    local a = function ()
 
-for a,b in 1,2,3,4 do
-    a = true
+    end
 end
