@@ -1,12 +1,12 @@
 -- local a,b
--- funcA[idx]()
--- funcB()
+-- funcA[idx](a, b, c)
+funcC(funcA(), funcB())
 -- local a = nil
 -- local b = false
 -- local c = true
 -- local d = 123
 -- local e = "abc"
-
+--
 -- local a = not false
 -- local a = 1 + 2
 -- local x = 1 - 2
@@ -31,11 +31,11 @@
 -- while true do
 --     z = 99
 -- end
-
---repeat
+--
+-- repeat
 --    x = 123
---until true
-
+-- until true
+--
 -- local function funA(a, b, ...)
 --     local function funB()
 --     end
@@ -53,11 +53,12 @@
 -- for a,b in 1,2,3,4 do
 --     a = true
 -- end
-
--- return a, b, c
+--
 -- a = {[1] => 2, abc=455, {boy=1, girl=2}}
-function A()
-    local a = function ()
-
-    end
-end
+-- function A()
+--     local a = function ()
+--
+--     end
+-- end
+--
+-- return a, b, c

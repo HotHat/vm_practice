@@ -416,7 +416,7 @@ class FunctionStmt(Stmt, DotLangTag):
                f"{self.body.__str__()}"
 
 
-class LocalFunctionStmt(Stmt):
+class LocalFunctionStmt(Stmt, DotLangTag):
     def __init__(self, name: TermName, args: 'ParList', body: Block):
         self.name = name
         self.args = args
