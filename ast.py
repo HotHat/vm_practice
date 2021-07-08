@@ -984,7 +984,7 @@ class UnOpExpr(DotLangTag):
 
 
 class Label(DotLangTag):
-    def __init__(self, label: TermString):
+    def __init__(self, label: TermName):
         self.label = label
         # for dot lang
         self.tag = None

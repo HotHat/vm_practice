@@ -6,24 +6,19 @@ from ast import *
 class MyLuaListener(LuaListener):
     def __init__(self):
         self.chuck = None
-        self.block = None
         self.block_stack = []
         self.stat_stack = []
         self.ret_stat = None
-        self.prefix_expr = None
+        self.prefix_expr_stack = []
         self.prefix_stack = []
         self.function_call_stack = []
         self.args = None
         self.name_and_args = []
         self.name = None
-        self.str = None
-        self.number = None
-        self.var = None
-        self.is_namelist = False
-        self.namelist = []
+        # self.var = None
+        self.namelist_stack = []
         self.exprlist_stack = []
         self.exprlist = []
-        self.is_var_list = False
         self.varlist = []
         self.expr = None
         self.table_constructor = None
@@ -40,39 +35,44 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#chunk.
     def exitChunk(self, ctx: LuaParser.ChunkContext):
-        self.chuck = Chunk(self.block_stack[0])
+        self.chuck = Chunk(self.block_stack.pop())
 
     # Enter a parse tree produced by LuaParser#block.
     def enterBlock(self, ctx: LuaParser.BlockContext):
-        self.stat_stack.append([])
+        # self.stat_stack.append([])
         print('----enter block-----')
         pass
 
     # Exit a parse tree produced by LuaParser#block.
     def exitBlock(self, ctx: LuaParser.BlockContext):
-        cur_stat = self.stat_stack[-1]
         print('----exit block---')
-        self.block = Block(cur_stat, self.ret_stat)
-        self.stat_stack.pop()
-        self.block_stack.append(self.block)
+        stat = []
+        ret = None
+        if ctx.stat():
+            for _ in ctx.stat():
+                stat.append(self.stat_stack.pop())
+        if ctx.retstat():
+            ret = self.ret_stat.pop()
+
+        stat.reverse()
+        block = Block(stat, ret)
+        self.block_stack.append(block)
 
     # Enter a parse tree produced by LuaParser#stat_stack.
     def enterStat(self, ctx: LuaParser.StatContext):
         self.exprlist_stack.append([])
         self.varlist.append([])
         self.parlist.append([])
-        self.func_body_stack.append([])
-        self.function_call_stack.append([])
 
     # Exit a parse tree produced by LuaParser#stat_stack.
     def exitStat(self, ctx: LuaParser.StatContext):
         print([i for i in ctx.getChildren()])
-        cur_stat = self.stat_stack[-1]
+        cur_stat = self.stat_stack
         if ctx.getChildCount() == 0:
             return
 
         if ctx.label():
-            cur_stat.append(Stmt(Label(self.name)))
+            cur_stat.append(Stmt(Label(TermName(ctx.label().NAME().getText()))))
         elif ctx.getText() == 'break':
             cur_stat.append(Stmt(Break()))
         elif ctx.getChild(0).getText() == 'goto':
@@ -90,8 +90,8 @@ class MyLuaListener(LuaListener):
             cur_stat.append(Stmt(RepeatStmt(block, expr)))
         elif ctx.getChild(0).getText() == 'if':
             print('------exit if--------')
-            print(self.exprlist_stack)
-            print(self.block_stack)
+            # print(self.exprlist_stack)
+            # print(self.block_stack)
             elseif_count = else_count = 0
             for i in ctx.getChildren():
                 if i.getText() == 'elseif':
@@ -155,8 +155,8 @@ class MyLuaListener(LuaListener):
                 # foreach
                 name_list = [TermName(i.getText()) for i in ctx.namelist().NAME()]
                 expr_list = self.exprlist_stack[-1]
-                cur_stat.append(Stmt(ForeachStmt(NameList(*name_list), ExprList(*expr_list), self.block_stack[-1])))
-                self.block_stack.pop()
+                cur_stat.append(Stmt(ForeachStmt(NameList(*name_list), ExprList(*expr_list), self.block_stack.pop())))
+                # self.block_stack.pop()
             pass
         elif ctx.getChild(0).getText() == 'function':
             name_list = [TermName(i.getText()) for i in ctx.funcname().NAME()]
@@ -175,7 +175,7 @@ class MyLuaListener(LuaListener):
                     opt_name = name_list[1:]
             func_name = FunctionName(name_list[0], opt_name, opt_colon_name)
 
-            func_body = self.func_body_stack[-1].pop()
+            func_body = self.func_body_stack.pop()
             cur_stat.append(Stmt(FunctionStmt(func_name, func_body['args'], func_body['body'])))
 
         elif ctx.getChild(0).getText() == 'local':
@@ -183,16 +183,16 @@ class MyLuaListener(LuaListener):
             if ctx.namelist() is not None:
                 name_list = [TermName(i.getText()) for i in ctx.namelist().NAME()]
                 cur_stat.append(Stmt(LocalAssignStmt(NameList(*name_list), ExprList(*self.exprlist_stack[-1]))))
-                self.namelist = []
+                self.namelist_stack = []
             else:
                 print('-----exit local function------')
                 name = TermName(ctx.getChild(2).getText())
-                func_body = self.func_body_stack[-1].pop()
+                func_body = self.func_body_stack.pop()
                 cur_stat.append(Stmt(LocalFunctionStmt(name, func_body['args'], func_body['body'])))
                 pass
         elif ctx.functioncall() is not None:
             print('---function call ---')
-            cur_stat.append(Stmt(self.function_call_stack[-1].pop()))
+            cur_stat.append(Stmt(self.function_call_stack.pop()))
         else:
             # varlist = explist
             cur_stat.append(Stmt(AssignStmt(VarList(*self.varlist[-1]), ExprList(*self.exprlist_stack[-1]))))
@@ -201,8 +201,8 @@ class MyLuaListener(LuaListener):
         self.exprlist_stack.pop()
         self.varlist.pop()
         self.parlist.pop()
-        self.func_body_stack.pop()
-        self.function_call_stack.pop()
+        # self.func_body_stack.pop()
+        # self.function_call_stack.pop()
 
 
     # Enter a parse tree produced by LuaParser#retstat.
@@ -245,9 +245,10 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#namelist.
     def exitNamelist(self, ctx: LuaParser.NamelistContext):
-        for i in ctx.NAME():
-            print(i.getText())
-            self.namelist.append(TermName(i.getText()))
+        pass
+        # for i in ctx.NAME():
+        #     print(i.getText())
+        #     self.namelist_stack.append(TermName(i.getText()))
 
     # Enter a parse tree produced by LuaParser#explist.
     def enterExplist(self, ctx: LuaParser.ExplistContext):
@@ -265,10 +266,8 @@ class MyLuaListener(LuaListener):
 
     # Enter a parse tree produced by LuaParser#exp.
     def enterExp(self, ctx: LuaParser.ExpContext):
-        self.field_stack.append([])
+        # self.field_stack.append([])
         self.parlist.append([])
-        self.func_body_stack.append([])
-        self.function_call_stack.append([])
         pass
         # print('enter exp')
 
@@ -276,31 +275,35 @@ class MyLuaListener(LuaListener):
     def exitExp(self, ctx: LuaParser.ExpContext):
         # print('exit exp', ctx.parentCtx, ctx.getChildCount())
         if ctx.getChild(0).getText() == 'nil':
-            self.expr = Expr(TermNil())
+            expr = Expr(TermNil())
         elif ctx.getChild(0).getText() == 'false':
-            self.expr = Expr(TermFalse())
+            expr = Expr(TermFalse())
         elif ctx.getChild(0).getText() == 'true':
-            self.expr = Expr(TermTrue())
+            expr = Expr(TermTrue())
         elif ctx.getChild(0).getText() == '...':
-            self.expr = Expr(TermEllipsis())
+            expr = Expr(TermEllipsis())
         elif ctx.number() is not None:
-            self.expr = Expr(self.number)
+            expr = Expr(TermNumber(ctx.getText()))
         elif ctx.string() is not None:
-            self.expr = Expr(self.str)
+            expr = Expr(TermString(ctx.getText().strip('"')))
         # prefix expr
         elif ctx.prefixexp() is not None:
-            self.expr = Expr(self.prefix_expr)
+            expr = Expr(self.prefix_expr_stack.pop())
         # unary operation
         elif ctx.operatorUnary() is not None:
             expr = self.exprlist_stack[-1].pop()
-            self.expr = Expr(UnOpExpr(UnOpEnum.from_symbol(ctx.operatorUnary().getText()), expr))
+            expr = Expr(UnOpExpr(UnOpEnum.from_symbol(ctx.operatorUnary().getText()), expr))
         # table constructor
         elif ctx.tableconstructor() is not None:
-            self.expr = Expr(TableConstructor(self.field_stack[-1]))
+            field_list = []
+            if ctx.tableconstructor().fieldlist():
+                for _ in ctx.tableconstructor().fieldlist().field():
+                    field_list.append(self.field_stack.pop())
+            expr = Expr(TableConstructor(field_list))
         # functiondef
         elif ctx.functiondef() is not None:
-            func_body = self.func_body_stack[-1].pop()
-            self.expr = Expr(FunctionExpr(func_body['args'], func_body['body']))
+            func_body = self.func_body_stack.pop()
+            expr = Expr(FunctionExpr(func_body['args'], func_body['body']))
             pass
         # binary operation
         elif ctx.exp() is not None:
@@ -308,14 +311,12 @@ class MyLuaListener(LuaListener):
             cur_exprlist = self.exprlist_stack[-1]
             right = cur_exprlist.pop()
             left = cur_exprlist.pop()
-            self.expr = Expr(BinOpExpr(BinOpEnum.from_symbol(ctx.getChild(1).getText()), left, right))
+            expr = Expr(BinOpExpr(BinOpEnum.from_symbol(ctx.getChild(1).getText()), left, right))
 
-        self.exprlist_stack[-1].append(self.expr)
+        self.exprlist_stack[-1].append(expr)
         # clean
-        self.field_stack.pop()
+        # self.field_stack.pop()
         self.parlist.pop()
-        self.func_body_stack.pop()
-        self.function_call_stack.pop()
 
     # Enter a parse tree produced by LuaParser#prefix.
     def enterPrefix(self, ctx: LuaParser.PrefixContext):
@@ -348,9 +349,9 @@ class MyLuaListener(LuaListener):
     # Exit a parse tree produced by LuaParser#nameOrExp.
     def exitNameOrExp(self, ctx: LuaParser.NameOrExpContext):
         if ctx.NAME() is not None:
-            self.prefix_stack[-1].append(prefix_name(ctx.NAME().getText()))
+            self.prefix_stack.append(prefix_name(ctx.NAME().getText()))
         else:
-            self.prefix_stack[-1].append(PrefixExpr.round(self.exprlist_stack[-1].pop()))
+            self.prefix_stack.append(PrefixExpr.round(self.exprlist_stack[-1].pop()))
 
     # Enter a parse tree produced by LuaParser#prefix_.
     def enterPrefix_(self, ctx: LuaParser.Prefix_Context):
@@ -360,18 +361,18 @@ class MyLuaListener(LuaListener):
     def exitPrefix_(self, ctx: LuaParser.Prefix_Context):
         if ctx.getChildCount() != 0:
             if ctx.getChild(0).getText() == '[':
-                self.prefix_stack[-1].append(prefix_bracket(self.prefix_stack[-1].pop(), self.exprlist_stack[-1].pop()))
+                self.prefix_stack.append(prefix_bracket(self.prefix_stack.pop(), self.exprlist_stack[-1].pop()))
             elif ctx.getChild(0).getText() == '.':
-                self.prefix_stack[-1].append(prefix_dot(self.prefix_stack[-1].pop(), TermName(ctx.NAME().getText())))
+                self.prefix_stack.append(prefix_dot(self.prefix_stack.pop(), TermName(ctx.NAME().getText())))
             else:
                 for name_and_args in self.name_and_args:
-                    self.prefix_stack[-1].append(PrefixExpr.call(FunctionCallStmt(self.prefix_stack[-1].pop(),
+                    self.prefix_stack.append(PrefixExpr.call(FunctionCallStmt(self.prefix_stack.pop(),
                                                                          name_and_args.opt_name, name_and_args)))
                 self.name_and_args = []
 
     # Enter a parse tree produced by LuaParser#functioncall.
     def enterFunctioncall(self, ctx: LuaParser.FunctioncallContext):
-        self.prefix_stack.append([])
+        # self.prefix_stack.append([])
         pass
 
     # Exit a parse tree produced by LuaParser#functioncall.
@@ -379,40 +380,40 @@ class MyLuaListener(LuaListener):
         if isinstance(ctx.getChild(0), TerminalNode):
             prefix_expr = prefix_name(ctx.NAME().getText())
         elif ctx.getChild(0).getText() == '(':
-            prefix_expr = self.prefix_expr
+            prefix_expr = self.prefix_expr_stack.pop()
         elif ctx.getChild(1).getText() == '[':
-            prefix_expr = prefix_bracket(self.prefix_stack[-1].pop(), self.exprlist_stack[-1].pop())
+            prefix_expr = prefix_bracket(self.prefix_stack.pop(), self.exprlist_stack[-1].pop())
         else:
-            prefix_expr = prefix_dot(self.prefix_stack[-1].pop(), TermName(ctx.NAME().getText()))
+            prefix_expr = prefix_dot(self.prefix_stack.pop(), TermName(ctx.NAME().getText()))
 
         for idx, name_and_args in enumerate(self.name_and_args):
             if idx == len(self.name_and_args) - 1:
-                self.function_call_stack[-1].append(FunctionCallStmt(prefix_expr, name_and_args.opt_name, name_and_args))
+                self.function_call_stack.append(FunctionCallStmt(prefix_expr, name_and_args.opt_name, name_and_args))
             else:
                 prefix_expr = PrefixExpr.call(FunctionCallStmt(prefix_expr, name_and_args.opt_name, name_and_args))
 
         #clean
-        self.prefix_stack.pop()
+        # self.prefix_stack.pop()
         self.name_and_args = []
 
     # Enter a parse tree produced by LuaParser#prefixexp.
     def enterPrefixexp(self, ctx: LuaParser.PrefixexpContext):
-        self.prefix_stack.append([])
+        # self.prefix_stack.append([])
         pass
 
     # Exit a parse tree produced by LuaParser#prefixexp.
     def exitPrefixexp(self, ctx: LuaParser.PrefixexpContext):
         # var
         if ctx.var_() is not None:
-            self.prefix_expr = PrefixExpr.var(self.varlist[-1].pop())
+            self.prefix_expr_stack.append(PrefixExpr.var(self.varlist[-1].pop()))
         # function call
         elif ctx.functioncall() is not None:
-            self.prefix_expr = PrefixExpr.call(self.function_call_stack[-1].pop())
+            self.prefix_expr_stack.append(PrefixExpr.call(self.function_call_stack.pop()))
         else:
-            self.prefix_expr = PrefixExpr.round(self.exprlist_stack[-1].pop())
+            self.prefix_expr_stack.append(PrefixExpr.round(self.exprlist_stack.pop()))
 
         # clean
-        self.prefix_stack.pop()
+        # self.prefix_stack.pop()
 
     # Enter a parse tree produced by LuaParser#varOrExp.
     def enterVarOrExp(self, ctx: LuaParser.VarOrExpContext):
@@ -430,9 +431,9 @@ class MyLuaListener(LuaListener):
     def exitVar_(self, ctx: LuaParser.Var_Context):
         if ctx.prefix() is not None:
             if ctx.NAME() is not None:
-                self.var = Var.dot(self.prefix_stack[-1].pop(), TermName(ctx.NAME().getText()))
+                self.var = Var.dot(self.prefix_stack.pop(), TermName(ctx.NAME().getText()))
             else:
-                self.var = Var.bracket(self.prefix_stack[-1].pop(), self.expr)
+                self.var = Var.bracket(self.prefix_stack.pop(), self.expr)
         else:
             self.var = Var.name(TermName(ctx.NAME().getText()))
 
@@ -493,7 +494,7 @@ class MyLuaListener(LuaListener):
         else:
             parlist = self.parlist[-1].pop()
 
-        self.func_body_stack[-1].append({
+        self.func_body_stack.append({
             'args': parlist,
             'body': self.block_stack.pop()
         })
@@ -548,7 +549,7 @@ class MyLuaListener(LuaListener):
         else:
             field = Field.exp(cur_exprlist.pop())
 
-        self.field_stack[-1].append(field)
+        self.field_stack.append(field)
 
 
     # Enter a parse tree produced by LuaParser#fieldsep.
@@ -637,7 +638,8 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#number.
     def exitNumber(self, ctx: LuaParser.NumberContext):
-        self.number = TermNumber(ctx.getText())
+        pass
+        # self.number = TermNumber(ctx.getText())
 
     # Enter a parse tree produced by LuaParser#string.
     def enterString(self, ctx: LuaParser.StringContext):
@@ -645,7 +647,8 @@ class MyLuaListener(LuaListener):
 
     # Exit a parse tree produced by LuaParser#string.
     def exitString(self, ctx: LuaParser.StringContext):
-        self.str = TermString(ctx.getText().strip('"'))
+        pass
+        # self.str = TermString(ctx.getText().strip('"'))
         # if ctx.NORMALSTRING() is not None:
         #     self.str = ctx.NORMALSTRING().getText().strip('"')
         # elif ctx.CHARSTRING() is not None:

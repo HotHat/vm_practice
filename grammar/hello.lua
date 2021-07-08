@@ -1,6 +1,6 @@
 -- local a,b
 -- funcA[idx](a, b, c)
-funcC(funcA(), funcB())
+-- funcC(funcA(), funcB())
 -- local a = nil
 -- local b = false
 -- local c = true
@@ -55,10 +55,12 @@ funcC(funcA(), funcB())
 -- end
 --
 -- a = {[1] => 2, abc=455, {boy=1, girl=2}}
--- function A()
---     local a = function ()
---
---     end
--- end
---
+ function A()
+     local a = function ()
+        local a,b
+        funcA[idx](a, b, c)
+        funcC(funcA(), funcB())
+    end
+end
+
 -- return a, b, c
